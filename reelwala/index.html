@@ -1,0 +1,1157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reelwala</title>
+<meta name="theme-color" content="#F5F3F2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@700;800&family=Bebas+Neue&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=Montserrat:wght@800&family=Mukta:wght@700;800&family=Poppins:wght@600;800&display=swap">
+<style>
+/* Layout: one phone-width column, sticky top bar with project switcher, fixed bottom tab bar. Cards only for scenes, ideas and projects. */
+:root{
+  --bg:#F5F3F2; --surface:#FFFFFF; --sunk:#ECE8E6; --ink:#17151A; --muted:#6B6570; --line:#E2DDDA;
+  --accent:#E8492A; --accent-ink:#FFFFFF; --soft:#FBE7E1; --good:#1F7A52; --warn:#9A6514; --bad:#B42318;
+  --display:"Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r:14px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#121014; --surface:#1C191F; --sunk:#262229; --ink:#F3EFF1; --muted:#A59DA8; --line:#322C35;
+    --accent:#FF6A48; --accent-ink:#1A0D09; --soft:#3A1E17; --good:#5CC995; --warn:#E3B05C; --bad:#FF8A80; color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+[hidden]{display:none!important}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h2{font-size:24px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:17px;font-weight:700}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.logo{font-family:var(--display);font-weight:800;font-size:21px;letter-spacing:-.02em;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.rec{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+.top select{margin-left:auto;max-width:56%;min-width:0}
+main .wrap{padding-block:18px 28px;display:flex;flex-direction:column;gap:18px}
+.lead{color:var(--muted);margin:4px 0 0}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grow{flex:1;min-width:0}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:9px 16px;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;min-height:42px;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.small{min-height:34px;padding:6px 12px;font-size:14px}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input[type=text],input[type=number],input[type=password],select,textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:42px}
+textarea{min-height:84px;resize:vertical}
+label.f{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+label.f .hint{font-weight:400;color:var(--muted);font-size:13px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:baseline;gap:10px}
+.step .n{font:500 12px/1 var(--mono);color:var(--accent);border:1.5px solid var(--accent);border-radius:6px;padding:4px 6px}
+.chip{font:500 11px/1 var(--mono);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line);border-radius:6px;padding:5px 7px;color:var(--muted);white-space:nowrap}
+.chip.hot{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.muted{color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+.msg{border-radius:10px;padding:10px 12px;font-size:14px;background:var(--sunk)}
+.msg.bad{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.msg.good{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+.sec-h{font:700 13px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:10px;padding-top:14px;border-top:1px dashed var(--line)}
+.sec-h:first-child{border-top:0;margin-top:0;padding-top:0}
+.form{display:flex;flex-direction:column;gap:14px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;font-size:14px}
+.toggle input{width:44px;height:26px;appearance:none;background:var(--sunk);border:1px solid var(--line);border-radius:999px;position:relative;cursor:pointer;flex:none}
+.toggle input::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px #0003;transition:left .15s}
+.toggle input:checked{background:var(--accent);border-color:var(--accent)}
+.toggle input:checked::after{left:20px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:3px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:420px){.two{grid-template-columns:1fr}}
+
+/* projects */
+.cards{display:flex;flex-direction:column;gap:12px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.pcard .stripe{height:6px}
+.pcard .in{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.pcard p{margin:0;color:var(--muted);font-size:14px}
+.tpl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tpl button{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:84px}
+.tpl button b{font-family:var(--display);font-size:16px}
+.tpl button span{font-size:13px;color:var(--muted)}
+
+/* media */
+.media{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px}
+.mi{position:relative;aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:var(--sunk);max-width:100%}
+.mi img{width:100%;height:100%;object-fit:cover;display:block}
+.mi .tag{position:absolute;left:5px;top:5px;font:500 10px/1 var(--mono);background:#000a;color:#fff;border-radius:4px;padding:3px 4px}
+.mi .dur{position:absolute;left:5px;bottom:5px;font:500 10px/1 var(--mono);background:#000a;color:#fff;border-radius:4px;padding:3px 4px}
+.mi .x{position:absolute;right:4px;top:4px;width:26px;height:26px;border-radius:50%;border:0;background:#000b;color:#fff;cursor:pointer;font-size:15px;line-height:1}
+.drop{border:1.5px dashed color-mix(in srgb,var(--accent) 50%,var(--line));border-radius:12px;padding:16px;text-align:center;cursor:pointer;background:var(--soft);color:var(--ink);font-weight:600}
+
+/* scenes */
+.scenes{display:flex;flex-direction:column;gap:10px}
+.scene{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.scene .hd{display:flex;gap:10px;align-items:flex-start}
+.scene .th{width:46px;flex:none;aspect-ratio:9/16;border-radius:7px;overflow:hidden;background:var(--sunk)}
+.scene .th img{width:100%;height:100%;object-fit:cover;display:block}
+.scene .meta{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.scene .meta label{font:500 10px/1.2 var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:flex;flex-direction:column;gap:3px;min-width:0}
+.scene .meta select,.scene .meta input{min-height:34px;padding:5px 7px;font:14px var(--body)}
+.scene .tc{font:500 12px/1 var(--mono);color:var(--accent)}
+.scene textarea{min-height:56px}
+.scene .ops{display:flex;gap:4px;margin-left:auto}
+.iconb{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px}
+.total{font:500 13px/1 var(--mono)}
+
+/* preview */
+.stage{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.screen{width:min(100%,300px);aspect-ratio:9/16;background:#000;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.screen canvas,.screen video{width:100%;height:100%;display:block}
+.bar{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.tcbig{font:500 15px/1 var(--mono);font-variant-numeric:tabular-nums}
+
+/* ideas */
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px}
+.idea .hook{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.25}
+.idea ol,.idea ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px;font-size:14px}
+.idea details summary{cursor:pointer;font-weight:600;font-size:14px}
+.idea .vo{white-space:pre-wrap;font-size:14px;background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:6px}
+.star{color:var(--accent)}
+
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-weight:600;font-size:14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.prompter{font-size:20px;line-height:1.45;background:var(--sunk);border-radius:12px;padding:14px;max-height:220px;overflow:auto;white-space:pre-wrap}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{background:none;border:0;padding:10px 4px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current=page]{color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);
+  padding:9px 16px;border-radius:999px;font-weight:600;font-size:14px;z-index:40;max-width:calc(100% - 32px)}
+.spin{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .8s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}.btn{transition:none}}
+a{color:var(--accent)}
+ol.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="logo"><span class="rec" aria-hidden="true"></span>Reelwala</div>
+  <select id="projSel" aria-label="Current project"></select>
+</div></header>
+
+<main>
+<section id="v-projects"><div class="wrap" id="projectsBox"></div></section>
+<section id="v-setup" hidden><div class="wrap" id="setupBox"></div></section>
+<section id="v-ideas" hidden><div class="wrap" id="ideasBox"></div></section>
+<section id="v-create" hidden><div class="wrap" id="createBox"></div></section>
+<section id="v-settings" hidden><div class="wrap" id="settingsBox"></div></section>
+</main>
+
+<nav class="tabs" aria-label="Sections"><div class="wrap">
+  <button class="tab" data-go="projects"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4l2 5M14 4l2 5"/></svg>Projects</button>
+  <button class="tab" data-go="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>Ideas</button>
+  <button class="tab" data-go="create"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 9.5v5l4-2.5z"/></svg>Create</button>
+  <button class="tab" data-go="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
+</div></nav>
+<div class="toast" id="toast" hidden></div>
+
+<script src="config.js"></script>
+<script>
+"use strict";
+/* ============ constants ============ */
+const BASE = "https://generativelanguage.googleapis.com/v1beta";
+const STRUCTURES = {
+  hook:["Hook → Build → Payoff","Open with the most surprising moment as a hook. Set up the situation in one line. Build with 2–4 escalating moments. Land the payoff or punchline. End with a question or call to action."],
+  versus:["Versus / Challenge","Cold open on the most dramatic moment. Introduce the competitors and the challenge rules. Round-by-round highlights with a running score. A twist, blunder or comeback. Final result and the winner's reaction. Tease next week's challenge."],
+  beforeafter:["Before → After","Flash the end result for 1 second as a hook. Cut to the 'before'. Show 3–5 quick steps of the process. Reveal the full 'after'. End with the key tip."],
+  countdown:["Top N countdown","Hook stating what the list is. Count down from N to 1, one item per scene with a one-line reason. Number 1 gets the longest scene. End by asking viewers for their pick."],
+  dayinlife:["Day in the life","Hook with the most interesting moment of the day. Then go chronological: morning, main activity, a funny or real moment, evening wind-down. Close with one reflection line."],
+  tutorial:["How-to / Tutorial","Hook with the result and a promise (\"do this in 30 seconds\"). Steps 1–N, one per scene, each with a clear caption. One common mistake to avoid. Final result. Ask viewers to save the reel."],
+  travel:["Travel diary","Hook with the best view. Arrival moment. 3–4 highlights, each with one interesting fact or tip. A food moment. Closing reflection plus one practical tip (cost, timing or route)."],
+  review:["Review / Verdict","Hook with the money shot and a bold claim. Where it is and how much it costs. Reactions to each item tried. Honest pros and cons. Score out of 10. Call to action."]
+};
+const TONES = ["Energetic & funny banter","Hype & intense","Cinematic & dreamy","Fun & honest","Relaxed & personal","Inspirational","Informative & crisp","Dramatic & suspenseful","Sarcastic & witty"];
+const LANGS = ["English (India)","English (US)","Hindi","Hinglish (Hindi + English mix)","Marathi","Gujarati","Bengali","Punjabi","Tamil","Telugu","Kannada","Malayalam","Urdu","Spanish","French","Arabic","Indonesian","Japanese"];
+const VOICES = [["Puck","Upbeat"],["Fenrir","Excitable"],["Zephyr","Bright"],["Kore","Firm"],["Charon","Informative"],["Leda","Youthful"],["Orus","Firm"],["Aoede","Breezy"],["Callirrhoe","Easy-going"],["Autonoe","Bright"],["Enceladus","Breathy"],["Iapetus","Clear"],["Umbriel","Easy-going"],["Algieba","Smooth"],["Despina","Smooth"],["Erinome","Clear"],["Algenib","Gravelly"],["Rasalgethi","Informative"],["Laomedeia","Upbeat"],["Achernar","Soft"],["Alnilam","Firm"],["Schedar","Even"],["Gacrux","Mature"],["Pulcherrima","Forward"],["Achird","Friendly"],["Zubenelgenubi","Casual"],["Vindemiatrix","Gentle"],["Sadachbia","Lively"],["Sadaltager","Knowledgeable"],["Sulafat","Warm"]];
+const FONTS = [["Poppins","Poppins (Hindi + English)"],["Baloo 2","Baloo 2 (Hindi + English)"],["Mukta","Mukta (Hindi + English)"],["Anton","Anton (English only)"],["Bebas Neue","Bebas Neue (English only)"],["Montserrat","Montserrat (English only)"]];
+const DEFAULTS = {
+  name:"New project", kind:"reel", duration:30, pacing:"medium", about:"", audience:"",
+  structureKey:"hook", structure:STRUCTURES.hook[1], tone:"Energetic & funny banter", extra:"",
+  voMode:"ai", language:"English (India)", voice:"Puck", voStyle:"", voPace:"normal", syncVO:true, origVol:0.25, musicVol:0.35,
+  captions:true, capLang:"same", capStyle:"bold", capAnim:"words", capCase:"normal", capPos:"bottom", font:"Poppins",
+  capColor:"#FFFFFF", hiColor:"#FFD43B", transition:"punch", showHook:true, endCard:true, handle:"", cta:"Follow for more", brand:"#E8492A"
+};
+const TEMPLATES = [
+  {label:"Sports challenge", blurb:"Two rivals, a new sport every week", p:{name:"Weekly Showdown", about:"Two friends compete against each other in a different sport every week.", audience:"Sports fans 16–35 who enjoy banter", structureKey:"versus", tone:"Energetic & funny banter", duration:45, pacing:"fast", voice:"Puck", voStyle:"hype sports commentator", font:"Anton", capCase:"upper", brand:"#E8492A"}},
+  {label:"Travel diary", blurb:"Places, food and tips", p:{name:"Travel Diary", about:"Short travel films from my trips with practical tips.", audience:"Young travellers planning budget trips", structureKey:"travel", tone:"Cinematic & dreamy", duration:30, pacing:"medium", voice:"Aoede", voStyle:"warm storyteller", capStyle:"minimal", capAnim:"pop", transition:"fade", brand:"#1E7A8C"}},
+  {label:"Food review", blurb:"Try it, rate it out of 10", p:{name:"Food Reviews", about:"Honest reviews of street food and restaurants.", audience:"Local foodies", structureKey:"review", tone:"Fun & honest", duration:30, pacing:"fast", voice:"Kore", voStyle:"friendly food critic", font:"Baloo 2", capStyle:"box", brand:"#C9821B"}},
+  {label:"Day in my life", blurb:"A day, start to finish", p:{name:"Day in My Life", about:"Everyday moments from my life.", structureKey:"dayinlife", tone:"Relaxed & personal", duration:30, pacing:"medium", voice:"Sulafat", voStyle:"calm and personal", transition:"fade", brand:"#5B5FC7"}},
+  {label:"Blank project", blurb:"Set everything yourself", p:{}}
+];
+const FIELDS = [
+  ["h","Basics"],
+  ["name","Project name","text"],
+  ["kind","Format","select",[["reel","Reel (up to 90 s)"],["story","Story (up to 60 s)"]]],
+  ["duration","Target length","select",[[15,"15 seconds"],[30,"30 seconds"],[45,"45 seconds"],[60,"60 seconds"],[90,"90 seconds"]]],
+  ["pacing","Cut pacing","select",[["fast","Fast cuts (1–2 s)"],["medium","Medium (2–4 s)"],["slow","Slow and cinematic (4 s+)"]]],
+  ["about","What is this series about?","textarea","e.g. Two friends compete in a different sport every week"],
+  ["audience","Who is it for?","text","e.g. Cricket fans 18–30"],
+  ["h","Story format"],
+  ["structureKey","Story structure","preset"],
+  ["structure","Structure the AI follows every time","textarea"],
+  ["tone","Tone","select",TONES.map(t=>[t,t])],
+  ["extra","Always remember","textarea","Rules for every reel, e.g. Call us “the bros”. No swear words. Mention the score in every round."],
+  ["h","Voice-over"],
+  ["voMode","Voice-over type","select",[["ai","AI voice (Gemini)"],["record","Record my own voice"],["upload","Upload an audio file"],["none","No voice-over, captions only"]]],
+  ["language","Language","select",LANGS.map(l=>[l,l])],
+  ["voice","AI voice","voice"],
+  ["voStyle","Delivery style","text","e.g. hype cricket commentator, warm storyteller"],
+  ["voPace","Speaking pace","select",[["slow","Slow"],["normal","Normal"],["fast","Fast"]]],
+  ["syncVO","Fit scene lengths to the voice-over","toggle"],
+  ["origVol","Original clip sound","range"],
+  ["musicVol","Background music volume","range"],
+  ["h","Captions and look"],
+  ["captions","Show captions","toggle"],
+  ["capLang","Caption language","select",[["same","Same as voice-over"],["English","English"],["roman","Roman script (Hinglish style)"]]],
+  ["capStyle","Caption style","select",[["bold","Bold outline"],["box","Dark box"],["minimal","Minimal shadow"]]],
+  ["capAnim","Caption animation","select",[["words","Word by word"],["pop","Pop in"],["static","Static"]]],
+  ["capCase","Letter case","select",[["normal","As written"],["upper","UPPERCASE"]]],
+  ["capPos","Caption position","select",[["top","Upper"],["middle","Middle"],["bottom","Lower third"]]],
+  ["font","Caption font","select",FONTS],
+  ["capColor","Caption colour","color"],
+  ["hiColor","Highlight colour","color"],
+  ["transition","Scene transition","select",[["punch","Punch zoom"],["flash","Flash"],["fade","Fade"],["cut","Hard cut"]]],
+  ["h","Brand"],
+  ["showHook","Show hook title at the start","toggle"],
+  ["endCard","Add end card","toggle"],
+  ["handle","Instagram handle","text","@yourhandle"],
+  ["cta","End card call to action","text"],
+  ["brand","Brand colour","color"]
+];
+
+/* ============ helpers ============ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const r1 = n => Math.round(n*10)/10;
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const tc = s => { s = Math.max(0, s||0); const m = Math.floor(s/60); return String(m).padStart(2,"0") + ":" + (s-m*60).toFixed(1).padStart(4,"0"); };
+const words = s => String(s||"").trim().split(/\s+/).filter(Boolean);
+const LS = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : v; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+let toastT;
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600); }
+function once(el, ev, ms = 8000){ return new Promise(res => { let done = false; const f = () => { if (done) return; done = true; el.removeEventListener(ev, f); res(); }; el.addEventListener(ev, f); setTimeout(f, ms); }); }
+function seek(v, t){ return new Promise(res => { let done = false; const f = () => { if (done) return; done = true; v.removeEventListener("seeked", f); res(); }; v.addEventListener("seeked", f); try { v.currentTime = t; } catch { f(); } setTimeout(f, 4000); }); }
+let AC = null;
+function getAC(){ if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); return AC; }
+
+/* ============ storage (IndexedDB) ============ */
+const DB = {
+  db:null, mem:{projects:new Map(), ideas:new Map()},
+  open(){ return new Promise(res => { try { const r = indexedDB.open("reelwala", 1);
+    r.onupgradeneeded = () => { const d = r.result; d.createObjectStore("projects",{keyPath:"id"}); d.createObjectStore("ideas",{keyPath:"id"}); };
+    r.onsuccess = () => { this.db = r.result; res(); }; r.onerror = () => res(); } catch { res(); } }); },
+  all(store){ if (!this.db) return Promise.resolve([...this.mem[store].values()]);
+    return new Promise(res => { const q = this.db.transaction(store).objectStore(store).getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); },
+  put(store, obj){ if (!this.db){ this.mem[store].set(obj.id, obj); return Promise.resolve(); }
+    return new Promise(res => { const tx = this.db.transaction(store, "readwrite"); tx.objectStore(store).put(JSON.parse(JSON.stringify(obj))); tx.oncomplete = res; tx.onerror = res; }); },
+  del(store, id){ if (!this.db){ this.mem[store].delete(id); return Promise.resolve(); }
+    return new Promise(res => { const tx = this.db.transaction(store, "readwrite"); tx.objectStore(store).delete(id); tx.oncomplete = res; tx.onerror = res; }); }
+};
+
+/* ============ app state ============ */
+const S = {
+  projects:[], ideas:[], pid:LS.get("rw_pid",""), view:"projects",
+  media:[], story:"", ideaNote:"", plan:null, planBusy:false,
+  vo:null, voMode:null, voVoice:null, music:null, musicVol:null,
+  renderer:null, dirty:true, exportUrl:null, exportExt:"mp4", safe:true, delArm:null
+};
+const cur = () => S.projects.find(p => p.id === S.pid) || null;
+function proj(){ const p = cur(); return p ? {...DEFAULTS, ...p} : {...DEFAULTS}; }
+
+/* ============ Gemini ============ */
+const CFG = window.REELWALA_CONFIG || {};
+const FORCE_DEMO = /[?&]demo=1/.test(location.search);
+const AI = {
+  key(){ const c = String(CFG.GEMINI_API_KEY || "").trim(); if (c && !/^YOUR_/.test(c)) return c; return LS.get("rw_key","").trim(); },
+  demo(){ return FORCE_DEMO || !this.key(); },
+  textModel(){ return LS.get("rw_text_model", CFG.TEXT_MODEL || "gemini-2.5-flash"); },
+  ttsModel(){ return LS.get("rw_tts_model", CFG.TTS_MODEL || "gemini-2.5-flash-preview-tts"); },
+  explain(status, j, model){
+    const m = (j && j.error && j.error.message) || "";
+    if (status === 400 && /api key/i.test(m)) return "That API key isn't valid. Paste a fresh key in Settings.";
+    if (status === 429) return "Free limit reached for " + model + ". Wait a minute and try again, or choose another model in Settings.";
+    if (status === 404) return "The model " + model + " isn't available for your key. Choose another one in Settings.";
+    if (status === 403) return "Your key isn't allowed to use " + model + ". Check the key in Google AI Studio.";
+    return (m || ("Request failed (" + status + ").")) ;
+  },
+  async call(model, body){
+    const key = this.key();
+    if (!key) throw new Error("Add your free Gemini API key in Settings first.");
+    for (let attempt = 0; attempt < 2; attempt++){
+      let r;
+      try {
+        r = await fetch(BASE + "/models/" + encodeURIComponent(model) + ":generateContent?key=" + encodeURIComponent(key),
+          {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)});
+      } catch (e) { throw new Error("Couldn't reach Google. Check your internet connection."); }
+      let j = null; try { j = await r.json(); } catch {}
+      if (r.ok) return j;
+      if ((r.status === 500 || r.status === 503) && attempt === 0){ await new Promise(s => setTimeout(s, 2500)); continue; }
+      throw new Error(this.explain(r.status, j, model));
+    }
+  },
+  async json(prompt, images = [], mock = null){
+    if (this.demo() && mock){ await new Promise(r => setTimeout(r, 500)); return mock(); }
+    const parts = [{text:prompt}];
+    for (const im of images){ parts.push({text:im.label}); parts.push({inlineData:{mimeType:"image/jpeg", data:im.b64}}); }
+    const j = await this.call(this.textModel(), {contents:[{role:"user", parts}], generationConfig:{responseMimeType:"application/json", temperature:0.9}});
+    const c = j && j.candidates && j.candidates[0];
+    const txt = c && c.content && c.content.parts ? c.content.parts.map(p => p.text || "").join("") : "";
+    if (!txt) throw new Error((c && c.finishReason === "SAFETY") ? "Gemini declined this request. Try rewording the story." : "Gemini returned an empty answer. Try again.");
+    return parseJSON(txt);
+  },
+  async tts(text, P, voiceName){
+    if (this.demo()){ await new Promise(r => setTimeout(r, 400)); return Mock.tts(text, voiceName); }
+    const pace = {slow:"slowly", normal:"at a natural pace", fast:"quickly, with energy"}[P.voPace] || "at a natural pace";
+    const style = P.voStyle ? ("like a " + P.voStyle) : "naturally";
+    const accent = /India|Hindi|Hinglish|Marathi|Gujarati|Bengali|Punjabi|Tamil|Telugu|Kannada|Malayalam|Urdu/.test(P.language) ? " with a natural Indian accent" : "";
+    const prompt = "Say this in " + P.language + accent + ", " + style + ", " + pace + ":\n" + text;
+    const j = await this.call(this.ttsModel(), {contents:[{parts:[{text:prompt}]}],
+      generationConfig:{responseModalities:["AUDIO"], speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName}}}}});
+    const parts = (j && j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts) || [];
+    const audio = parts.find(p => p.inlineData || p.inline_data);
+    if (!audio) throw new Error("The voice model returned no audio. Try another TTS model in Settings.");
+    const d = audio.inlineData || audio.inline_data;
+    const mime = d.mimeType || d.mime_type || "";
+    const rate = parseInt((mime.match(/rate=(\d+)/) || [])[1] || "24000", 10);
+    return pcmToBuffer(d.data, rate);
+  },
+  async models(){
+    const key = this.key(); if (!key) throw new Error("Paste a key first.");
+    const r = await fetch(BASE + "/models?pageSize=200&key=" + encodeURIComponent(key));
+    let j = null; try { j = await r.json(); } catch {}
+    if (!r.ok) throw new Error(this.explain(r.status, j, "model list"));
+    return (j.models || []).filter(m => (m.supportedGenerationMethods || []).includes("generateContent")).map(m => m.name.replace(/^models\//, ""));
+  }
+};
+function parseJSON(t){
+  t = t.replace(/^\s*```(?:json)?/i, "").replace(/```\s*$/, "").trim();
+  try { return JSON.parse(t); } catch {}
+  const a = t.indexOf("{"), b = t.lastIndexOf("}");
+  if (a >= 0 && b > a){ try { return JSON.parse(t.slice(a, b+1)); } catch {} }
+  throw new Error("Gemini's answer wasn't in the expected format. Tap the button again.");
+}
+function pcmToBuffer(b64, rate){
+  const bin = atob(b64); const n = bin.length >> 1; const buf = getAC().createBuffer(1, Math.max(1, n), rate); const ch = buf.getChannelData(0);
+  for (let i = 0; i < n; i++){ let v = bin.charCodeAt(2*i) | (bin.charCodeAt(2*i+1) << 8); if (v >= 32768) v -= 65536; ch[i] = v / 32768; }
+  return buf;
+}
+function bufToWav(buf){
+  const data = buf.getChannelData(0), len = data.length, ab = new ArrayBuffer(44 + len*2), v = new DataView(ab);
+  const ws = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o+i, s.charCodeAt(i)); };
+  ws(0,"RIFF"); v.setUint32(4, 36+len*2, true); ws(8,"WAVE"); ws(12,"fmt "); v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+  v.setUint32(24, buf.sampleRate, true); v.setUint32(28, buf.sampleRate*2, true); v.setUint16(32,2,true); v.setUint16(34,16,true); ws(36,"data"); v.setUint32(40, len*2, true);
+  for (let i = 0; i < len; i++) v.setInt16(44 + i*2, clamp(data[i], -1, 1) * 0x7fff, true);
+  return new Blob([ab], {type:"audio/wav"});
+}
+
+/* ============ demo-mode AI (used when no Gemini key is set) ============ */
+const Mock = {
+  sentences(t){ return String(t || "").split(/(?<=[.!?।])\s+|\n+/).map(x => x.trim()).filter(Boolean); },
+  beats(P){ return P.structure.split(/(?<=\.)\s+/).map(x => x.replace(/\.$/, "").trim()).filter(Boolean); },
+  plan(P){
+    const sen = this.sentences(S.story); const n = Math.max(S.media.length, Math.min(sen.length, S.media.length * 2), 1);
+    const per = P.duration / n; const scenes = [];
+    for (let i = 0; i < n; i++){
+      const mi = i % S.media.length, m = S.media[mi]; const reuse = Math.floor(i / S.media.length);
+      const dur = m.type === "video" ? Math.min(per, m.dur) : clamp(per, 1.5, 4);
+      const start = m.type === "video" ? r1(Math.min(reuse * dur, Math.max(0, m.dur - dur))) : 0;
+      const line = sen[i] || sen[sen.length - 1] || "";
+      scenes.push({media:mi, start, end:start + dur, caption:words(line).slice(0, 7).join(" "), voice:P.voMode === "none" ? "" : line,
+        motion:m.type === "image" ? ["zoom-in","zoom-out","pan-left","pan-right"][i % 4] : "none"});
+    }
+    const hook = words(sen[0] || P.name).slice(0, 6).join(" ");
+    const tag = s => "#" + String(s).replace(/[^\p{L}\p{N}]+/gu, "");
+    return {title:hook, hook, scenes, post_caption:(sen[0] || P.name) + "\nWho do you think wins next time?",
+      hashtags:[tag(P.name), "#reels", "#instareels", "#trending", "#explore", "#viral", tag(P.tone.split(" ")[0])]};
+  },
+  ideas(P, hint, offset){
+    const beats = this.beats(P); const topic = hint || (P.about ? P.about.split(/[.,]/)[0] : P.name);
+    const angles = ["The unexpected twist","Behind the scenes","Rookie vs pro","One-take challenge","The rematch","Fan's choice","Speed round","Worst to best"];
+    return {ideas:[0,1,2,3,4].map(k => { const a = angles[(k + offset) % angles.length]; return {
+      title:a + ": " + topic, hook:"Open on the most dramatic second, text on screen: \u201c" + a + "\u201d",
+      format:["Versus","POV","Countdown","Story","Challenge"][k], storyline:beats.length ? beats : ["Hook","Build","Payoff"],
+      shots:["Wide shot that sets the scene (hold the phone vertical, at chest height)","Close-up reaction faces","Slow-motion of the key moment (record at 60 fps)","Over-the-shoulder shot of the action","Final result or scoreboard"],
+      voiceover:"[Demo draft in " + P.language + "] " + beats.map(b => b + ".").join(" "),
+      caption:a + " \u2014 " + topic + ". What should we try next?", why:"Demo idea. Add a Gemini key in Settings for real, tailored ideas."}; })};
+  },
+  story(P, story){ const b = this.beats(P); const sen = this.sentences(story);
+    return {story:b.map((x, i) => x + (sen[i] ? ": " + sen[i] : "")).join("\n")}; },
+  tts(text, voice){
+    // Speech-like placeholder: one soft tone per word at ~2.5 words per second, pitch set by the voice.
+    const ws = words(text), rate = 24000, wd = 0.3, gap = 0.1, n = Math.ceil((ws.length * (wd + gap) + 0.3) * rate);
+    const buf = getAC().createBuffer(1, Math.max(n, rate), rate), ch = buf.getChannelData(0);
+    const base = 120 + (VOICES.findIndex(v => v[0] === voice) % 6) * 22;
+    ws.forEach((w, i) => { const f = base * (1 + ((w.length * 7 + i) % 5) * 0.06), s0 = Math.floor(i * (wd + gap) * rate), len = Math.floor(wd * rate);
+      for (let k = 0; k < len && s0 + k < ch.length; k++){ const t = k / rate, env = Math.sin(Math.PI * k / len);
+        ch[s0 + k] = 0.18 * env * (Math.sin(2*Math.PI*f*t) + 0.5*Math.sin(2*Math.PI*2*f*t) + 0.25*Math.sin(2*Math.PI*3.1*f*t)); } });
+    return buf;
+  }
+};
+
+/* ============ prompts ============ */
+function brief(P){
+  const pacing = {fast:"fast cuts, 1–2 seconds per scene", medium:"medium cuts, 2–4 seconds per scene", slow:"slow cinematic shots, 4+ seconds per scene"}[P.pacing];
+  return [
+    "PROJECT: " + P.name,
+    "Format: Instagram " + (P.kind === "story" ? "Story" : "Reel") + ", vertical 9:16, about " + P.duration + " seconds.",
+    P.about && ("What the series is about: " + P.about),
+    P.audience && ("Audience: " + P.audience),
+    "Tone: " + P.tone,
+    "Pacing: " + pacing,
+    "Story structure to follow every time:\n" + P.structure,
+    "Voice-over language: " + P.language + (/Hinglish/.test(P.language) ? " (write Hindi-English mix in Roman script, the way people text)" : ""),
+    P.voStyle && ("Narrator style: " + P.voStyle),
+    P.extra && ("Always-remember rules from the creator:\n" + P.extra)
+  ].filter(Boolean).join("\n");
+}
+function capRule(P){
+  if (P.capLang === "English") return "always in English";
+  if (P.capLang === "roman") return "in Roman script (Hinglish style if the voice-over is Hindi)";
+  return "in the same language and script as the voice-over";
+}
+
+/* ============ media ============ */
+async function addFiles(files){
+  const box = $("#mediaMsg"); if (box){ box.hidden = false; box.className = "msg"; box.textContent = "Reading " + files.length + " file(s)…"; }
+  for (const f of files){
+    try {
+      if (f.type.startsWith("video/")) S.media.push(await loadVideo(f));
+      else if (f.type.startsWith("image/")) S.media.push(await loadImage(f));
+    } catch (e) { toast("Couldn't read " + f.name); }
+  }
+  S.dirty = true; renderMedia(); if (box) box.hidden = true;
+}
+async function loadVideo(f){
+  const url = URL.createObjectURL(f); const v = document.createElement("video");
+  v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = url;
+  await once(v, "loadedmetadata");
+  if (!isFinite(v.duration) || !v.videoWidth) throw new Error("bad video");
+  await seek(v, Math.min(0.5, v.duration/2));
+  return {id:uid(), name:f.name, type:"video", url, dur:v.duration, w:v.videoWidth, h:v.videoHeight, thumb:snap(v, v.videoWidth, v.videoHeight, 200, 0.7)};
+}
+async function loadImage(f){
+  const url = URL.createObjectURL(f); const img = new Image(); img.src = url;
+  await img.decode();
+  return {id:uid(), name:f.name, type:"image", url, img, dur:0, w:img.naturalWidth, h:img.naturalHeight, thumb:snap(img, img.naturalWidth, img.naturalHeight, 200, 0.7)};
+}
+function snap(src, sw, sh, maxW, q){
+  const s = Math.min(1, maxW / Math.max(sw, sh)); const c = document.createElement("canvas");
+  c.width = Math.max(1, Math.round(sw*s)); c.height = Math.max(1, Math.round(sh*s));
+  c.getContext("2d").drawImage(src, 0, 0, c.width, c.height); return c.toDataURL("image/jpeg", q);
+}
+async function framesFor(m, n){
+  if (m.type === "image"){ return [{t:0, b64:snap(m.img, m.w, m.h, 512, 0.72).split(",")[1]}]; }
+  const v = document.createElement("video"); v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = m.url;
+  await once(v, "loadeddata");
+  const out = [];
+  for (let i = 0; i < n; i++){
+    const t = n === 1 ? m.dur/2 : clamp((m.dur - 0.2) * (i + 0.5) / n, 0, m.dur);
+    await seek(v, t); out.push({t:r1(t), b64:snap(v, m.w, m.h, 448, 0.68).split(",")[1]});
+  }
+  v.removeAttribute("src"); v.load(); return out;
+}
+
+/* ============ plan ============ */
+async function makePlan(){
+  const P = proj();
+  if (!S.media.length) return toast("Add at least one clip or photo first.");
+  if (!S.story.trim()) return toast("Write a short story description first.");
+  S.planBusy = true; renderPlan(); const st = $("#planStatus");
+  try {
+    const vids = S.media.filter(m => m.type === "video").length;
+    const budget = 36 - S.media.filter(m => m.type === "image").length;
+    const per = vids ? clamp(Math.floor(budget / vids), 2, 8) : 0;
+    const images = [];
+    for (let i = 0; i < S.media.length; i++){
+      const m = S.media[i];
+      if (st) st.textContent = "Watching media " + (i+1) + " of " + S.media.length + "…";
+      const n = m.type === "video" ? clamp(Math.round(m.dur / 2), 2, per) : 1;
+      const fr = await framesFor(m, n);
+      fr.forEach(f => images.push({label: m.type === "video" ? ("Media #" + i + " (video) frame at " + f.t + "s:") : ("Media #" + i + " (photo):"), b64:f.b64}));
+    }
+    if (st) st.textContent = "Writing the story and edit plan…";
+    const list = S.media.map((m, i) => "#" + i + " " + (m.type === "video" ? "video, " + r1(m.dur) + "s" : "photo") + ", " + (m.h >= m.w ? "portrait" : "landscape")).join("\n");
+    const prompt = "You are a short-form video editor and scriptwriter. Build an edit plan for one Instagram " + (P.kind === "story" ? "Story" : "Reel") + " using ONLY the media provided.\n\n" +
+      brief(P) + "\n\nSTORY FROM THE CREATOR:\n" + S.story.trim() + (S.ideaNote ? "\n\nIDEA NOTES:\n" + S.ideaNote : "") +
+      "\n\nMEDIA (reference these indexes):\n" + list + "\nFrames from each media item follow, labelled with the media index and timestamp.\n\n" +
+      "RULES:\n- The scene durations should add up to about " + P.duration + " seconds (within 15%).\n" +
+      "- Each scene uses one media index. For a video, choose start and end seconds inside the clip that show the moment you need (use the frame timestamps). For a photo, use start 0 and end = how long to show it (1.5–4 s).\n" +
+      "- You may reuse a video at different moments. Order scenes to follow the story structure. Open on the strongest visual.\n" +
+      "- caption: on-screen text, max 7 words, " + capRule(P) + ".\n" +
+      (P.voMode === "none" ? "- voice: leave empty for every scene (no voice-over).\n" : "- voice: the voice-over spoken during that scene, in " + P.language + ", roughly 2.5 words per second of the scene. Together the lines must tell the story.\n") +
+      "- motion: for photos one of zoom-in, zoom-out, pan-left, pan-right. For videos none or zoom-in.\n" +
+      "- hook: punchy title shown in the first 2 seconds, max 6 words, " + capRule(P) + ".\n" +
+      "- post_caption: the Instagram post caption, 1–3 short lines ending in a question that invites comments.\n" +
+      "- hashtags: 8–12 relevant hashtags.\n\n" +
+      'Reply with only JSON: {"title":"","hook":"","scenes":[{"media":0,"start":0,"end":3,"caption":"","voice":"","motion":"none"}],"post_caption":"","hashtags":["#tag"]}';
+    const j = await AI.json(prompt, images, () => Mock.plan(P));
+    S.plan = normalizePlan(j);
+    if (!S.plan.scenes.length) throw new Error("The plan came back without scenes. Try again.");
+    S.vo = null; S.dirty = true; toast("Plan ready: " + S.plan.scenes.length + " scenes");
+  } catch (e) { S.planErr = e.message; }
+  S.planBusy = false; renderCreate();
+}
+function normalizePlan(j){
+  const scenes = (Array.isArray(j.scenes) ? j.scenes : []).map(s => {
+    const idx = clamp(parseInt(s.media, 10) || 0, 0, S.media.length - 1); const m = S.media[idx];
+    let start = Math.max(0, +s.start || 0), end = +s.end || start + 2.5;
+    if (m.type === "video"){ start = clamp(start, 0, Math.max(0, m.dur - 0.5)); end = clamp(end, start + 0.6, m.dur); }
+    else { start = 0; end = clamp(end, 1, 6); }
+    const motion = ["zoom-in","zoom-out","pan-left","pan-right","none"].includes(s.motion) ? s.motion : (m.type === "image" ? "zoom-in" : "none");
+    return {mediaIdx:idx, start:r1(start), dur:r1(Math.max(0.6, end - start)), caption:String(s.caption || ""), voice:String(s.voice || ""), motion};
+  });
+  return {title:String(j.title || ""), hook:String(j.hook || ""), scenes, post:String(j.post_caption || ""), tags:(Array.isArray(j.hashtags) ? j.hashtags : []).map(String)};
+}
+function quickPlan(){
+  const P = proj(); if (!S.media.length) return toast("Add clips or photos first.");
+  const sentences = S.story.split(/(?<=[.!?।])\s+|\n+/).map(s => s.trim()).filter(Boolean);
+  const per = P.duration / S.media.length;
+  S.plan = {title:"", hook:sentences[0] ? words(sentences[0]).slice(0,6).join(" ") : "", post:S.story.trim(), tags:[],
+    scenes:S.media.map((m, i) => ({mediaIdx:i, start:0, dur:r1(m.type === "video" ? Math.min(m.dur, Math.max(1.5, per)) : clamp(per, 1.5, 4)),
+      caption:sentences[i] ? words(sentences[i]).slice(0,7).join(" ") : "", voice:P.voMode === "none" ? "" : (sentences[i] || ""), motion:m.type === "image" ? (i % 2 ? "zoom-out" : "zoom-in") : "none"}))};
+  S.vo = null; S.dirty = true; renderCreate(); toast("Quick plan made without AI");
+}
+function syncToVO(){
+  if (!S.plan || !S.vo) return;
+  const sc = S.plan.scenes; const w = sc.map(s => Math.max(words(s.voice).length, 1.5)); const W = w.reduce((a,b) => a+b, 0);
+  const total = S.vo.buffer.duration + 0.6;
+  sc.forEach((s, i) => {
+    const d = Math.max(1, total * w[i] / W); const m = S.media[s.mediaIdx];
+    if (m && m.type === "video" && s.start + d > m.dur) s.start = r1(Math.max(0, m.dur - d));
+    s.dur = r1(d);
+  });
+  S.dirty = true;
+}
+function script(){ return S.plan ? S.plan.scenes.map(s => s.voice.trim()).filter(Boolean).join("\n") : ""; }
+function planTotal(){ const P = proj(); return S.plan ? S.plan.scenes.reduce((a, s) => a + (+s.dur || 0), 0) + (P.endCard ? 2.5 : 0) : 0; }
+
+/* ============ renderer ============ */
+function fontStr(font, size, heavy = true){
+  const w = (font === "Anton" || font === "Bebas Neue") ? 400 : (heavy ? 800 : 600);
+  return w + " " + Math.round(size) + 'px "' + font + '", "Poppins", "Mukta", sans-serif';
+}
+function wrapWords(cx, ws, maxW){
+  const lines = []; let line = [];
+  for (const w of ws){ const test = line.concat(w).join(" "); if (line.length && cx.measureText(test).width > maxW){ lines.push(line); line = [w]; } else line.push(w); }
+  if (line.length) lines.push(line); return lines;
+}
+function rrect(cx, x, y, w, h, r){ cx.beginPath(); cx.moveTo(x+r, y); cx.arcTo(x+w, y, x+w, y+h, r); cx.arcTo(x+w, y+h, x, y+h, r); cx.arcTo(x, y+h, x, y, r); cx.arcTo(x, y, x+w, y, r); cx.closePath(); }
+class Renderer {
+  constructor(cv){ this.cv = cv; this.cx = cv.getContext("2d"); this.running = false; this.scenes = []; }
+  async prepare(W, H){
+    this.halt(); this.W = W; this.H = H; this.cv.width = W; this.cv.height = H; this.P = proj();
+    const P = this.P; let t = 0;
+    this.hook = S.plan.hook;
+    this.scenes = S.plan.scenes.filter(s => S.media[s.mediaIdx]).map(s => { const o = {...s, m:S.media[s.mediaIdx], t0:t}; t += Math.max(0.3, +s.dur || 1); return o; });
+    this.endT = t; this.total = t + (P.endCard ? 2.5 : 0);
+    for (const s of this.scenes){
+      if (s.m.type !== "video") continue;
+      const el = document.createElement("video"); el.src = s.m.url; el.playsInline = true; el.setAttribute("playsinline", ""); el.preload = "auto";
+      el.muted = !(P.origVol > 0); s.el = el; await once(el, "loadeddata"); await seek(el, s.start);
+    }
+    try { await Promise.all([document.fonts.load(fontStr(P.font, 40)), document.fonts.load(fontStr(P.font, 40, false))]); } catch {}
+    this.ready = true; S.dirty = false; this.draw(0);
+  }
+  unlock(){ for (const s of this.scenes) if (s.el){ const p = s.el.play(); if (p) p.then(() => s.el.pause()).catch(() => {}); } }
+  async play({record = false, onTick, onDone}){
+    const ac = getAC(); ac.resume(); this.unlock();
+    const P = this.P; this.recording = record;
+    await Promise.all(this.scenes.filter(s => s.el).map(s => { s.el.pause(); return seek(s.el, s.start); }));
+    const master = ac.createGain(); master.gain.value = 1; master.connect(ac.destination);
+    let dest = null; if (record){ dest = ac.createMediaStreamDestination(); master.connect(dest); }
+    this.nodes = [master];
+    const hasVO = !!S.vo;
+    for (const s of this.scenes){
+      if (!s.el || s.el.muted) continue;
+      if (!s.src) { try { s.src = ac.createMediaElementSource(s.el); } catch { continue; } }
+      try { s.src.disconnect(); } catch {}
+      const g = ac.createGain(); g.gain.value = P.origVol * (hasVO ? 0.6 : 1); s.src.connect(g); g.connect(master); this.nodes.push(g);
+    }
+    const t0 = ac.currentTime + 0.3; this.sources = [];
+    if (hasVO){ const src = ac.createBufferSource(); src.buffer = S.vo.buffer; src.connect(master); src.start(t0 + 0.2); this.sources.push(src); }
+    if (S.music){
+      const src = ac.createBufferSource(); src.buffer = S.music.buffer; src.loop = true; const g = ac.createGain();
+      const vol = (S.musicVol ?? P.musicVol) * (hasVO ? 0.45 : 1);
+      g.gain.setValueAtTime(vol, t0); g.gain.setValueAtTime(vol, t0 + Math.max(0, this.total - 1.2)); g.gain.linearRampToValueAtTime(0.0001, t0 + this.total);
+      src.connect(g); g.connect(master); src.start(t0); this.sources.push(src); this.nodes.push(g);
+    }
+    if (record){
+      const vs = this.cv.captureStream(30);
+      const stream = new MediaStream([...vs.getVideoTracks(), ...dest.stream.getAudioTracks()]);
+      const types = ["video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4;codecs=avc1,mp4a","video/mp4","video/webm;codecs=vp9,opus","video/webm;codecs=vp8,opus","video/webm"];
+      const mime = types.find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t)) || "";
+      this.mime = mime; this.chunks = [];
+      this.rec = new MediaRecorder(stream, mime ? {mimeType:mime, videoBitsPerSecond:this.W >= 1080 ? 9e6 : 5e6, audioBitsPerSecond:160000} : undefined);
+      this.rec.ondataavailable = e => { if (e.data && e.data.size) this.chunks.push(e.data); };
+      this.rec.start(500);
+    }
+    this.running = true; this.cur = -1; this.ac = ac; this.t0 = t0; this.onDone = onDone;
+    const loop = () => {
+      if (!this.running) return;
+      const t = ac.currentTime - t0;
+      if (t >= this.total){ this.finish(); return; }
+      this.draw(Math.max(0, t)); if (onTick) onTick(Math.max(0, t), this.total);
+      this.raf = requestAnimationFrame(loop);
+    };
+    this.raf = requestAnimationFrame(loop);
+  }
+  finish(){
+    const done = this.onDone; this.halt();
+    if (this.rec && this.rec.state !== "inactive"){
+      const rec = this.rec; rec.onstop = () => { const blob = new Blob(this.chunks, {type:(this.mime || "video/webm").split(";")[0]}); this.rec = null; if (done) done(blob); };
+      rec.stop();
+    } else if (done) done(null);
+  }
+  halt(){
+    this.running = false; cancelAnimationFrame(this.raf);
+    for (const s of this.scenes) if (s.el) s.el.pause();
+    for (const src of (this.sources || [])) { try { src.stop(); } catch {} }
+    for (const n of (this.nodes || [])) { try { n.disconnect(); } catch {} }
+    this.sources = []; this.nodes = [];
+  }
+  stop(){ this.onDone = null; if (this.rec && this.rec.state !== "inactive"){ this.rec.onstop = null; this.rec.stop(); this.rec = null; } this.halt(); }
+  sceneAt(t){ let i = this.scenes.findIndex(s => t >= s.t0 && t < s.t0 + s.dur); if (i < 0) i = this.scenes.length - 1; return i; }
+  draw(t){
+    const {cx, W, H, P} = this;
+    if (!this.scenes.length) return;
+    if (t >= this.endT && P.endCard){ this.drawEnd(t - this.endT); this.overlay(); return; }
+    const i = this.sceneAt(t), s = this.scenes[i]; const lt = t - s.t0, p = clamp(lt / s.dur, 0, 1);
+    if (this.running && i !== this.cur){
+      const prev = this.scenes[this.cur]; if (prev && prev.el && prev.el !== s.el) prev.el.pause();
+      if (s.el){ const pr = s.el.play(); if (pr) pr.catch(() => { s.el.muted = true; s.el.play().catch(() => {}); }); }
+      this.cur = i;
+    }
+    let src = null, sw = 0, sh = 0;
+    if (s.el){ if (s.el.readyState >= 2){ src = s.el; sw = s.el.videoWidth; sh = s.el.videoHeight; } else return; }
+    else { src = s.m.img; sw = s.m.w; sh = s.m.h; }
+    let scale = 1, ox = 0;
+    switch (s.motion){ case "zoom-in": scale = 1 + 0.12*p; break; case "zoom-out": scale = 1.12 - 0.12*p; break;
+      case "pan-left": scale = 1.15; ox = 0.05 - 0.1*p; break; case "pan-right": scale = 1.15; ox = -0.05 + 0.1*p; break; }
+    if (P.transition === "punch" && i > 0 && lt < 0.35) scale *= 1 + 0.08 * (1 - lt/0.35);
+    cx.fillStyle = "#000"; cx.fillRect(0, 0, W, H);
+    const k = Math.max(W/sw, H/sh) * scale, dw = sw*k, dh = sh*k;
+    cx.drawImage(src, (W-dw)/2 + ox*W, (H-dh)/2, dw, dh);
+    if (P.transition === "flash" && i > 0 && lt < 0.2){ cx.fillStyle = "rgba(255,255,255," + (0.55*(1 - lt/0.2)) + ")"; cx.fillRect(0, 0, W, H); }
+    if (P.transition === "fade" && lt < 0.3){ cx.fillStyle = "rgba(0,0,0," + (1 - lt/0.3) + ")"; cx.fillRect(0, 0, W, H); }
+    if (P.captions && s.caption && P.capStyle !== "box"){
+      const yc = {top:0.24, middle:0.5, bottom:0.7}[P.capPos] * H; const g = cx.createLinearGradient(0, yc - H*0.18, 0, yc + H*0.18);
+      g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(0.5, "rgba(0,0,0,0.28)"); g.addColorStop(1, "rgba(0,0,0,0)"); cx.fillStyle = g; cx.fillRect(0, yc - H*0.18, W, H*0.36);
+    }
+    if (P.captions && s.caption) this.drawCaption(s.caption, p, s.dur);
+    if (i === 0 && P.showHook && this.hook && lt < Math.min(2.6, s.dur)) this.drawHook(lt, Math.min(2.6, s.dur));
+    this.overlay();
+  }
+  drawCaption(text, p, dur){
+    const {cx, W, H, P} = this;
+    let txt = P.capCase === "upper" ? text.toUpperCase() : text;
+    let fs = W * (P.capStyle === "minimal" ? 0.06 : 0.07), ws = words(txt), lines;
+    for (let tries = 0; tries < 4; tries++){ cx.font = fontStr(P.font, fs); lines = wrapWords(cx, ws, W * 0.82); if (lines.length <= 3) break; fs *= 0.86; }
+    const lh = fs * 1.22, yc = {top:0.24, middle:0.5, bottom:0.7}[P.capPos] * H, y0 = yc - (lines.length * lh)/2 + lh/2;
+    let shown = ws.length, hi = -1, sc = 1;
+    if (P.capAnim === "words"){ shown = clamp(Math.floor(p / 0.85 * ws.length) + 1, 1, ws.length); hi = shown - 1; }
+    if (P.capAnim === "pop"){ const a = clamp((p*dur) / 0.18, 0, 1); sc = 0.82 + 0.18 * (1 - Math.pow(1 - a, 3)); }
+    cx.save(); cx.translate(W/2, yc); cx.scale(sc, sc); cx.translate(-W/2, -yc);
+    cx.textBaseline = "middle"; cx.lineJoin = "round"; cx.font = fontStr(P.font, fs);
+    const space = cx.measureText(" ").width; let k = 0;
+    lines.forEach((ln, li) => {
+      const widths = ln.map(w => cx.measureText(w).width); const lw = widths.reduce((a,b) => a+b, 0) + space*(ln.length - 1);
+      let x = (W - lw)/2; const y = y0 + li*lh;
+      if (P.capStyle === "box"){ cx.fillStyle = "rgba(12,10,14,0.78)"; rrect(cx, x - fs*0.35, y - lh/2 + fs*0.04, lw + fs*0.7, lh - fs*0.08, fs*0.22); cx.fill(); }
+      ln.forEach((w, wi) => {
+        if (k < shown){
+          const col = k === hi ? P.hiColor : P.capColor;
+          if (P.capStyle === "bold"){ cx.strokeStyle = "rgba(0,0,0,0.92)"; cx.lineWidth = fs * 0.2; cx.strokeText(w, x, y); }
+          if (P.capStyle === "minimal"){ cx.shadowColor = "rgba(0,0,0,0.7)"; cx.shadowBlur = fs*0.3; cx.shadowOffsetY = fs*0.06; }
+          cx.fillStyle = col; cx.textAlign = "left"; cx.fillText(w, x, y); cx.shadowColor = "transparent"; cx.shadowBlur = 0; cx.shadowOffsetY = 0;
+        }
+        x += widths[wi] + space; k++;
+      });
+    });
+    cx.restore();
+  }
+  drawHook(lt, len){
+    const {cx, W, H, P} = this;
+    const a = clamp(lt/0.25, 0, 1), out = clamp((len - lt)/0.3, 0, 1), sc = 0.8 + 0.2*(1 - Math.pow(1 - a, 3));
+    let txt = P.capCase === "upper" ? this.hook.toUpperCase() : this.hook; const fs = W*0.078;
+    cx.save(); cx.globalAlpha = Math.min(a, out); cx.font = fontStr(P.font, fs); cx.textBaseline = "middle";
+    const lines = wrapWords(cx, words(txt), W*0.78), lh = fs*1.2, yc = H*0.22;
+    cx.translate(W/2, yc); cx.scale(sc, sc); cx.rotate(-0.025); cx.translate(-W/2, -yc);
+    const bw = Math.max(...lines.map(l => cx.measureText(l.join(" ")).width)) + fs*0.9, bh = lines.length*lh + fs*0.5;
+    cx.fillStyle = P.brand; rrect(cx, (W - bw)/2, yc - bh/2, bw, bh, fs*0.25); cx.fill();
+    cx.fillStyle = "#fff"; cx.textAlign = "center";
+    lines.forEach((l, i) => cx.fillText(l.join(" "), W/2, yc - (lines.length - 1)*lh/2 + i*lh));
+    cx.restore();
+  }
+  drawEnd(lt){
+    const {cx, W, H, P} = this; const a = clamp(lt/0.35, 0, 1);
+    cx.fillStyle = "#000"; cx.fillRect(0, 0, W, H); cx.globalAlpha = a; cx.fillStyle = P.brand; cx.fillRect(0, 0, W, H);
+    const g = cx.createRadialGradient(W/2, H*0.45, W*0.1, W/2, H*0.5, H*0.7); g.addColorStop(0, "rgba(255,255,255,0.12)"); g.addColorStop(1, "rgba(0,0,0,0.35)"); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    cx.textAlign = "center"; cx.textBaseline = "middle"; cx.fillStyle = "#fff";
+    const handle = P.handle || P.name; let fs = W*0.085; cx.font = fontStr(P.font, fs); while (cx.measureText(handle).width > W*0.86 && fs > 20){ fs *= 0.9; cx.font = fontStr(P.font, fs); }
+    cx.fillText(handle, W/2, H*0.45);
+    if (P.cta){ const f2 = W*0.05; cx.font = fontStr(P.font, f2, false); const tw = cx.measureText(P.cta).width;
+      cx.fillStyle = "rgba(255,255,255,0.95)"; rrect(cx, (W - tw)/2 - f2*0.9, H*0.55 - f2*0.95, tw + f2*1.8, f2*1.9, f2*0.95); cx.fill();
+      cx.fillStyle = P.brand; cx.fillText(P.cta, W/2, H*0.55 + f2*0.02); }
+    cx.globalAlpha = 1;
+  }
+  overlay(){
+    if (!S.safe || this.recording) return; const {cx, W, H} = this;
+    cx.save(); cx.fillStyle = "rgba(232,73,42,0.16)"; cx.fillRect(0, 0, W, H*0.14); cx.fillRect(0, H*0.8, W, H*0.2);
+    cx.setLineDash([W*0.015, W*0.012]); cx.strokeStyle = "rgba(255,255,255,0.7)"; cx.lineWidth = W*0.003;
+    cx.beginPath(); cx.moveTo(0, H*0.14); cx.lineTo(W, H*0.14); cx.moveTo(0, H*0.8); cx.lineTo(W, H*0.8); cx.stroke();
+    cx.font = "500 " + Math.round(W*0.026) + 'px "JetBrains Mono", monospace'; cx.fillStyle = "rgba(255,255,255,0.85)"; cx.textAlign = "left"; cx.textBaseline = "top";
+    cx.fillText("INSTAGRAM TOP BAR", W*0.03, H*0.14 - W*0.045); cx.fillText("CAPTION + BUTTONS ZONE", W*0.03, H*0.8 + W*0.015);
+    cx.restore();
+  }
+}
+
+/* ============ views ============ */
+function go(view){
+  S.view = view;
+  for (const v of ["projects","setup","ideas","create","settings"]) $("#v-" + v).hidden = v !== view;
+  document.querySelectorAll(".tab").forEach(b => { if (b.dataset.go === (view === "setup" ? "projects" : view)) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  if (view !== "create" && S.renderer && S.renderer.running && !S.renderer.recording) S.renderer.stop();
+  ({projects:renderProjects, setup:renderSetup, ideas:renderIdeas, create:renderCreate, settings:renderSettings})[view]();
+  window.scrollTo(0, 0);
+}
+function demoNote(){
+  if (!AI.demo()) return "";
+  return '<div class="msg" id="demoNote"><b>Demo mode.</b> AI steps are simulated on this device, and the voice-over is a placeholder tone. <button class="btn small ghost" data-go="settings">Add Gemini key</button></div>';
+}
+function renderSel(){
+  const sel = $("#projSel");
+  sel.innerHTML = S.projects.length ? S.projects.map(p => '<option value="' + p.id + '"' + (p.id === S.pid ? " selected" : "") + ">" + esc(p.name) + "</option>").join("") : '<option value="">No projects yet</option>';
+  sel.disabled = !S.projects.length;
+}
+function needProject(box, what){
+  box.innerHTML = '<div><h2>' + what + '</h2><p class="lead">Create a project first. It holds your reel format, story structure and voice settings so every reel stays consistent.</p></div><div><button class="btn primary" data-go="projects">Create a project</button></div>';
+}
+function renderProjects(){
+  const box = $("#projectsBox");
+  const cards = S.projects.map(p0 => { const p = {...DEFAULTS, ...p0}; const n = S.ideas.filter(i => i.pid === p.id).length;
+    return '<article class="pcard"><div class="stripe" style="background:' + esc(p.brand) + '"></div><div class="in">' +
+      '<div class="row"><h3 class="grow">' + esc(p.name) + '</h3>' + (p.id === S.pid ? '<span class="chip hot">Current</span>' : "") + '</div>' +
+      '<div class="row"><span class="chip">' + (p.kind === "story" ? "Story" : "Reel") + ' · ' + p.duration + 's · 9:16</span><span class="chip">' + esc(STRUCTURES[p.structureKey] ? STRUCTURES[p.structureKey][0] : "Custom") + '</span><span class="chip">' +
+      (p.voMode === "ai" ? esc(p.voice) : {record:"My voice", upload:"Uploaded audio", none:"No voice"}[p.voMode]) + ' · ' + esc(p.language.split(" (")[0]) + '</span></div>' +
+      (p.about ? '<p>' + esc(p.about) + '</p>' : "") +
+      '<div class="row"><button class="btn small primary" data-act="open-create" data-id="' + p.id + '">Make a reel</button><button class="btn small" data-act="open-ideas" data-id="' + p.id + '">Ideas' + (n ? " (" + n + ")" : "") + '</button><button class="btn small" data-act="open-setup" data-id="' + p.id + '">Edit setup</button>' +
+      '<button class="btn small ghost" data-act="dup" data-id="' + p.id + '">Duplicate</button><button class="btn small ghost danger" data-act="del" data-id="' + p.id + '">' + (S.delArm === p.id ? "Tap again to delete" : "Delete") + '</button></div></div></article>'; }).join("");
+  box.innerHTML = '<div><span class="eyebrow">Your series</span><h2>Reel projects</h2><p class="lead">Each project keeps one format, story structure, caption look and voice, so every reel in the series feels the same.</p></div>' +
+    (cards ? '<div class="cards">' + cards + '</div>' : "") +
+    '<div class="panel"><h3>' + (S.projects.length ? "New project" : "Start your first project") + '</h3><p class="note" style="margin:0">Pick a starting point. You can change every setting afterwards.</p><div class="tpl">' +
+    TEMPLATES.map((t, i) => '<button data-act="new" data-tpl="' + i + '"><b>' + esc(t.label) + '</b><span>' + esc(t.blurb) + '</span></button>').join("") + '</div></div>';
+}
+async function newProject(i){
+  const t = TEMPLATES[i]; const p = {...DEFAULTS, ...t.p, id:uid(), created:Date.now()};
+  p.structure = STRUCTURES[p.structureKey][1];
+  S.projects.push(p); await DB.put("projects", p); setPid(p.id); go("setup"); toast("Project created");
+}
+function setPid(id){ S.pid = id; LS.set("rw_pid", id); S.voMode = null; S.voVoice = null; S.musicVol = null; S.dirty = true; renderSel(); }
+let saveT;
+function saveProject(){ const p = cur(); if (!p) return; clearTimeout(saveT); saveT = setTimeout(async () => { await DB.put("projects", p); renderSel(); toast("Saved"); }, 450); S.dirty = true; }
+function renderSetup(){
+  const box = $("#setupBox"); const p0 = cur(); if (!p0) return needProject(box, "Project setup");
+  const p = {...DEFAULTS, ...p0};
+  let html = '<div><span class="eyebrow">Project setup</span><h2>' + esc(p.name) + '</h2><p class="lead">Changes save automatically and apply to every new reel and idea in this project.</p></div><div class="panel form" id="setupForm">';
+  for (const f of FIELDS){
+    const [k, label, type, opt] = f;
+    if (k === "h"){ html += '<div class="sec-h">' + esc(label) + '</div>'; continue; }
+    const v = p[k]; const id = "f_" + k;
+    if (type === "text") html += '<label class="f" for="' + id + '">' + esc(label) + '<input type="text" id="' + id + '" data-k="' + k + '" value="' + esc(v) + '" placeholder="' + esc(opt || "") + '"></label>';
+    else if (type === "textarea") html += '<label class="f" for="' + id + '">' + esc(label) + '<textarea id="' + id + '" data-k="' + k + '" placeholder="' + esc(opt || "") + '">' + esc(v) + '</textarea></label>';
+    else if (type === "select") html += '<label class="f" for="' + id + '">' + esc(label) + '<select id="' + id + '" data-k="' + k + '">' + opt.map(([a, b]) => '<option value="' + esc(a) + '"' + (String(a) === String(v) ? " selected" : "") + ">" + esc(b) + "</option>").join("") + '</select></label>';
+    else if (type === "preset") html += '<label class="f" for="' + id + '">' + esc(label) + '<span class="hint">Choosing one fills in the structure below. Edit the text to make it your own.</span><select id="' + id + '" data-k="' + k + '">' + Object.entries(STRUCTURES).map(([a, b]) => '<option value="' + a + '"' + (a === v ? " selected" : "") + ">" + esc(b[0]) + "</option>").join("") + '<option value="custom"' + (v === "custom" ? " selected" : "") + '>Custom</option></select></label>';
+    else if (type === "toggle") html += '<label class="toggle" for="' + id + '">' + esc(label) + '<input type="checkbox" id="' + id + '" data-k="' + k + '"' + (v ? " checked" : "") + '></label>';
+    else if (type === "range") html += '<label class="f" for="' + id + '">' + esc(label) + ' <span class="hint" id="' + id + '_v">' + Math.round(v*100) + '%</span><input type="range" min="0" max="1" step="0.05" id="' + id + '" data-k="' + k + '" value="' + v + '"></label>';
+    else if (type === "color") html += '<label class="toggle" for="' + id + '">' + esc(label) + '<input type="color" id="' + id + '" data-k="' + k + '" value="' + esc(v) + '"></label>';
+    else if (type === "voice") html += '<div class="f"><label class="f" for="' + id + '">' + esc(label) + '<span class="hint">30 Gemini voices. Any voice can speak any language.</span><select id="' + id + '" data-k="' + k + '">' + VOICES.map(([a, b]) => '<option value="' + a + '"' + (a === v ? " selected" : "") + ">" + a + " · " + b + "</option>").join("") + '</select></label><div class="row"><button class="btn small" data-act="sample-voice">Hear a sample</button><span class="note" id="sampleMsg"></span></div><audio id="sampleAudio" controls hidden style="width:100%"></audio></div>';
+  }
+  html += '</div><div class="row"><button class="btn primary" data-act="open-ideas" data-id="' + p.id + '">Get ideas</button><button class="btn" data-act="open-create" data-id="' + p.id + '">Make a reel</button></div>';
+  box.innerHTML = html;
+}
+function onSetupInput(e){
+  const el = e.target, k = el.dataset.k; if (!k) return; const p = cur(); if (!p) return;
+  let v = el.type === "checkbox" ? el.checked : el.value;
+  if (el.type === "range"){ v = +v; const lab = $("#f_" + k + "_v"); if (lab) lab.textContent = Math.round(v*100) + "%"; }
+  if (k === "duration") v = +v;
+  p[k] = v;
+  if (k === "structureKey" && STRUCTURES[v]){ p.structure = STRUCTURES[v][1]; const ta = $("#f_structure"); if (ta) ta.value = p.structure; }
+  if (k === "structure"){ const pre = Object.entries(STRUCTURES).find(([, b]) => b[1] === v); p.structureKey = pre ? pre[0] : "custom"; const sel = $("#f_structureKey"); if (sel) sel.value = p.structureKey; }
+  saveProject();
+}
+async function sampleVoice(){
+  const P = proj(); const msg = $("#sampleMsg"); const au = $("#sampleAudio");
+  msg.innerHTML = '<span class="spin"></span> Generating…';
+  try {
+    const line = /Hindi|Hinglish/.test(P.language) ? "Namaste doston! Aaj ka challenge dekh ke aap hairan reh jaoge." : "Hey everyone! Wait till you see what happens in today's challenge.";
+    const buf = await AI.tts(line, P, P.voice); au.src = URL.createObjectURL(bufToWav(buf)); au.hidden = false; au.play().catch(() => {}); msg.textContent = "";
+  } catch (e) { msg.textContent = e.message; }
+}
+
+/* ideas */
+function renderIdeas(){
+  const box = $("#ideasBox"); const p0 = cur(); if (!p0) return needProject(box, "Reel ideas");
+  const P = proj(); const list = S.ideas.filter(i => i.pid === P.id).sort((a, b) => (b.starred - a.starred) || (b.created - a.created));
+  box.innerHTML = '<div><span class="eyebrow">' + esc(P.name) + '</span><h2>Reel ideas</h2><p class="lead">Ideas follow this project\'s structure, tone and language. Each comes with a hook, story beats, a shot list and a draft voice-over.</p></div>' + demoNote() +
+    '<div class="panel"><label class="f" for="ideaHint">Topic or angle <span class="hint">Optional, e.g. “badminton week”, “Diwali special”, “rain day”</span><input type="text" id="ideaHint" value="' + esc(S.ideaHint || "") + '"></label>' +
+    '<div class="row"><button class="btn primary" id="ideaBtn" data-act="gen-ideas">Give me 5 ideas</button><span class="note" id="ideaMsg"></span></div></div>' +
+    (list.length ? '<div class="cards">' + list.map(ideaCard).join("") + '</div>' : '<p class="note">No ideas yet. Tap “Give me 5 ideas” and they will be saved here.</p>');
+}
+function ideaCard(d){
+  return '<article class="idea"><div class="row"><span class="chip hot">' + esc(d.format || "Idea") + '</span><span class="grow"></span><button class="iconb star" aria-label="Star idea" data-act="star-idea" data-id="' + d.id + '">' + (d.starred ? "★" : "☆") + '</button></div>' +
+    '<h3>' + esc(d.title) + '</h3><div class="hook">“' + esc(d.hook) + '”</div>' +
+    (d.why ? '<p class="note" style="margin:0">' + esc(d.why) + '</p>' : "") +
+    '<div><span class="eyebrow">Story beats</span><ol>' + (d.storyline || []).map(b => "<li>" + esc(b) + "</li>").join("") + '</ol></div>' +
+    '<details><summary>Shot list (' + (d.shots || []).length + ')</summary><ul>' + (d.shots || []).map(b => "<li>" + esc(b) + "</li>").join("") + '</ul></details>' +
+    '<details><summary>Draft voice-over</summary><div class="vo">' + esc(d.voiceover) + '</div></details>' +
+    (d.caption ? '<details><summary>Post caption</summary><div class="vo">' + esc(d.caption) + '</div></details>' : "") +
+    '<div class="row"><button class="btn small primary" data-act="use-idea" data-id="' + d.id + '">Make this reel</button><button class="btn small ghost danger" data-act="del-idea" data-id="' + d.id + '">Delete</button></div></article>';
+}
+async function genIdeas(){
+  const P = proj(); const btn = $("#ideaBtn"), msg = $("#ideaMsg"); S.ideaHint = $("#ideaHint").value.trim();
+  btn.disabled = true; msg.innerHTML = '<span class="spin"></span> Thinking up ideas…';
+  const old = S.ideas.filter(i => i.pid === P.id).map(i => i.title).slice(0, 40);
+  const prompt = "You are a creative strategist for Instagram short-form video. Suggest 5 fresh, specific reel ideas for this series.\n\n" + brief(P) +
+    (S.ideaHint ? "\n\nFocus on: " + S.ideaHint : "") + (old.length ? "\n\nDo not repeat these existing ideas: " + old.join("; ") : "") +
+    "\n\nFor each idea give: title; hook (what is on screen and said in the first 2 seconds); format (one or two words, e.g. Versus, POV, Countdown); storyline (4–6 beats that follow the project's structure); shots (4–8 specific clips to film, with a quick phone-filming tip where useful); voiceover (a complete draft script in " + P.language + " sized for about " + P.duration + " seconds); caption (Instagram caption ending in a question); why (one line on why viewers will watch to the end).\n\n" +
+    'Reply with only JSON: {"ideas":[{"title":"","hook":"","format":"","storyline":[""],"shots":[""],"voiceover":"","caption":"","why":""}]}';
+  try {
+    const j = await AI.json(prompt, [], () => Mock.ideas(P, S.ideaHint, old.length)); const arr = Array.isArray(j) ? j : (j.ideas || []);
+    if (!arr.length) throw new Error("No ideas came back. Try again.");
+    for (const d of arr){ const it = {id:uid(), pid:P.id, created:Date.now(), starred:0, title:String(d.title || "Untitled"), hook:String(d.hook || ""), format:String(d.format || ""),
+      storyline:(d.storyline || []).map(String), shots:(d.shots || []).map(String), voiceover:String(d.voiceover || ""), caption:String(d.caption || ""), why:String(d.why || "")};
+      S.ideas.push(it); await DB.put("ideas", it); }
+    renderIdeas(); toast(arr.length + " ideas saved");
+  } catch (e) { btn.disabled = false; msg.textContent = e.message; msg.style.color = "var(--bad)"; }
+}
+function useIdea(id){
+  const d = S.ideas.find(i => i.id === id); if (!d) return;
+  S.story = d.title + "\n" + d.storyline.join("\n");
+  S.ideaNote = "Hook: " + d.hook + "\nDraft voice-over (adapt it to the actual footage):\n" + d.voiceover + (d.caption ? "\nPost caption idea: " + d.caption : "");
+  go("create"); toast("Idea loaded. Add your clips.");
+}
+
+/* create */
+function renderCreate(){
+  const box = $("#createBox"); const p0 = cur(); if (!p0) return needProject(box, "Make a reel");
+  const P = proj(); const vm = S.voMode || P.voMode;
+  box.innerHTML =
+    '<div><span class="eyebrow">' + esc(P.name) + ' · ' + (P.kind === "story" ? "Story" : "Reel") + ' · ' + P.duration + 's</span><h2>Make a reel</h2><p class="lead">Add clips, describe the story, and let the AI cut it, caption it and voice it in this project\'s style.</p></div>' + demoNote() +
+    '<div class="panel"><div class="step"><span class="n">01</span><h3>Clips and photos</h3></div>' +
+    '<label class="drop" for="fileIn">+ Add videos or photos<input type="file" id="fileIn" accept="video/*,image/*" multiple hidden></label>' +
+    '<div class="msg" id="mediaMsg" hidden></div><div class="media" id="mediaGrid"></div></div>' +
+    '<div class="panel"><div class="step"><span class="n">02</span><h3>Story</h3></div>' +
+    '<label class="f" for="storyIn">What happens in this reel? <span class="hint">A few lines is enough. Mention names, the result and anything funny.</span><textarea id="storyIn" placeholder="e.g. Badminton week. Rohan was 2 points down, smashed three in a row and won 21–19. I lost my shoe mid-rally.">' + esc(S.story) + '</textarea></label>' +
+    (S.ideaNote ? '<div class="msg">Using a saved idea. <button class="btn small ghost" data-act="clear-idea">Remove idea</button></div>' : "") +
+    '<div class="row"><button class="btn small" data-act="expand-story">Expand with AI</button><span class="note" id="storyMsg"></span></div></div>' +
+    '<div class="panel" id="planPanel"></div>' +
+    '<div class="panel" id="voPanel"' + (S.plan ? "" : " hidden") + '><div class="step"><span class="n">04</span><h3>Voice-over</h3></div>' +
+    '<div class="seg" role="group" aria-label="Voice-over type">' + [["ai","AI voice"],["record","My voice"],["upload","Upload audio"],["none","None"]].map(([a, b]) => '<button data-act="vo-mode" data-v="' + a + '" aria-pressed="' + (vm === a) + '">' + b + '</button>').join("") + '</div><div id="voBody"></div></div>' +
+    '<div class="panel" id="musicPanel"' + (S.plan ? "" : " hidden") + '><div class="step"><span class="n">05</span><h3>Background music</h3></div>' +
+    '<p class="note" style="margin:0">Use a track you have rights to. Instagram may mute copyrighted songs; you can also add music inside Instagram after uploading.</p>' +
+    '<div class="row"><label class="btn small" for="musicIn">' + (S.music ? "Replace track" : "Add a track") + '<input type="file" id="musicIn" accept="audio/*" hidden></label>' + (S.music ? '<span class="grow note">' + esc(S.music.name) + '</span><button class="btn small ghost danger" data-act="del-music">Remove</button>' : "") + '</div>' +
+    '<label class="f" for="musicVol">Volume <input type="range" id="musicVol" min="0" max="1" step="0.05" value="' + (S.musicVol ?? P.musicVol) + '"></label></div>' +
+    '<div class="panel" id="outPanel"' + (S.plan ? "" : " hidden") + '><div class="step"><span class="n">06</span><h3>Preview and export</h3></div>' +
+    '<div class="stage"><div class="screen"><canvas id="cv" width="540" height="960"></canvas></div><div class="grow" style="display:flex;flex-direction:column;gap:10px;min-width:200px">' +
+    '<div class="tcbig"><span id="tcNow">00:00.0</span> <span class="muted">/ <span id="tcAll">' + tc(planTotal()) + '</span></span></div><div class="bar"><i id="pbar"></i></div>' +
+    '<div class="row"><button class="btn primary" data-act="play" id="playBtn">▶ Preview</button><button class="btn" data-act="stop">Stop</button></div>' +
+    '<label class="toggle" for="safeT">Show Instagram safe zones<input type="checkbox" id="safeT"' + (S.safe ? " checked" : "") + '></label>' +
+    '<label class="f" for="qual">Export quality<select id="qual"><option value="720">720p · faster, good for phones</option><option value="1080">1080p · sharper</option></select></label>' +
+    '<button class="btn primary" data-act="export" id="expBtn">Export video</button><p class="note" style="margin:0">Export runs in real time. Keep this screen open until it finishes.</p><div id="expMsg"></div></div></div>' +
+    '<div id="result"></div>' +
+    '<div><span class="eyebrow">Post caption</span><textarea id="postCap" style="margin-top:6px">' + esc(S.plan ? (S.plan.post + (S.plan.tags.length ? "\n\n" + S.plan.tags.join(" ") : "")) : "") + '</textarea><div class="row" style="margin-top:8px"><button class="btn small" data-act="copy-cap">Copy caption</button></div></div></div>';
+  renderMedia(); renderPlan(); renderVO(); renderResult();
+  if (S.plan && S.renderer && !S.dirty){ S.renderer.cv = $("#cv"); S.renderer.cx = S.renderer.cv.getContext("2d"); S.renderer.cv.width = S.renderer.W; S.renderer.cv.height = S.renderer.H; S.renderer.draw(0); }
+  else if (S.plan) drawPoster();
+}
+function drawPoster(){
+  const cv = $("#cv"); if (!cv) return; const cx = cv.getContext("2d"); cx.fillStyle = "#111"; cx.fillRect(0, 0, cv.width, cv.height);
+  cx.fillStyle = "#bbb"; cx.font = '500 22px "JetBrains Mono", monospace'; cx.textAlign = "center"; cx.fillText("Tap Preview", cv.width/2, cv.height/2);
+}
+function renderMedia(){
+  const g = $("#mediaGrid"); if (!g) return;
+  g.innerHTML = S.media.map((m, i) => '<div class="mi"><img src="' + m.thumb + '" alt="' + esc(m.name) + '"><span class="tag">#' + i + '</span>' + (m.type === "video" ? '<span class="dur">' + tc(m.dur) + '</span>' : '<span class="dur">PHOTO</span>') + '<button class="x" aria-label="Remove ' + esc(m.name) + '" data-act="del-media" data-i="' + i + '">×</button></div>').join("");
+}
+function renderPlan(){
+  const box = $("#planPanel"); if (!box) return; const P = proj();
+  let h = '<div class="step"><span class="n">03</span><h3>Edit plan</h3></div>';
+  if (S.planBusy){ box.innerHTML = h + '<div class="msg"><span class="spin"></span> <span id="planStatus">Starting…</span></div><p class="note" style="margin:0">Gemini looks at frames from every clip, picks the best moments and writes captions and voice-over in ' + esc(P.language) + '.</p>'; return; }
+  h += '<div class="row"><button class="btn primary" data-act="plan">' + (S.plan ? "Re-plan with AI" : "Create plan with AI") + '</button><button class="btn small ghost" data-act="quick">Quick plan without AI</button></div>';
+  if (S.planErr){ h += '<div class="msg bad">' + esc(S.planErr) + '</div>'; S.planErr = null; }
+  if (S.plan){
+    let t = 0;
+    h += '<label class="f" for="hookIn">Hook title <span class="hint">Shown big in the first 2 seconds</span><input type="text" id="hookIn" value="' + esc(S.plan.hook) + '"></label>';
+    h += '<div class="row"><span class="eyebrow grow">' + S.plan.scenes.length + ' scenes</span><span class="total" id="totalTc">Total ' + tc(planTotal()) + (P.endCard ? " incl. end card" : "") + '</span></div><div class="scenes" id="sceneList">';
+    S.plan.scenes.forEach((s, i) => {
+      const m = S.media[s.mediaIdx];
+      h += '<div class="scene" data-i="' + i + '"><div class="hd"><div class="th">' + (m ? '<img src="' + m.thumb + '" alt="">' : "") + '</div><div class="meta">' +
+        '<label>Media<select data-f="mediaIdx">' + S.media.map((mm, j) => '<option value="' + j + '"' + (j === s.mediaIdx ? " selected" : "") + ">#" + j + " " + (mm.type === "video" ? "video" : "photo") + "</option>").join("") + '</select></label>' +
+        '<label>Start s<input type="number" step="0.1" min="0" data-f="start" value="' + s.start + '"' + (m && m.type === "image" ? " disabled" : "") + '></label>' +
+        '<label>Length s<input type="number" step="0.1" min="0.5" data-f="dur" value="' + s.dur + '"></label>' +
+        '<label>Motion<select data-f="motion">' + ["none","zoom-in","zoom-out","pan-left","pan-right"].map(o => '<option' + (o === s.motion ? " selected" : "") + ">" + o + "</option>").join("") + '</select></label>' +
+        '<label>At<span class="tc">' + tc(t) + '</span></label>' +
+        '<div class="ops" style="grid-column:span 1;align-self:end"><button class="iconb" aria-label="Move up" data-act="up" data-i="' + i + '">↑</button><button class="iconb" aria-label="Move down" data-act="down" data-i="' + i + '">↓</button><button class="iconb" aria-label="Delete scene" data-act="del-scene" data-i="' + i + '">✕</button></div></div></div>' +
+        '<input type="text" data-f="caption" placeholder="On-screen caption" value="' + esc(s.caption) + '"><textarea data-f="voice" placeholder="Voice-over line for this scene">' + esc(s.voice) + '</textarea></div>';
+      t += +s.dur || 0;
+    });
+    h += '</div><div class="row"><button class="btn small" data-act="add-scene">+ Add scene</button></div>';
+  }
+  box.innerHTML = h;
+}
+function renderVO(){
+  const b = $("#voBody"); if (!b) return; const P = proj(); const vm = S.voMode || P.voMode; const voice = S.voVoice || P.voice;
+  let h = "";
+  if (vm === "ai") h += '<label class="f" for="voVoice">Voice<select id="voVoice">' + VOICES.map(([a, d]) => '<option value="' + a + '"' + (a === voice ? " selected" : "") + ">" + a + " · " + d + "</option>").join("") + '</select></label>' +
+    '<p class="note" style="margin:0">' + esc(P.language) + (P.voStyle ? " · " + esc(P.voStyle) : "") + ' · ' + P.voPace + ' pace. Change these in project setup.</p><div class="row"><button class="btn primary" data-act="gen-vo">' + (S.vo && S.vo.src === "ai" ? "Regenerate voice-over" : "Generate voice-over") + '</button><span class="note" id="voMsg"></span></div>';
+  if (vm === "record") h += '<p class="note" style="margin:0">Read the script below aloud. Your phone will ask for microphone access.</p><div class="prompter">' + esc(script() || "Write voice-over lines in the plan first.") + '</div><div class="row"><button class="btn primary" data-act="rec" id="recBtn">● Record</button><span class="tcbig" id="recT"></span><span class="note" id="voMsg"></span></div>';
+  if (vm === "upload") h += '<div class="row"><label class="btn" for="voIn">Choose audio file<input type="file" id="voIn" accept="audio/*" hidden></label><span class="note" id="voMsg"></span></div>';
+  if (vm === "none") h += '<p class="note" style="margin:0">No narration. The reel uses captions, original clip sound and music.</p>';
+  if (S.vo && vm !== "none") h += '<div class="msg good">Voice-over ready · ' + tc(S.vo.buffer.duration) + '</div><audio controls style="width:100%" src="' + S.vo.url + '"></audio><div class="row"><button class="btn small" data-act="fit-vo">Fit scenes to voice-over</button><button class="btn small ghost danger" data-act="del-vo">Remove</button></div>';
+  b.innerHTML = h;
+}
+function setVO(buffer, src){
+  if (S.vo && S.vo.url) URL.revokeObjectURL(S.vo.url);
+  S.vo = {buffer, src, url:URL.createObjectURL(bufToWav(buffer))};
+  if (proj().syncVO) syncToVO();
+  S.dirty = true; renderPlan(); renderVO(); updateTotals();
+}
+async function genVO(){
+  const P = proj(); const txt = script(); const msg = $("#voMsg");
+  if (!txt) return toast("The plan has no voice-over lines yet.");
+  msg.innerHTML = '<span class="spin"></span> Recording the AI voice…';
+  try { setVO(await AI.tts(txt, P, S.voVoice || P.voice), "ai"); toast("Voice-over ready"); }
+  catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; }
+}
+let micRec = null, micT = null;
+async function toggleRec(){
+  const btn = $("#recBtn"), msg = $("#voMsg");
+  if (micRec){ micRec.stop(); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true}});
+    const chunks = []; micRec = new MediaRecorder(stream); const t0 = Date.now();
+    micRec.ondataavailable = e => chunks.push(e.data);
+    micRec.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop()); clearInterval(micT); micRec = null;
+      try { const buf = await getAC().decodeAudioData(await new Blob(chunks).arrayBuffer()); setVO(buf, "rec"); toast("Recording saved"); }
+      catch { if (msg) msg.textContent = "Couldn't read the recording. Try again."; }
+    };
+    micRec.start(); btn.textContent = "■ Stop"; micT = setInterval(() => { const el = $("#recT"); if (el) el.textContent = tc((Date.now() - t0)/1000); }, 100);
+  } catch { msg.textContent = "Microphone access was blocked. Allow it in your browser settings, or upload an audio file instead."; }
+}
+function updateTotals(){
+  const P = proj(); const tt = $("#totalTc"); if (tt) tt.textContent = "Total " + tc(planTotal()) + (P.endCard ? " incl. end card" : "");
+  const ta = $("#tcAll"); if (ta) ta.textContent = tc(planTotal());
+  let t = 0; document.querySelectorAll("#sceneList .scene").forEach((el, i) => { const s = S.plan.scenes[i]; const c = el.querySelector(".tc"); if (c) c.textContent = tc(t); t += +s.dur || 0; });
+}
+async function ensureRenderer(){
+  const q = +($("#qual") ? $("#qual").value : 720); const W = q >= 1080 ? 1080 : 720, H = W * 16 / 9;
+  if (!S.renderer) S.renderer = new Renderer($("#cv"));
+  S.renderer.cv = $("#cv"); S.renderer.cx = S.renderer.cv.getContext("2d");
+  if (S.dirty || !S.renderer.ready || S.renderer.W !== W){ S.renderer.ready = false; await S.renderer.prepare(W, H); }
+}
+async function preview(){
+  if (!S.plan) return; getAC().resume();
+  const btn = $("#playBtn"); btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Loading';
+  try { await ensureRenderer(); } catch (e) { toast("Couldn't load the clips for preview."); }
+  btn.disabled = false; btn.textContent = "▶ Preview";
+  S.renderer.play({record:false, onTick:tick, onDone:() => tick(0, 1)});
+}
+function tick(t, total){ const a = $("#tcNow"), b = $("#pbar"); if (a) a.textContent = tc(t); if (b) b.style.width = (100*t/total) + "%"; }
+async function exportVideo(){
+  if (!S.plan) return;
+  if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream){ $("#expMsg").innerHTML = '<div class="msg bad">This browser can\'t record video. Use the latest Chrome on Android or a computer, or Safari on iPhone.</div>'; return; }
+  getAC().resume();
+  const btn = $("#expBtn"), msg = $("#expMsg"); btn.disabled = true; msg.innerHTML = '<div class="msg"><span class="spin"></span> Preparing clips…</div>';
+  let lock = null; try { lock = await navigator.wakeLock.request("screen"); } catch {}
+  try { await ensureRenderer(); } catch { msg.innerHTML = '<div class="msg bad">Couldn\'t load the clips.</div>'; btn.disabled = false; return; }
+  msg.innerHTML = '<div class="msg"><span class="spin"></span> Recording your reel… keep this screen open.</div>';
+  S.renderer.play({record:true, onTick:tick, onDone:blob => {
+    btn.disabled = false; try { lock && lock.release(); } catch {}
+    if (!blob || !blob.size){ msg.innerHTML = '<div class="msg bad">The recording came out empty. Try 720p, and keep the screen on.</div>'; return; }
+    if (S.exportUrl) URL.revokeObjectURL(S.exportUrl);
+    S.exportBlob = blob; S.exportH264 = /avc1/.test(S.renderer.mime || "") || (/mp4/.test(blob.type) && /Apple/.test(navigator.vendor || "")); S.exportUrl = URL.createObjectURL(blob); S.exportExt = /mp4/.test(blob.type) ? "mp4" : "webm";
+    msg.innerHTML = '<div class="msg good">Done · ' + (blob.size/1048576).toFixed(1) + ' MB · ' + S.exportExt.toUpperCase() + '</div>';
+    renderResult();
+  }});
+}
+function renderResult(){
+  const r = $("#result"); if (!r) return; if (!S.exportUrl){ r.innerHTML = ""; return; }
+  const name = (proj().name || "reel").replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-").toLowerCase() + "." + S.exportExt;
+  r.innerHTML = '<div class="panel" style="background:var(--bg)"><h3>Your reel</h3><div class="screen" style="margin:0 auto"><video src="' + S.exportUrl + '" controls playsinline></video></div>' +
+    '<div class="row"><a class="btn primary" href="' + S.exportUrl + '" download="' + esc(name) + '">Download</a>' + (navigator.canShare ? '<button class="btn" data-act="share">Share to Instagram</button>' : "") + '</div>' +
+    (S.exportExt === "webm" ? '<div class="msg bad">This browser saved WebM, which Instagram may not accept. For MP4, export in the latest Chrome or Safari.</div>' : (!S.exportH264 ? '<div class="msg">This browser couldn\'t use H.264, the format Instagram prefers. If the upload fails, export again in Google Chrome or Safari.</div>' : "")) + '</div>';
+}
+async function share(){
+  if (!S.exportBlob) return;
+  const file = new File([S.exportBlob], "reel." + S.exportExt, {type:S.exportBlob.type});
+  try { if (navigator.canShare({files:[file]})) await navigator.share({files:[file], text:$("#postCap") ? $("#postCap").value : ""}); else toast("Sharing files isn't supported here. Use Download."); }
+  catch (e) { if (e.name !== "AbortError") toast("Couldn't open the share sheet. Use Download."); }
+}
+async function expandStory(){
+  const P = proj(); const msg = $("#storyMsg"); const story = $("#storyIn").value.trim(); if (!story) return toast("Write a line or two first.");
+  msg.innerHTML = '<span class="spin"></span> Expanding…';
+  try {
+    const j = await AI.json("Expand this creator's short description into a storyline for one Instagram reel. Follow the project's structure, one beat per line. Keep every fact the creator gave. Don't invent results or names that contradict them.\n\n" + brief(P) + "\n\nCREATOR'S DESCRIPTION:\n" + story + '\n\nReply with only JSON: {"story":"beat 1\\nbeat 2"}', [], () => Mock.story(P, story));
+    S.story = String(j.story || story); $("#storyIn").value = S.story; msg.textContent = "";
+  } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; }
+}
+
+/* settings */
+function renderSettings(){
+  const key = AI.key();
+  $("#settingsBox").innerHTML = '<div><span class="eyebrow">Settings</span><h2>Free AI setup</h2><p class="lead">Reelwala uses Google\'s Gemini API free tier to watch your clips, write stories and generate voices. The key stays on this device.</p></div>' +
+    '<div class="msg ' + (AI.demo() ? "" : "good") + '" id="modeMsg">' + (AI.demo() ? (FORCE_DEMO ? "Demo mode is forced by the ?demo=1 link." : "Demo mode: no key yet, so AI steps are simulated.") : ("Real AI is on" + (String(CFG.GEMINI_API_KEY || "").startsWith("YOUR_") ? " (key saved in this browser)." : " (key from config.js).")) ) + '</div>' +
+    '<div class="panel"><h3>Get your free key</h3><ol class="steps"><li>Open <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> and sign in with Google.</li><li>Tap <b>Create API key</b> and copy it.</li><li>Paste it below and tap <b>Save and test</b>.</li></ol>' +
+    '<label class="f" for="keyIn">Gemini API key<input type="password" id="keyIn" autocomplete="off" value="' + esc(key) + '" placeholder="AIza…"></label>' +
+    '<div class="row"><button class="btn primary" data-act="save-key">Save and test</button>' + (LS.get("rw_key","") ? '<button class="btn small ghost danger" data-act="clear-key">Remove key</button>' : "") + '<span class="note" id="keyMsg"></span></div></div>' +
+    '<div class="panel"><h3>Models</h3><p class="note" style="margin:0">Defaults work on the free tier. If you hit “free limit reached”, switch to another model here.</p>' +
+    '<label class="f" for="tmIn">Story and planning model<input type="text" id="tmIn" list="tmList" value="' + esc(AI.textModel()) + '"></label><datalist id="tmList"></datalist>' +
+    '<label class="f" for="vmIn">Voice (text-to-speech) model<input type="text" id="vmIn" list="vmList" value="' + esc(AI.ttsModel()) + '"></label><datalist id="vmList"></datalist>' +
+    '<div class="row"><button class="btn small" data-act="save-models">Save models</button></div></div>' +
+    '<div class="panel"><h3>Backup</h3><p class="note" style="margin:0">Projects and ideas are stored in this browser. Export a backup to move them to another device.</p>' +
+    '<div class="row"><button class="btn small" data-act="export-json">Export backup</button><label class="btn small" for="importIn">Import backup<input type="file" id="importIn" accept="application/json,.json" hidden></label></div></div>' +
+    '<div class="panel"><h3>Good to know</h3><ul class="steps" style="padding-left:18px"><li>Free-tier requests may be used by Google to improve its products. Don\'t upload private footage.</li><li>The AI only edits what you upload. It doesn\'t generate new video.</li><li>Clips are processed on this device and never leave it, except for small preview frames sent to Gemini for planning.</li></ul></div>';
+}
+async function testKey(){
+  const msg = $("#keyMsg"); LS.set("rw_key", $("#keyIn").value.trim()); msg.innerHTML = '<span class="spin"></span> Testing…';
+  try {
+    const ms = await AI.models();
+    const text = ms.filter(m => /gemini/.test(m) && !/tts|image|embed|live|audio|veo|imagen/.test(m));
+    const tts = ms.filter(m => /tts/.test(m));
+    if (!text.includes(AI.textModel())){ const pick = text.find(m => /^gemini-2\.5-flash$/.test(m)) || text.find(m => /flash/.test(m) && !/lite|preview/.test(m)) || text[0]; if (pick) LS.set("rw_text_model", pick); }
+    if (tts.length && !tts.includes(AI.ttsModel())){ const pick = tts.find(m => /flash/.test(m)) || tts[0]; LS.set("rw_tts_model", pick); }
+    renderSettings();
+    $("#tmList").innerHTML = text.map(m => '<option value="' + esc(m) + '">').join(""); $("#vmList").innerHTML = tts.map(m => '<option value="' + esc(m) + '">').join("");
+    $("#keyMsg").textContent = "Key works. " + text.length + " text models and " + tts.length + " voice models available."; $("#keyMsg").style.color = "var(--good)";
+  } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; }
+}
+function exportJSON(){
+  const blob = new Blob([JSON.stringify({app:"reelwala", v:1, projects:S.projects, ideas:S.ideas}, null, 1)], {type:"application/json"});
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "reelwala-backup.json"; document.body.appendChild(a); a.click(); a.remove();
+}
+async function importJSON(f){
+  try { const j = JSON.parse(await f.text()); if (j.app !== "reelwala") throw 0;
+    for (const p of j.projects || []){ if (!S.projects.find(x => x.id === p.id)) S.projects.push(p); await DB.put("projects", p); }
+    for (const d of j.ideas || []){ if (!S.ideas.find(x => x.id === d.id)) S.ideas.push(d); await DB.put("ideas", d); }
+    if (!cur() && S.projects[0]) setPid(S.projects[0].id); renderSel(); toast("Backup imported");
+  } catch { toast("That file isn't a Reelwala backup."); }
+}
+
+/* ============ events ============ */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-go],[data-act]"); if (!t) return;
+  if (t.dataset.go){ go(t.dataset.go); return; }
+  const a = t.dataset.act, id = t.dataset.id, i = +t.dataset.i;
+  if (a !== "del") S.delArm = null;
+  switch (a){
+    case "new": newProject(+t.dataset.tpl); break;
+    case "open-setup": setPid(id); go("setup"); break;
+    case "open-ideas": setPid(id); go("ideas"); break;
+    case "open-create": setPid(id); go("create"); break;
+    case "dup": { const p = S.projects.find(x => x.id === id); const c = {...JSON.parse(JSON.stringify(p)), id:uid(), name:p.name + " copy", created:Date.now()}; S.projects.push(c); await DB.put("projects", c); renderSel(); renderProjects(); break; }
+    case "del": if (S.delArm !== id){ S.delArm = id; renderProjects(); break; }
+      S.projects = S.projects.filter(x => x.id !== id); await DB.del("projects", id);
+      for (const d of S.ideas.filter(x => x.pid === id)) await DB.del("ideas", d.id); S.ideas = S.ideas.filter(x => x.pid !== id);
+      S.delArm = null; if (S.pid === id) setPid(S.projects[0] ? S.projects[0].id : ""); renderSel(); renderProjects(); toast("Project deleted"); break;
+    case "sample-voice": sampleVoice(); break;
+    case "gen-ideas": genIdeas(); break;
+    case "star-idea": { const d = S.ideas.find(x => x.id === id); d.starred = d.starred ? 0 : 1; await DB.put("ideas", d); renderIdeas(); break; }
+    case "del-idea": S.ideas = S.ideas.filter(x => x.id !== id); await DB.del("ideas", id); renderIdeas(); break;
+    case "use-idea": useIdea(id); break;
+    case "clear-idea": S.ideaNote = ""; renderCreate(); break;
+    case "del-media": S.media.splice(i, 1); if (S.plan){ S.plan.scenes = S.plan.scenes.filter(s => s.mediaIdx !== i).map(s => ({...s, mediaIdx:s.mediaIdx > i ? s.mediaIdx - 1 : s.mediaIdx})); } S.dirty = true; renderCreate(); break;
+    case "expand-story": expandStory(); break;
+    case "plan": S.story = $("#storyIn").value; makePlan(); break;
+    case "quick": S.story = $("#storyIn").value; quickPlan(); break;
+    case "up": case "down": { const sc = S.plan.scenes, j = a === "up" ? i - 1 : i + 1; if (j < 0 || j >= sc.length) break; [sc[i], sc[j]] = [sc[j], sc[i]]; S.dirty = true; renderPlan(); break; }
+    case "del-scene": S.plan.scenes.splice(i, 1); S.dirty = true; renderPlan(); updateTotals(); break;
+    case "add-scene": S.plan.scenes.push({mediaIdx:0, start:0, dur:2.5, caption:"", voice:"", motion:S.media[0] && S.media[0].type === "image" ? "zoom-in" : "none"}); S.dirty = true; renderPlan(); updateTotals(); break;
+    case "vo-mode": S.voMode = t.dataset.v; document.querySelectorAll('[data-act="vo-mode"]').forEach(b => b.setAttribute("aria-pressed", b === t)); if (S.voMode === "none" && S.vo){ S.vo = null; S.dirty = true; } renderVO(); break;
+    case "gen-vo": genVO(); break;
+    case "rec": toggleRec(); break;
+    case "fit-vo": syncToVO(); renderPlan(); updateTotals(); toast("Scene lengths fitted to the voice-over"); break;
+    case "del-vo": S.vo = null; S.dirty = true; renderVO(); break;
+    case "del-music": S.music = null; S.dirty = true; renderCreate(); break;
+    case "play": preview(); break;
+    case "stop": if (S.renderer) S.renderer.stop(); tick(0, 1); break;
+    case "export": exportVideo(); break;
+    case "share": share(); break;
+    case "copy-cap": { const v = $("#postCap").value; try { await navigator.clipboard.writeText(v); toast("Caption copied"); } catch { $("#postCap").select(); toast("Selected. Copy it from the menu."); } break; }
+    case "save-key": testKey(); break;
+    case "clear-key": try { localStorage.removeItem("rw_key"); } catch {} renderSettings(); toast("Key removed. Demo mode is on."); break;
+    case "save-models": LS.set("rw_text_model", $("#tmIn").value.trim() || "gemini-2.5-flash"); LS.set("rw_tts_model", $("#vmIn").value.trim() || "gemini-2.5-flash-preview-tts"); toast("Models saved"); break;
+    case "export-json": exportJSON(); break;
+  }
+});
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.closest("#setupForm")) return onSetupInput(e);
+  if (el.id === "storyIn"){ S.story = el.value; return; }
+  if (el.id === "hookIn"){ S.plan.hook = el.value; S.dirty = true; return; }
+  if (el.id === "musicVol"){ S.musicVol = +el.value; S.dirty = true; return; }
+  if (el.id === "postCap") return;
+  const f = el.dataset.f, row = el.closest(".scene");
+  if (f && row && S.plan){
+    const s = S.plan.scenes[+row.dataset.i]; let v = el.value;
+    if (f === "start" || f === "dur") v = Math.max(f === "dur" ? 0.3 : 0, parseFloat(v) || 0);
+    s[f] = v; S.dirty = true; if (f === "dur" || f === "start") updateTotals();
+  }
+});
+document.addEventListener("change", async e => {
+  const el = e.target;
+  if (el.id === "projSel"){ setPid(el.value); go(S.view === "settings" ? "projects" : S.view); return; }
+  if (el.id === "fileIn"){ await addFiles([...el.files]); el.value = ""; return; }
+  if (el.id === "musicIn" && el.files[0]){ try { S.music = {name:el.files[0].name, buffer:await getAC().decodeAudioData(await el.files[0].arrayBuffer())}; S.dirty = true; renderCreate(); } catch { toast("Couldn't read that audio file."); } return; }
+  if (el.id === "voIn" && el.files[0]){ try { setVO(await getAC().decodeAudioData(await el.files[0].arrayBuffer()), "upload"); toast("Voice-over added"); } catch { toast("Couldn't read that audio file."); } return; }
+  if (el.id === "importIn" && el.files[0]){ importJSON(el.files[0]); return; }
+  if (el.id === "voVoice"){ S.voVoice = el.value; return; }
+  if (el.id === "safeT"){ S.safe = el.checked; if (S.renderer && S.renderer.ready && !S.renderer.running) S.renderer.draw(0); return; }
+  if (el.id === "qual"){ S.dirty = true; return; }
+  const f = el.dataset.f, row = el.closest(".scene");
+  if (f === "mediaIdx" && row){ const s = S.plan.scenes[+row.dataset.i]; s.mediaIdx = +el.value; const m = S.media[s.mediaIdx]; if (m.type === "image") s.start = 0; S.dirty = true; renderPlan(); }
+});
+
+/* ============ boot ============ */
+(async function boot(){
+  await DB.open();
+  S.projects = (await DB.all("projects")).sort((a, b) => (a.created || 0) - (b.created || 0));
+  S.ideas = await DB.all("ideas");
+  if (!cur() && S.projects[0]) S.pid = S.projects[0].id;
+  renderSel();
+  go("projects");
+})();
+</script>
+</body>
+</html>

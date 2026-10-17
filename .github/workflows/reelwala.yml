@@ -1,0 +1,60 @@
+name: Reelwala
+
+on:
+  push:
+    paths: ["reelwala/**", ".github/workflows/reelwala.yml"]
+  pull_request:
+    paths: ["reelwala/**"]
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: "Publish the app to GitHub Pages (enable Pages with source 'GitHub Actions' first)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: End-to-end test (demo mode)
+        run: python reelwala/tests/e2e_test.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reelwala-e2e-output
+          path: reelwala/tests/artifacts/
+          if-no-files-found: ignore
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && inputs.deploy
+    needs: e2e
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare site (app only, no tests)
+        run: |
+          mkdir site
+          cp reelwala/index.html reelwala/config.js site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: pages
+        uses: actions/deploy-pages@v4
