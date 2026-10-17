@@ -18,6 +18,7 @@ There is no server and no build step. Video editing happens on your device; only
 |---|---|
 | **Projects** | One per series. Saves format (Reel/Story, 15–90 s), pacing, story structure, tone, "always remember" rules, voice-over, caption look, transitions, handle and end card, so every reel stays consistent. Templates: Sports challenge, Travel diary, Food review, Day in my life, Blank. |
 | **Ideas** | 5 ideas at a time that follow the project's structure, each with a hook, story beats, shot list, draft voice-over and post caption. Star, delete, or tap **Make this reel**. |
+| **Series** | Upload a whole trip or tournament plus the storyline you want covered. The AI catalogues every photo and clip, splits them into several reels with distinct angles (arrival, food, hidden gems, budget tips…), writes each reel's story, hook, caption and series hashtag, and schedules them (daily, every 2 days, Mon/Wed/Fri or weekly at your time). **Make all reels** plans, voices and exports every reel in one go; **Add posting plan to calendar** downloads an .ics file with a reminder before each post. Tick each reel as Posted to track progress. |
 | **Create** | Upload media → story (with **Expand with AI**) → AI edit plan you can change scene by scene → voice-over → music → preview with Instagram safe zones → export. |
 | **Voice-over** | AI voice (Gemini TTS, 30 voices, 18 languages incl. Hindi and Hinglish, delivery style, pace), record your own voice, upload audio, or none. Scene lengths auto-fit the narration. |
 | **Backup** | Export/import projects and ideas as JSON. |
@@ -49,7 +50,7 @@ Option B — drag `index.html` and `config.js` onto <https://app.netlify.com/dro
 
 ## Tests
 
-`tests/e2e_test.py` drives the whole app in a headless browser in demo mode: create a project, change its language, generate ideas, use an idea, upload a photo and a video, build the plan, generate and fit the voice-over, preview, export a video, and reload to check everything was saved.
+`tests/e2e_test.py` drives the whole app in a headless browser in demo mode: create a project, change its language, generate ideas, use an idea, upload a photo and a video, build the plan, generate and fit the voice-over, preview, export a video, reload to check everything was saved, then plan a 3-reel series from 6 trip files, download the posting calendar, make all three reels in one go, open one in the editor and mark one as posted.
 
 ```bash
 pip install playwright
@@ -77,4 +78,6 @@ reelwala/
 - **Export is real time**: a 45-second reel takes about 45 seconds. Keep the screen on.
 - **Format**: Chrome and Safari export H.264 MP4, which Instagram accepts. Browsers without H.264 recording fall back to another format and the app warns you.
 - **Music rights**: use tracks you're allowed to use, or add music inside Instagram after uploading.
-- Projects and ideas live in the browser's storage (IndexedDB). Use **Settings → Export backup** to move them between devices.
+- Projects, ideas and series plans live in the browser's storage (IndexedDB). Use **Settings → Export backup** to move them between devices.
+- Your photos and videos are never copied into the app's storage (trips can be gigabytes). After closing the app, re-select the same trip files in a series and Reelwala matches them back automatically.
+- "Make all reels" takes about as long as the reels themselves plus AI time, and each reel uses a few free-tier requests. For long series, make a few reels per sitting.

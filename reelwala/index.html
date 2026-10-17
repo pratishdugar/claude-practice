@@ -127,7 +127,7 @@ input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-rad
 .idea .hook{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.25}
 .idea ol,.idea ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:3px;font-size:14px}
 .idea details summary{cursor:pointer;font-weight:600;font-size:14px}
-.idea .vo{white-space:pre-wrap;font-size:14px;background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:6px}
+.idea .vo,.reel .vo{white-space:pre-wrap;font-size:14px;background:var(--sunk);border-radius:10px;padding:10px 12px;margin-top:6px}
 .star{color:var(--accent)}
 
 .seg{display:flex;flex-wrap:wrap;gap:6px}
@@ -137,7 +137,7 @@ input[type=color]{width:52px;height:38px;border:1px solid var(--line);border-rad
 
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom,0px)}
-nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
 .tab{background:none;border:0;padding:10px 4px 9px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
 .tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab[aria-current=page]{color:var(--accent)}
@@ -147,6 +147,15 @@ nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
 @keyframes sp{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.spin{animation-duration:2.4s}.btn{transition:none}}
 a{color:var(--accent)}
+.strip{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.strip img{width:38px;aspect-ratio:9/16;object-fit:cover;border-radius:5px;flex:none;background:var(--sunk)}
+.reel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:9px}
+.reel.posted{opacity:.72}
+.reel .when{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.reel .when input{width:auto;min-height:34px;padding:4px 8px;font:500 13px var(--mono)}
+.chip.ok{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.mini{width:min(100%,180px);aspect-ratio:9/16;background:#000;border-radius:12px;overflow:hidden}
+.mini canvas,.mini video{width:100%;height:100%;display:block}
 ol.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
 </style>
@@ -161,6 +170,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5
 <section id="v-projects"><div class="wrap" id="projectsBox"></div></section>
 <section id="v-setup" hidden><div class="wrap" id="setupBox"></div></section>
 <section id="v-ideas" hidden><div class="wrap" id="ideasBox"></div></section>
+<section id="v-series" hidden><div class="wrap" id="seriesBox"></div></section>
 <section id="v-create" hidden><div class="wrap" id="createBox"></div></section>
 <section id="v-settings" hidden><div class="wrap" id="settingsBox"></div></section>
 </main>
@@ -168,6 +178,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5
 <nav class="tabs" aria-label="Sections"><div class="wrap">
   <button class="tab" data-go="projects"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4l2 5M14 4l2 5"/></svg>Projects</button>
   <button class="tab" data-go="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>Ideas</button>
+  <button class="tab" data-go="series"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h3M7 17h3M14 14h3"/></svg>Series</button>
   <button class="tab" data-go="create"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 9.5v5l4-2.5z"/></svg>Create</button>
   <button class="tab" data-go="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
 </div></nav>
@@ -268,9 +279,9 @@ function getAC(){ if (!AC) AC = new (window.AudioContext || window.webkitAudioCo
 
 /* ============ storage (IndexedDB) ============ */
 const DB = {
-  db:null, mem:{projects:new Map(), ideas:new Map()},
-  open(){ return new Promise(res => { try { const r = indexedDB.open("reelwala", 1);
-    r.onupgradeneeded = () => { const d = r.result; d.createObjectStore("projects",{keyPath:"id"}); d.createObjectStore("ideas",{keyPath:"id"}); };
+  db:null, mem:{projects:new Map(), ideas:new Map(), batches:new Map()},
+  open(){ return new Promise(res => { try { const r = indexedDB.open("reelwala", 2);
+    r.onupgradeneeded = () => { const d = r.result; for (const n of ["projects","ideas","batches"]) if (!d.objectStoreNames.contains(n)) d.createObjectStore(n,{keyPath:"id"}); };
     r.onsuccess = () => { this.db = r.result; res(); }; r.onerror = () => res(); } catch { res(); } }); },
   all(store){ if (!this.db) return Promise.resolve([...this.mem[store].values()]);
     return new Promise(res => { const q = this.db.transaction(store).objectStore(store).getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); },
@@ -285,7 +296,8 @@ const S = {
   projects:[], ideas:[], pid:LS.get("rw_pid",""), view:"projects",
   media:[], story:"", ideaNote:"", plan:null, planBusy:false,
   vo:null, voMode:null, voVoice:null, music:null, musicVol:null,
-  renderer:null, dirty:true, exportUrl:null, exportExt:"mp4", safe:true, delArm:null
+  renderer:null, dirty:true, exportUrl:null, exportExt:"mp4", safe:true, delArm:null,
+  batches:[], bid:null, bmedia:new Map(), bnew:[], bOut:{}, batchRef:null, queue:null
 };
 const cur = () => S.projects.find(p => p.id === S.pid) || null;
 function proj(){ const p = cur(); return p ? {...DEFAULTS, ...p} : {...DEFAULTS}; }
@@ -380,11 +392,11 @@ function bufToWav(buf){
 const Mock = {
   sentences(t){ return String(t || "").split(/(?<=[.!?।])\s+|\n+/).map(x => x.trim()).filter(Boolean); },
   beats(P){ return P.structure.split(/(?<=\.)\s+/).map(x => x.replace(/\.$/, "").trim()).filter(Boolean); },
-  plan(P){
-    const sen = this.sentences(S.story); const n = Math.max(S.media.length, Math.min(sen.length, S.media.length * 2), 1);
+  plan(P, media = S.media, story = S.story){
+    const sen = this.sentences(story); const n = Math.max(media.length, Math.min(sen.length, media.length * 2), 1);
     const per = P.duration / n; const scenes = [];
     for (let i = 0; i < n; i++){
-      const mi = i % S.media.length, m = S.media[mi]; const reuse = Math.floor(i / S.media.length);
+      const mi = i % media.length, m = media[mi]; const reuse = Math.floor(i / media.length);
       const dur = m.type === "video" ? Math.min(per, m.dur) : clamp(per, 1.5, 4);
       const start = m.type === "video" ? r1(Math.min(reuse * dur, Math.max(0, m.dur - dur))) : 0;
       const line = sen[i] || sen[sen.length - 1] || "";
@@ -484,48 +496,52 @@ async function framesFor(m, n){
 }
 
 /* ============ plan ============ */
+async function buildPlan(P, media, story, note, onStatus){
+  const vids = media.filter(m => m.type === "video").length;
+  const budget = 36 - media.filter(m => m.type === "image").length;
+  const per = vids ? clamp(Math.floor(budget / vids), 2, 8) : 0;
+  const images = [];
+  for (let i = 0; i < media.length; i++){
+    const m = media[i];
+    if (onStatus) onStatus("Watching media " + (i+1) + " of " + media.length + "…");
+    const n = m.type === "video" ? clamp(Math.round(m.dur / 2), 2, per) : 1;
+    const fr = await framesFor(m, n);
+    fr.forEach(f => images.push({label: m.type === "video" ? ("Media #" + i + " (video) frame at " + f.t + "s:") : ("Media #" + i + " (photo):"), b64:f.b64}));
+  }
+  if (onStatus) onStatus("Writing the story and edit plan…");
+  const list = media.map((m, i) => "#" + i + " " + (m.type === "video" ? "video, " + r1(m.dur) + "s" : "photo") + ", " + (m.h >= m.w ? "portrait" : "landscape")).join("\n");
+  const prompt = "You are a short-form video editor and scriptwriter. Build an edit plan for one Instagram " + (P.kind === "story" ? "Story" : "Reel") + " using ONLY the media provided.\n\n" +
+    brief(P) + "\n\nSTORY FROM THE CREATOR:\n" + story.trim() + (note ? "\n\nIDEA NOTES:\n" + note : "") +
+    "\n\nMEDIA (reference these indexes):\n" + list + "\nFrames from each media item follow, labelled with the media index and timestamp.\n\n" +
+    "RULES:\n- The scene durations should add up to about " + P.duration + " seconds (within 15%).\n" +
+    "- Each scene uses one media index. For a video, choose start and end seconds inside the clip that show the moment you need (use the frame timestamps). For a photo, use start 0 and end = how long to show it (1.5–4 s).\n" +
+    "- You may reuse a video at different moments. Order scenes to follow the story structure. Open on the strongest visual.\n" +
+    "- caption: on-screen text, max 7 words, " + capRule(P) + ".\n" +
+    (P.voMode === "none" ? "- voice: leave empty for every scene (no voice-over).\n" : "- voice: the voice-over spoken during that scene, in " + P.language + ", roughly 2.5 words per second of the scene. Together the lines must tell the story.\n") +
+    "- motion: for photos one of zoom-in, zoom-out, pan-left, pan-right. For videos none or zoom-in.\n" +
+    "- hook: punchy title shown in the first 2 seconds, max 6 words, " + capRule(P) + ".\n" +
+    "- post_caption: the Instagram post caption, 1–3 short lines ending in a question that invites comments.\n" +
+    "- hashtags: 8–12 relevant hashtags.\n\n" +
+    'Reply with only JSON: {"title":"","hook":"","scenes":[{"media":0,"start":0,"end":3,"caption":"","voice":"","motion":"none"}],"post_caption":"","hashtags":["#tag"]}';
+  const j = await AI.json(prompt, images, () => Mock.plan(P, media, story));
+  const plan = normalizePlan(j, media);
+  if (!plan.scenes.length) throw new Error("The plan came back without scenes. Try again.");
+  return plan;
+}
 async function makePlan(){
   const P = proj();
   if (!S.media.length) return toast("Add at least one clip or photo first.");
   if (!S.story.trim()) return toast("Write a short story description first.");
-  S.planBusy = true; renderPlan(); const st = $("#planStatus");
+  S.planBusy = true; renderPlan();
   try {
-    const vids = S.media.filter(m => m.type === "video").length;
-    const budget = 36 - S.media.filter(m => m.type === "image").length;
-    const per = vids ? clamp(Math.floor(budget / vids), 2, 8) : 0;
-    const images = [];
-    for (let i = 0; i < S.media.length; i++){
-      const m = S.media[i];
-      if (st) st.textContent = "Watching media " + (i+1) + " of " + S.media.length + "…";
-      const n = m.type === "video" ? clamp(Math.round(m.dur / 2), 2, per) : 1;
-      const fr = await framesFor(m, n);
-      fr.forEach(f => images.push({label: m.type === "video" ? ("Media #" + i + " (video) frame at " + f.t + "s:") : ("Media #" + i + " (photo):"), b64:f.b64}));
-    }
-    if (st) st.textContent = "Writing the story and edit plan…";
-    const list = S.media.map((m, i) => "#" + i + " " + (m.type === "video" ? "video, " + r1(m.dur) + "s" : "photo") + ", " + (m.h >= m.w ? "portrait" : "landscape")).join("\n");
-    const prompt = "You are a short-form video editor and scriptwriter. Build an edit plan for one Instagram " + (P.kind === "story" ? "Story" : "Reel") + " using ONLY the media provided.\n\n" +
-      brief(P) + "\n\nSTORY FROM THE CREATOR:\n" + S.story.trim() + (S.ideaNote ? "\n\nIDEA NOTES:\n" + S.ideaNote : "") +
-      "\n\nMEDIA (reference these indexes):\n" + list + "\nFrames from each media item follow, labelled with the media index and timestamp.\n\n" +
-      "RULES:\n- The scene durations should add up to about " + P.duration + " seconds (within 15%).\n" +
-      "- Each scene uses one media index. For a video, choose start and end seconds inside the clip that show the moment you need (use the frame timestamps). For a photo, use start 0 and end = how long to show it (1.5–4 s).\n" +
-      "- You may reuse a video at different moments. Order scenes to follow the story structure. Open on the strongest visual.\n" +
-      "- caption: on-screen text, max 7 words, " + capRule(P) + ".\n" +
-      (P.voMode === "none" ? "- voice: leave empty for every scene (no voice-over).\n" : "- voice: the voice-over spoken during that scene, in " + P.language + ", roughly 2.5 words per second of the scene. Together the lines must tell the story.\n") +
-      "- motion: for photos one of zoom-in, zoom-out, pan-left, pan-right. For videos none or zoom-in.\n" +
-      "- hook: punchy title shown in the first 2 seconds, max 6 words, " + capRule(P) + ".\n" +
-      "- post_caption: the Instagram post caption, 1–3 short lines ending in a question that invites comments.\n" +
-      "- hashtags: 8–12 relevant hashtags.\n\n" +
-      'Reply with only JSON: {"title":"","hook":"","scenes":[{"media":0,"start":0,"end":3,"caption":"","voice":"","motion":"none"}],"post_caption":"","hashtags":["#tag"]}';
-    const j = await AI.json(prompt, images, () => Mock.plan(P));
-    S.plan = normalizePlan(j);
-    if (!S.plan.scenes.length) throw new Error("The plan came back without scenes. Try again.");
+    S.plan = await buildPlan(P, S.media, S.story, S.ideaNote, t => { const st = $("#planStatus"); if (st) st.textContent = t; });
     S.vo = null; S.dirty = true; toast("Plan ready: " + S.plan.scenes.length + " scenes");
   } catch (e) { S.planErr = e.message; }
   S.planBusy = false; renderCreate();
 }
-function normalizePlan(j){
+function normalizePlan(j, media = S.media){
   const scenes = (Array.isArray(j.scenes) ? j.scenes : []).map(s => {
-    const idx = clamp(parseInt(s.media, 10) || 0, 0, S.media.length - 1); const m = S.media[idx];
+    const idx = clamp(parseInt(s.media, 10) || 0, 0, media.length - 1); const m = media[idx];
     let start = Math.max(0, +s.start || 0), end = +s.end || start + 2.5;
     if (m.type === "video"){ start = clamp(start, 0, Math.max(0, m.dur - 0.5)); end = clamp(end, start + 0.6, m.dur); }
     else { start = 0; end = clamp(end, 1, 6); }
@@ -543,18 +559,18 @@ function quickPlan(){
       caption:sentences[i] ? words(sentences[i]).slice(0,7).join(" ") : "", voice:P.voMode === "none" ? "" : (sentences[i] || ""), motion:m.type === "image" ? (i % 2 ? "zoom-out" : "zoom-in") : "none"}))};
   S.vo = null; S.dirty = true; renderCreate(); toast("Quick plan made without AI");
 }
-function syncToVO(){
-  if (!S.plan || !S.vo) return;
-  const sc = S.plan.scenes; const w = sc.map(s => Math.max(words(s.voice).length, 1.5)); const W = w.reduce((a,b) => a+b, 0);
-  const total = S.vo.buffer.duration + 0.6;
+function syncToVO(plan = S.plan, media = S.media, buffer = S.vo && S.vo.buffer){
+  if (!plan || !buffer) return;
+  const sc = plan.scenes; const w = sc.map(s => Math.max(words(s.voice).length, 1.5)); const W = w.reduce((a,b) => a+b, 0);
+  const total = buffer.duration + 0.6;
   sc.forEach((s, i) => {
-    const d = Math.max(1, total * w[i] / W); const m = S.media[s.mediaIdx];
+    const d = Math.max(1, total * w[i] / W); const m = media[s.mediaIdx];
     if (m && m.type === "video" && s.start + d > m.dur) s.start = r1(Math.max(0, m.dur - d));
     s.dur = r1(d);
   });
   S.dirty = true;
 }
-function script(){ return S.plan ? S.plan.scenes.map(s => s.voice.trim()).filter(Boolean).join("\n") : ""; }
+function script(plan = S.plan){ return plan ? plan.scenes.map(s => s.voice.trim()).filter(Boolean).join("\n") : ""; }
 function planTotal(){ const P = proj(); return S.plan ? S.plan.scenes.reduce((a, s) => a + (+s.dur || 0), 0) + (P.endCard ? 2.5 : 0) : 0; }
 
 /* ============ renderer ============ */
@@ -570,11 +586,12 @@ function wrapWords(cx, ws, maxW){
 function rrect(cx, x, y, w, h, r){ cx.beginPath(); cx.moveTo(x+r, y); cx.arcTo(x+w, y, x+w, y+h, r); cx.arcTo(x+w, y+h, x, y+h, r); cx.arcTo(x, y+h, x, y, r); cx.arcTo(x, y, x+w, y, r); cx.closePath(); }
 class Renderer {
   constructor(cv){ this.cv = cv; this.cx = cv.getContext("2d"); this.running = false; this.scenes = []; }
-  async prepare(W, H){
+  async prepare(W, H, src = null){
     this.halt(); this.W = W; this.H = H; this.cv.width = W; this.cv.height = H; this.P = proj();
-    const P = this.P; let t = 0;
-    this.hook = S.plan.hook;
-    this.scenes = S.plan.scenes.filter(s => S.media[s.mediaIdx]).map(s => { const o = {...s, m:S.media[s.mediaIdx], t0:t}; t += Math.max(0.3, +s.dur || 1); return o; });
+    this.src = src || {plan:S.plan, media:S.media, vo:S.vo, music:S.music, musicVol:S.musicVol};
+    const P = this.P, plan = this.src.plan, media = this.src.media; let t = 0;
+    this.hook = plan.hook;
+    this.scenes = plan.scenes.filter(s => media[s.mediaIdx]).map(s => { const o = {...s, m:media[s.mediaIdx], t0:t}; t += Math.max(0.3, +s.dur || 1); return o; });
     this.endT = t; this.total = t + (P.endCard ? 2.5 : 0);
     for (const s of this.scenes){
       if (s.m.type !== "video") continue;
@@ -582,7 +599,7 @@ class Renderer {
       el.muted = !(P.origVol > 0); s.el = el; await once(el, "loadeddata"); await seek(el, s.start);
     }
     try { await Promise.all([document.fonts.load(fontStr(P.font, 40)), document.fonts.load(fontStr(P.font, 40, false))]); } catch {}
-    this.ready = true; S.dirty = false; this.draw(0);
+    this.ready = true; if (!src) S.dirty = false; this.draw(0);
   }
   unlock(){ for (const s of this.scenes) if (s.el){ const p = s.el.play(); if (p) p.then(() => s.el.pause()).catch(() => {}); } }
   async play({record = false, onTick, onDone}){
@@ -592,7 +609,7 @@ class Renderer {
     const master = ac.createGain(); master.gain.value = 1; master.connect(ac.destination);
     let dest = null; if (record){ dest = ac.createMediaStreamDestination(); master.connect(dest); }
     this.nodes = [master];
-    const hasVO = !!S.vo;
+    const VO = this.src.vo, MUS = this.src.music; const hasVO = !!VO;
     for (const s of this.scenes){
       if (!s.el || s.el.muted) continue;
       if (!s.src) { try { s.src = ac.createMediaElementSource(s.el); } catch { continue; } }
@@ -600,10 +617,10 @@ class Renderer {
       const g = ac.createGain(); g.gain.value = P.origVol * (hasVO ? 0.6 : 1); s.src.connect(g); g.connect(master); this.nodes.push(g);
     }
     const t0 = ac.currentTime + 0.3; this.sources = [];
-    if (hasVO){ const src = ac.createBufferSource(); src.buffer = S.vo.buffer; src.connect(master); src.start(t0 + 0.2); this.sources.push(src); }
-    if (S.music){
-      const src = ac.createBufferSource(); src.buffer = S.music.buffer; src.loop = true; const g = ac.createGain();
-      const vol = (S.musicVol ?? P.musicVol) * (hasVO ? 0.45 : 1);
+    if (hasVO){ const src = ac.createBufferSource(); src.buffer = VO.buffer; src.connect(master); src.start(t0 + 0.2); this.sources.push(src); }
+    if (MUS){
+      const src = ac.createBufferSource(); src.buffer = MUS.buffer; src.loop = true; const g = ac.createGain();
+      const vol = (this.src.musicVol ?? P.musicVol) * (hasVO ? 0.45 : 1);
       g.gain.setValueAtTime(vol, t0); g.gain.setValueAtTime(vol, t0 + Math.max(0, this.total - 1.2)); g.gain.linearRampToValueAtTime(0.0001, t0 + this.total);
       src.connect(g); g.connect(master); src.start(t0); this.sources.push(src); this.nodes.push(g);
     }
@@ -740,10 +757,11 @@ class Renderer {
 /* ============ views ============ */
 function go(view){
   S.view = view;
-  for (const v of ["projects","setup","ideas","create","settings"]) $("#v-" + v).hidden = v !== view;
+  for (const v of ["projects","setup","ideas","series","create","settings"]) $("#v-" + v).hidden = v !== view;
   document.querySelectorAll(".tab").forEach(b => { if (b.dataset.go === (view === "setup" ? "projects" : view)) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   if (view !== "create" && S.renderer && S.renderer.running && !S.renderer.recording) S.renderer.stop();
-  ({projects:renderProjects, setup:renderSetup, ideas:renderIdeas, create:renderCreate, settings:renderSettings})[view]();
+  if (view !== "series" && S.queue && S.queue.renderer && !S.queue.renderer.recording && S.queue.renderer.running) S.queue.renderer.stop();
+  ({projects:renderProjects, setup:renderSetup, ideas:renderIdeas, series:renderSeries, create:renderCreate, settings:renderSettings})[view]();
   window.scrollTo(0, 0);
 }
 function demoNote(){
@@ -778,7 +796,7 @@ async function newProject(i){
   p.structure = STRUCTURES[p.structureKey][1];
   S.projects.push(p); await DB.put("projects", p); setPid(p.id); go("setup"); toast("Project created");
 }
-function setPid(id){ S.pid = id; LS.set("rw_pid", id); S.voMode = null; S.voVoice = null; S.musicVol = null; S.dirty = true; renderSel(); }
+function setPid(id){ if (S.pid !== id) S.bid = null; S.pid = id; LS.set("rw_pid", id); S.voMode = null; S.voVoice = null; S.musicVol = null; S.dirty = true; renderSel(); }
 let saveT;
 function saveProject(){ const p = cur(); if (!p) return; clearTimeout(saveT); saveT = setTimeout(async () => { await DB.put("projects", p); renderSel(); toast("Saved"); }, 450); S.dirty = true; }
 function renderSetup(){
@@ -868,7 +886,7 @@ function renderCreate(){
   const box = $("#createBox"); const p0 = cur(); if (!p0) return needProject(box, "Make a reel");
   const P = proj(); const vm = S.voMode || P.voMode;
   box.innerHTML =
-    '<div><span class="eyebrow">' + esc(P.name) + ' · ' + (P.kind === "story" ? "Story" : "Reel") + ' · ' + P.duration + 's</span><h2>Make a reel</h2><p class="lead">Add clips, describe the story, and let the AI cut it, caption it and voice it in this project\'s style.</p></div>' + demoNote() +
+    '<div><span class="eyebrow">' + esc(P.name) + ' · ' + (P.kind === "story" ? "Story" : "Reel") + ' · ' + P.duration + 's</span><h2>Make a reel</h2><p class="lead">Add clips, describe the story, and let the AI cut it, caption it and voice it in this project\'s style.</p></div>' + demoNote() + seriesNote() +
     '<div class="panel"><div class="step"><span class="n">01</span><h3>Clips and photos</h3></div>' +
     '<label class="drop" for="fileIn">+ Add videos or photos<input type="file" id="fileIn" accept="video/*,image/*" multiple hidden></label>' +
     '<div class="msg" id="mediaMsg" hidden></div><div class="media" id="mediaGrid"></div></div>' +
@@ -895,6 +913,10 @@ function renderCreate(){
   renderMedia(); renderPlan(); renderVO(); renderResult();
   if (S.plan && S.renderer && !S.dirty){ S.renderer.cv = $("#cv"); S.renderer.cx = S.renderer.cv.getContext("2d"); S.renderer.cv.width = S.renderer.W; S.renderer.cv.height = S.renderer.H; S.renderer.draw(0); }
   else if (S.plan) drawPoster();
+}
+function seriesNote(){
+  const ref = S.batchRef; const b = ref && S.batches.find(x => x.id === ref.bid); if (!b) return "";
+  return '<div class="msg">Making <b>part ' + (ref.i + 1) + ' of ' + b.reels.length + '</b> of “' + esc(b.name) + '”. Exporting marks it as made in the series. <div class="row" style="margin-top:6px"><button class="btn small" data-act="back-series">Back to series</button><button class="btn small ghost" data-act="detach">Make a separate reel instead</button></div></div>';
 }
 function drawPoster(){
   const cv = $("#cv"); if (!cv) return; const cx = cv.getContext("2d"); cx.fillStyle = "#111"; cx.fillRect(0, 0, cv.width, cv.height);
@@ -1004,6 +1026,7 @@ async function exportVideo(){
     S.exportBlob = blob; S.exportH264 = /avc1/.test(S.renderer.mime || "") || (/mp4/.test(blob.type) && /Apple/.test(navigator.vendor || "")); S.exportUrl = URL.createObjectURL(blob); S.exportExt = /mp4/.test(blob.type) ? "mp4" : "webm";
     msg.innerHTML = '<div class="msg good">Done · ' + (blob.size/1048576).toFixed(1) + ' MB · ' + S.exportExt.toUpperCase() + '</div>';
     renderResult();
+    if (S.batchRef) markMade(S.batchRef, blob, S.plan);
   }});
 }
 function renderResult(){
@@ -1058,15 +1081,230 @@ async function testKey(){
   } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; }
 }
 function exportJSON(){
-  const blob = new Blob([JSON.stringify({app:"reelwala", v:1, projects:S.projects, ideas:S.ideas}, null, 1)], {type:"application/json"});
+  const blob = new Blob([JSON.stringify({app:"reelwala", v:2, projects:S.projects, ideas:S.ideas, batches:S.batches}, null, 1)], {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "reelwala-backup.json"; document.body.appendChild(a); a.click(); a.remove();
 }
 async function importJSON(f){
   try { const j = JSON.parse(await f.text()); if (j.app !== "reelwala") throw 0;
     for (const p of j.projects || []){ if (!S.projects.find(x => x.id === p.id)) S.projects.push(p); await DB.put("projects", p); }
     for (const d of j.ideas || []){ if (!S.ideas.find(x => x.id === d.id)) S.ideas.push(d); await DB.put("ideas", d); }
+    for (const d of j.batches || []){ if (!S.batches.find(x => x.id === d.id)) S.batches.push(d); await DB.put("batches", d); }
     if (!cur() && S.projects[0]) setPid(S.projects[0].id); renderSel(); toast("Backup imported");
   } catch { toast("That file isn't a Reelwala backup."); }
+}
+
+/* ============ series: one trip or tournament → many reels + posting plan ============ */
+const ANGLES = ["Arrival and first impressions","Food trail","Hidden gems","Best views","Budget and tips","People and moments","Golden hour","Last day and reflection","Bloopers","Before vs after"];
+const mkey = f => f.name + "|" + f.size + "|" + f.lastModified;
+const curBatch = () => S.batches.find(b => b.id === S.bid) || null;
+const fmtDate = iso => { try { return new Date(iso + "T00:00").toLocaleDateString(undefined, {weekday:"short", day:"numeric", month:"short"}); } catch { return iso; } };
+const isoDay = d => d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+function scheduleDates(start, freq, n){
+  const out = []; let d = new Date(start + "T00:00");
+  if (isNaN(d)) d = new Date();
+  if (freq === "mwf") while (![1,3,5].includes(d.getDay())) d.setDate(d.getDate() + 1);
+  for (let i = 0; i < n; i++){
+    out.push(isoDay(d));
+    if (freq === "daily") d.setDate(d.getDate() + 1);
+    else if (freq === "every2") d.setDate(d.getDate() + 2);
+    else if (freq === "weekly") d.setDate(d.getDate() + 7);
+    else { do { d.setDate(d.getDate() + 1); } while (![1,3,5].includes(d.getDay())); }
+  }
+  return out;
+}
+async function addSeriesFiles(files){
+  const box = $("#bMsg"); if (box){ box.hidden = false; box.className = "msg"; }
+  let i = 0;
+  for (const f of files){
+    i++; if (box) box.textContent = "Reading " + i + " of " + files.length + "…";
+    const key = mkey(f); if (S.bnew.some(m => m.key === key)) continue;
+    try { const m = f.type.startsWith("video/") ? await loadVideo(f) : f.type.startsWith("image/") ? await loadImage(f) : null;
+      if (!m) continue; m.key = key; m.date = f.lastModified || Date.now(); S.bnew.push(m); S.bmedia.set(key, m);
+    } catch { toast("Couldn't read " + f.name); }
+  }
+  S.bnew.sort((a, b) => a.date - b.date);
+  if (box) box.hidden = true; renderBatchMedia();
+}
+async function reattach(files){
+  const b = curBatch(); if (!b) return; const want = new Set(b.media.map(m => m.key)); let n = 0;
+  const box = $("#bMsg"); if (box){ box.hidden = false; box.className = "msg"; }
+  for (const f of files){
+    const key = mkey(f); if (!want.has(key) || S.bmedia.has(key)) continue;
+    if (box) box.textContent = "Matching " + f.name + "…";
+    try { const m = f.type.startsWith("video/") ? await loadVideo(f) : await loadImage(f); m.key = key; m.date = f.lastModified; S.bmedia.set(key, m); n++; } catch {}
+  }
+  toast(n ? n + " file(s) matched" : "None of those files are in this series"); renderSeries();
+}
+function dayLabel(m, first){ const d = Math.floor((new Date(m.date).setHours(0,0,0,0) - new Date(first).setHours(0,0,0,0)) / 864e5) + 1;
+  return "Day " + d + " (" + new Date(m.date).toLocaleString(undefined, {day:"numeric", month:"short", hour:"numeric", minute:"2-digit"}) + ")"; }
+
+async function planSeries(){
+  const P = proj(); const name = $("#bName").value.trim() || "My series"; const storyline = $("#bStory").value.trim();
+  const want = $("#bCount").value, start = $("#bStart").value, freq = $("#bFreq").value, time = $("#bTime").value || "19:00";
+  if (S.bnew.length < 2) return toast("Add at least 2 photos or videos.");
+  const msg = $("#bPlanMsg"), btn = $("#bPlanBtn"); btn.disabled = true;
+  const say = t => { msg.innerHTML = '<span class="spin"></span> ' + esc(t); };
+  try {
+    const media = S.bnew, first = media[0].date;
+    // Stage 1: describe every item in small batches so long trips fit the free tier.
+    const desc = {};
+    for (let c = 0; c < media.length; c += 24){
+      const chunk = media.slice(c, c + 24); const imgs = [];
+      for (let k = 0; k < chunk.length; k++){
+        const m = chunk[k], id = "m" + (c + k); say("Looking at your media " + (c + k + 1) + " of " + media.length + "…");
+        const fr = await framesFor(m, m.type === "video" ? 2 : 1);
+        fr.forEach(f => imgs.push({label:id + " (" + (m.type === "video" ? "video at " + f.t + "s" : "photo") + "):", b64:f.b64}));
+      }
+      say("Describing media " + (c + 1) + "–" + (c + chunk.length) + "…");
+      const j = await AI.json("You are cataloguing raw footage for a short-form video creator. For each media id below write a short factual description (what, where, who, action, mood) and rate how good it looks for Instagram from 1 to 5.\n\nSeries: " + name + "\n" + (storyline ? "Creator's storyline: " + storyline + "\n" : "") +
+        "Ids in this batch: " + chunk.map((m, k) => "m" + (c + k)).join(", ") + '\n\nReply with only JSON: {"items":[{"id":"m0","desc":"","quality":4}]}', imgs,
+        () => ({items:chunk.map((m, k) => ({id:"m" + (c + k), desc:(m.type === "video" ? "Video clip, " + r1(m.dur) + "s" : "Photo") + " from " + dayLabel(m, first), quality:3 + ((c + k) % 3)}))}));
+      for (const it of (j.items || [])) desc[it.id] = it;
+    }
+    // Stage 2: split into reels and order them for posting.
+    say("Planning the reels and posting order…");
+    const catalog = media.map((m, i) => { const d = desc["m" + i] || {};
+      return "m" + i + " | " + (m.type === "video" ? "video " + r1(m.dur) + "s" : "photo") + " | " + dayLabel(m, first) + " | " + (d.desc || "") + " | quality " + (d.quality || 3); }).join("\n");
+    const count = want === "auto" ? "Choose the best number of reels (between 3 and 10) for this much footage." : "Make exactly " + want + " reels.";
+    const j = await AI.json("You are a content strategist for an Instagram creator. Turn one batch of footage into a series of separate reels and decide the posting order.\n\n" + brief(P) +
+      "\n\nSERIES NAME: " + name + "\n" + (storyline ? "STORYLINE THE CREATOR WANTS COVERED:\n" + storyline + "\n" : "") + "\nMEDIA CATALOGUE (id | type | when | description | quality):\n" + catalog +
+      "\n\nRULES:\n- " + count + "\n- Each reel has its own clear angle (e.g. arrival, food, hidden gem, budget tips, best views, people, bloopers) and together the reels cover the storyline.\n" +
+      "- Each reel uses 3–12 media ids that fit its angle, preferring quality 4–5. A media id may appear in at most 2 reels.\n" +
+      "- List reels in posting order: open with the most eye-catching reel, then keep variety from one post to the next.\n" +
+      "- story: 3–6 beats (one per line) for that reel, following the project's structure.\n- hook: max 6 words.\n" +
+      "- caption: Instagram caption mentioning it is part N of the series, ending with a question.\n- hashtags: 8–12, including one series hashtag shared by all reels.\n" +
+      "- strategy: 2–3 sentences on why this order works and what to post in Stories between reels.\n\n" +
+      'Reply with only JSON: {"strategy":"","reels":[{"title":"","angle":"","hook":"","media":["m0"],"story":"","caption":"","hashtags":["#tag"]}]}', [],
+      () => Mock.series(P, name, storyline, media, want));
+    const reels = (j.reels || []).map(r => ({title:String(r.title || ""), angle:String(r.angle || ""), hook:String(r.hook || ""), story:String(r.story || ""), caption:String(r.caption || ""),
+      hashtags:(r.hashtags || []).map(String), mediaKeys:(r.media || []).map(id => media[parseInt(String(id).replace(/\D/g, ""), 10)]).filter(Boolean).map(m => m.key), status:"planned", time}))
+      .filter(r => r.mediaKeys.length);
+    if (!reels.length) throw new Error("No reels came back. Try again.");
+    const dates = scheduleDates(start, freq, reels.length); reels.forEach((r, i) => r.date = dates[i]);
+    const b = {id:uid(), pid:P.id, created:Date.now(), name, storyline, freq, strategy:String(j.strategy || ""), reels,
+      media:media.map((m, i) => ({key:m.key, name:m.name, type:m.type, dur:m.dur, date:m.date, thumb:m.thumb, desc:(desc["m" + i] || {}).desc || ""}))};
+    S.batches.push(b); await DB.put("batches", b); S.bid = b.id; S.bnew = []; toast(reels.length + " reels planned");
+  } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; btn.disabled = false; return; }
+  renderSeries();
+}
+Mock.series = function(P, name, storyline, media, want){
+  const n = want === "auto" ? clamp(Math.round(media.length / 5), 3, 8) : +want;
+  const per = Math.max(2, Math.ceil(media.length / n)); const beats = this.sentences(storyline);
+  const tag = "#" + name.replace(/[^\p{L}\p{N}]+/gu, "");
+  return {strategy:"Demo plan: reels follow the order you shot them, one angle each. Add a Gemini key for a real strategy based on what is in your footage.",
+    reels:Array.from({length:n}, (_, i) => { const ids = []; for (let k = 0; k < per; k++) ids.push("m" + ((i * per + k) % media.length));
+      const angle = ANGLES[i % ANGLES.length];
+      return {title:name + ": " + angle, angle, hook:words(angle).slice(0, 5).join(" "), media:ids,
+        story:(beats[i] ? beats[i] + "\n" : "") + this.beats(P).slice(0, 4).join("\n"),
+        caption:angle + " (part " + (i + 1) + " of " + n + "). Which part should I post next?", hashtags:[tag, "#travel", "#reels", "#explore", "#travelgram", "#wanderlust", "#instatravel", "#trip"]}; })};
+};
+async function saveBatch(b){ await DB.put("batches", b); }
+
+function renderSeries(){
+  const box = $("#seriesBox"); if (!cur()) return needProject(box, "Reel series");
+  const b = curBatch(); if (b) return renderBatch(box, b);
+  const P = proj(); const mine = S.batches.filter(x => x.pid === P.id).sort((a, c) => c.created - a.created);
+  const tomorrow = new Date(Date.now() + 864e5);
+  box.innerHTML = '<div><span class="eyebrow">' + esc(P.name) + '</span><h2>Trip to reel series</h2><p class="lead">Upload everything from a trip or tournament. The AI splits it into several reels, each with its own angle, and plans when to post them.</p></div>' + demoNote() +
+    (mine.length ? '<div class="cards">' + mine.map(x => { const posted = x.reels.filter(r => r.status === "posted").length, next = x.reels.find(r => r.status !== "posted");
+      return '<article class="pcard"><div class="in"><div class="row"><h3 class="grow">' + esc(x.name) + '</h3><span class="chip">' + x.reels.length + ' reels</span><span class="chip ' + (posted === x.reels.length ? "ok" : "") + '">' + posted + ' posted</span></div>' +
+        (next ? '<p>Next: ' + esc(next.title) + ' · ' + fmtDate(next.date) + ' ' + esc(next.time) + '</p>' : '<p>All posted.</p>') +
+        '<div class="row"><button class="btn small primary" data-act="open-batch" data-id="' + x.id + '">Open</button><button class="btn small ghost danger" data-act="del-batch" data-id="' + x.id + '">' + (S.delArm === x.id ? "Tap again to delete" : "Delete") + '</button></div></div></article>'; }).join("") + '</div>' : "") +
+    '<div class="panel form"><div class="step"><span class="n">01</span><h3>New series</h3></div>' +
+    '<label class="f" for="bName">Series name<input type="text" id="bName" placeholder="e.g. Cebu trip, Monsoon cricket league"></label>' +
+    '<label class="f" for="bStory">Storyline to cover <span class="hint">Optional. What happened, what you want people to feel, must-include moments.</span><textarea id="bStory" placeholder="e.g. 6 days in Cebu with my wife. Whale sharks at Oslob, canyoneering at Kawasan, street food in the city. Show it is doable on a budget."></textarea></label>' +
+    '<label class="drop" for="bFiles">+ Add all trip photos and videos<input type="file" id="bFiles" accept="video/*,image/*" multiple hidden></label><div class="msg" id="bMsg" hidden></div><div class="media" id="bGrid"></div>' +
+    '<div class="two"><label class="f" for="bCount">Number of reels<select id="bCount"><option value="auto">Let AI decide</option>' + [3,4,5,6,8,10].map(n => '<option value="' + n + '">' + n + ' reels</option>').join("") + '</select></label>' +
+    '<label class="f" for="bFreq">Posting rhythm<select id="bFreq"><option value="every2">Every 2 days</option><option value="daily">Daily</option><option value="mwf">Mon, Wed, Fri</option><option value="weekly">Weekly</option></select></label>' +
+    '<label class="f" for="bStart">First post on<input type="date" id="bStart" value="' + isoDay(tomorrow) + '"></label>' +
+    '<label class="f" for="bTime">Posting time<input type="time" id="bTime" value="19:00"></label></div>' +
+    '<p class="note" style="margin:0">Reels use this project\'s format, voice and caption style. Evenings around 7–9 PM are a common starting point; check your Instagram insights for when your followers are online.</p>' +
+    '<div class="row"><button class="btn primary" id="bPlanBtn" data-act="plan-series">Plan my series</button><span class="note" id="bPlanMsg"></span></div></div>';
+  renderBatchMedia();
+}
+function renderBatchMedia(){
+  const g = $("#bGrid"); if (!g) return;
+  g.innerHTML = S.bnew.map((m, i) => '<div class="mi"><img src="' + m.thumb + '" alt="' + esc(m.name) + '"><span class="tag">' + new Date(m.date).toLocaleDateString(undefined, {day:"numeric", month:"short"}) + '</span>' + (m.type === "video" ? '<span class="dur">' + tc(m.dur) + '</span>' : "") + '<button class="x" aria-label="Remove ' + esc(m.name) + '" data-act="del-bmedia" data-i="' + i + '">×</button></div>').join("") +
+    (S.bnew.length ? '<p class="note" style="grid-column:1/-1;margin:0">' + S.bnew.length + ' items, sorted by when they were taken.</p>' : "");
+}
+function renderBatch(box, b){
+  const missing = b.media.filter(m => !S.bmedia.has(m.key)).length, q = S.queue;
+  const thumbs = new Map(b.media.map(m => [m.key, m.thumb]));
+  box.innerHTML = '<div><button class="btn small ghost" data-act="close-batch">← All series</button></div>' +
+    '<div><span class="eyebrow">' + b.reels.length + ' reels · ' + b.reels.filter(r => r.status === "posted").length + ' posted</span><h2>' + esc(b.name) + '</h2>' + (b.strategy ? '<p class="lead">' + esc(b.strategy) + '</p>' : "") + '</div>' + demoNote() +
+    (missing ? '<div class="msg">' + missing + ' of ' + b.media.length + ' files aren\'t loaded on this device. Select the same trip files again to make the reels. <label class="btn small" for="reIn" style="margin-top:6px">Select files<input type="file" id="reIn" accept="video/*,image/*" multiple hidden></label></div><div class="msg" id="bMsg" hidden></div>' : "") +
+    '<div class="panel"><div class="row"><button class="btn primary" data-act="make-all"' + (q ? " disabled" : "") + '>Make all reels</button><button class="btn" data-act="ics">Add posting plan to calendar</button></div>' +
+    '<p class="note" style="margin:0">“Make all” plans, voices and exports every reel that isn\'t made yet, one after another in real time. Keep this screen open. You can also open any reel in the editor to fine-tune it.</p>' +
+    (q ? '<div class="stage"><div class="mini"><canvas id="qCv" width="360" height="640"></canvas></div><div class="grow" style="display:flex;flex-direction:column;gap:8px;min-width:160px"><div class="msg" id="qMsg">' + esc(q.msg || "Starting…") + '</div><div class="bar"><i id="qBar"></i></div><button class="btn small" data-act="stop-queue">Stop after this reel</button></div></div>' : "") +
+    (b.queueErr ? '<div class="msg bad">' + esc(b.queueErr) + '</div>' : "") + '</div>' +
+    '<div class="cards">' + b.reels.map((r, i) => { const out = S.bOut[b.id + ":" + i];
+      return '<article class="reel' + (r.status === "posted" ? " posted" : "") + '"><div class="row"><span class="chip hot">Part ' + (i + 1) + '/' + b.reels.length + '</span>' +
+        '<span class="chip ' + (r.status === "planned" ? "" : "ok") + '">' + ({planned:"Planned", made:"Made", posted:"Posted"}[r.status]) + '</span><span class="grow"></span>' +
+        '<label class="toggle" style="font-size:13px" for="posted' + i + '">Posted<input type="checkbox" id="posted' + i + '" data-act="posted" data-i="' + i + '"' + (r.status === "posted" ? " checked" : "") + '></label></div>' +
+        '<h3>' + esc(r.title) + '</h3>' + (r.hook ? '<div class="note">Hook: “' + esc(r.hook) + '”</div>' : "") +
+        '<div class="when"><input type="date" data-bf="date" data-i="' + i + '" value="' + esc(r.date) + '" aria-label="Post date"><input type="time" data-bf="time" data-i="' + i + '" value="' + esc(r.time) + '" aria-label="Post time"><span class="note">' + fmtDate(r.date) + '</span></div>' +
+        '<div class="strip">' + r.mediaKeys.map(k => '<img src="' + (thumbs.get(k) || "") + '" alt="">').join("") + '</div>' +
+        '<details><summary>Story beats</summary><div class="vo">' + esc(r.story) + '</div></details>' +
+        '<details><summary>Caption and hashtags</summary><div class="vo">' + esc(r.caption + "\n\n" + r.hashtags.join(" ")) + '</div><button class="btn small" style="margin-top:6px" data-act="copy-bcap" data-i="' + i + '">Copy</button></details>' +
+        (out ? '<div class="mini"><video src="' + out.url + '" controls playsinline></video></div><div class="row"><a class="btn small primary" href="' + out.url + '" download="' + esc(slug(b.name) + "-part-" + (i + 1) + "." + out.ext) + '">Download</a>' + (navigator.canShare ? '<button class="btn small" data-act="share-b" data-i="' + i + '">Share</button>' : "") + '</div>' : "") +
+        '<div class="row"><button class="btn small' + (out ? "" : " primary") + '" data-act="open-reel" data-i="' + i + '">Open in editor</button></div></article>'; }).join("") + '</div>';
+}
+const slug = t => String(t || "reel").replace(/[^\w\- ]+/g, "").trim().replace(/\s+/g, "-").toLowerCase() || "reel";
+function reelMedia(b, r){ return r.mediaKeys.map(k => S.bmedia.get(k)).filter(Boolean); }
+function openReel(i){
+  const b = curBatch(), r = b.reels[i]; const media = reelMedia(b, r);
+  if (!media.length) return toast("Select the trip files first so this reel has media.");
+  S.media = media; S.story = r.story; S.ideaNote = "This is part " + (i + 1) + " of " + b.reels.length + " in the series \"" + b.name + "\". Angle: " + r.angle + ". Hook: " + r.hook + "\nPost caption idea: " + r.caption + " " + r.hashtags.join(" ");
+  S.plan = r.plan && r.plan.scenes.every(s => s.mediaIdx < media.length) ? JSON.parse(JSON.stringify(r.plan)) : null;
+  if (S.plan && !S.plan.post) S.plan.post = r.caption;
+  S.vo = null; S.dirty = true; S.exportUrl = null; S.batchRef = {bid:b.id, i}; go("create");
+}
+async function markMade(ref, blob, plan){
+  const b = S.batches.find(x => x.id === ref.bid); if (!b) return; const r = b.reels[ref.i]; if (!r) return;
+  if (r.status === "planned") r.status = "made"; if (plan) r.plan = JSON.parse(JSON.stringify(plan));
+  const key = b.id + ":" + ref.i; if (S.bOut[key]) URL.revokeObjectURL(S.bOut[key].url);
+  S.bOut[key] = {blob, url:URL.createObjectURL(blob), ext:/mp4/.test(blob.type) ? "mp4" : "webm"}; await saveBatch(b);
+}
+async function makeAll(){
+  const b = curBatch(); if (!b || S.queue) return; const P = proj();
+  const todo = b.reels.map((r, i) => i).filter(i => b.reels[i].status === "planned" && reelMedia(b, b.reels[i]).length);
+  if (!todo.length) return toast(b.media.some(m => !S.bmedia.has(m.key)) ? "Select the trip files first." : "Every reel is already made.");
+  getAC().resume(); delete b.queueErr;
+  let lock = null; try { lock = await navigator.wakeLock.request("screen"); } catch {}
+  S.queue = {stop:false, msg:"Starting…"}; renderSeries();
+  const say = (t, frac) => { S.queue.msg = t; const m = $("#qMsg"); if (m) m.textContent = t; const bar = $("#qBar"); if (bar && frac != null) bar.style.width = (100 * frac) + "%"; };
+  try {
+    for (let n = 0; n < todo.length && !S.queue.stop; n++){
+      const i = todo[n], r = b.reels[i], media = reelMedia(b, r), tag = "Reel " + (n + 1) + " of " + todo.length + " (part " + (i + 1) + ")";
+      say(tag + ": planning…", n / todo.length);
+      const plan = await buildPlan(P, media, r.story, "Part " + (i + 1) + " of " + b.reels.length + " in the series \"" + b.name + "\". Angle: " + r.angle + ". Hook: " + r.hook, t => say(tag + ": " + t.toLowerCase()));
+      if (!plan.post) plan.post = r.caption;
+      let vo = null;
+      if (P.voMode === "ai" && script(plan)){ say(tag + ": recording voice-over…"); const buf = await AI.tts(script(plan), P, P.voice); vo = {buffer:buf}; if (P.syncVO) syncToVO(plan, media, buf); }
+      say(tag + ": exporting…");
+      const cv = $("#qCv") || document.createElement("canvas"); const rd = new Renderer(cv); S.queue.renderer = rd;
+      await rd.prepare(720, 1280, {plan, media, vo, music:null});
+      const blob = await new Promise(res => rd.play({record:true, onTick:(t, T) => say(tag + ": exporting " + tc(t) + " / " + tc(T), (n + t / T) / todo.length), onDone:res}));
+      if (!blob || !blob.size) throw new Error("Export of part " + (i + 1) + " came out empty. Keep the screen on and try again.");
+      await markMade({bid:b.id, i}, blob, plan);
+    }
+  } catch (e) { b.queueErr = e.message + " Reels made so far are kept."; await saveBatch(b); }
+  try { lock && lock.release(); } catch {}
+  const stopped = S.queue.stop; S.queue = null; renderSeries(); if (!b.queueErr) toast(stopped ? "Stopped" : "All reels made");
+}
+function downloadICS(){
+  const b = curBatch(); if (!b) return;
+  const pad = n => String(n).padStart(2, "0"), now = new Date(), stamp = now.getUTCFullYear() + pad(now.getUTCMonth()+1) + pad(now.getUTCDate()) + "T" + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + "00Z";
+  const escI = t => String(t).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/[,;]/g, m => "\\" + m);
+  const ev = b.reels.map((r, i) => { const d = r.date.replace(/-/g, ""), t = (r.time || "19:00").replace(":", "") + "00";
+    const end = new Date(r.date + "T" + (r.time || "19:00")); end.setMinutes(end.getMinutes() + 30);
+    const e = end.getFullYear() + pad(end.getMonth()+1) + pad(end.getDate()) + "T" + pad(end.getHours()) + pad(end.getMinutes()) + "00";
+    return ["BEGIN:VEVENT", "UID:" + b.id + "-" + i + "@reelwala", "DTSTAMP:" + stamp, "DTSTART:" + d + "T" + t, "DTEND:" + e,
+      "SUMMARY:" + escI("Post reel: " + r.title + " (" + (i + 1) + "/" + b.reels.length + ")"), "DESCRIPTION:" + escI(r.caption + "\n\n" + r.hashtags.join(" ")),
+      "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:" + escI("Post " + r.title), "END:VALARM", "END:VEVENT"].join("\r\n"); });
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Reelwala//Posting plan//EN", "CALSCALE:GREGORIAN", ...ev, "END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([ics], {type:"text/calendar"})); a.download = slug(b.name) + "-posting-plan.ics"; document.body.appendChild(a); a.click(); a.remove();
+  toast("Calendar file downloaded. Open it to add the reminders.");
 }
 
 /* ============ events ============ */
@@ -1084,6 +1322,7 @@ document.addEventListener("click", async e => {
     case "del": if (S.delArm !== id){ S.delArm = id; renderProjects(); break; }
       S.projects = S.projects.filter(x => x.id !== id); await DB.del("projects", id);
       for (const d of S.ideas.filter(x => x.pid === id)) await DB.del("ideas", d.id); S.ideas = S.ideas.filter(x => x.pid !== id);
+      for (const d of S.batches.filter(x => x.pid === id)) await DB.del("batches", d.id); S.batches = S.batches.filter(x => x.pid !== id);
       S.delArm = null; if (S.pid === id) setPid(S.projects[0] ? S.projects[0].id : ""); renderSel(); renderProjects(); toast("Project deleted"); break;
     case "sample-voice": sampleVoice(); break;
     case "gen-ideas": genIdeas(); break;
@@ -1113,6 +1352,22 @@ document.addEventListener("click", async e => {
     case "clear-key": try { localStorage.removeItem("rw_key"); } catch {} renderSettings(); toast("Key removed. Demo mode is on."); break;
     case "save-models": LS.set("rw_text_model", $("#tmIn").value.trim() || "gemini-2.5-flash"); LS.set("rw_tts_model", $("#vmIn").value.trim() || "gemini-2.5-flash-preview-tts"); toast("Models saved"); break;
     case "export-json": exportJSON(); break;
+    case "open-batch": S.bid = id; renderSeries(); window.scrollTo(0, 0); break;
+    case "close-batch": S.bid = null; renderSeries(); break;
+    case "del-batch": if (S.delArm !== id){ S.delArm = id; renderSeries(); break; }
+      S.batches = S.batches.filter(x => x.id !== id); await DB.del("batches", id); S.delArm = null; renderSeries(); toast("Series deleted"); break;
+    case "plan-series": planSeries(); break;
+    case "del-bmedia": { const m = S.bnew.splice(i, 1)[0]; if (m) S.bmedia.delete(m.key); renderBatchMedia(); break; }
+    case "make-all": makeAll(); break;
+    case "stop-queue": if (S.queue){ S.queue.stop = true; t.disabled = true; t.textContent = "Stopping after this reel…"; } break;
+    case "ics": downloadICS(); break;
+    case "open-reel": openReel(i); break;
+    case "back-series": S.bid = S.batchRef ? S.batchRef.bid : S.bid; go("series"); break;
+    case "detach": S.batchRef = null; renderCreate(); break;
+    case "posted": { const b = curBatch(); const r = b.reels[i]; r.status = t.checked ? "posted" : (r.plan || S.bOut[b.id + ":" + i] ? "made" : "planned"); await saveBatch(b); renderSeries(); break; }
+    case "copy-bcap": { const r = curBatch().reels[i]; const v = r.caption + "\n\n" + r.hashtags.join(" "); try { await navigator.clipboard.writeText(v); toast("Caption copied"); } catch { toast("Couldn't copy. Select the text instead."); } break; }
+    case "share-b": { const b = curBatch(), out = S.bOut[b.id + ":" + i], r = b.reels[i]; const file = new File([out.blob], slug(b.name) + "-part-" + (i + 1) + "." + out.ext, {type:out.blob.type});
+      try { if (navigator.canShare({files:[file]})) await navigator.share({files:[file], text:r.caption + "\n\n" + r.hashtags.join(" ")}); else toast("Sharing files isn't supported here. Use Download."); } catch (e) { if (e.name !== "AbortError") toast("Couldn't open the share sheet. Use Download."); } break; }
   }
 });
 document.addEventListener("input", e => {
@@ -1136,6 +1391,9 @@ document.addEventListener("change", async e => {
   if (el.id === "musicIn" && el.files[0]){ try { S.music = {name:el.files[0].name, buffer:await getAC().decodeAudioData(await el.files[0].arrayBuffer())}; S.dirty = true; renderCreate(); } catch { toast("Couldn't read that audio file."); } return; }
   if (el.id === "voIn" && el.files[0]){ try { setVO(await getAC().decodeAudioData(await el.files[0].arrayBuffer()), "upload"); toast("Voice-over added"); } catch { toast("Couldn't read that audio file."); } return; }
   if (el.id === "importIn" && el.files[0]){ importJSON(el.files[0]); return; }
+  if (el.id === "bFiles"){ await addSeriesFiles([...el.files]); el.value = ""; return; }
+  if (el.id === "reIn"){ await reattach([...el.files]); return; }
+  if (el.dataset.bf){ const b = curBatch(); if (b){ b.reels[+el.dataset.i][el.dataset.bf] = el.value; await saveBatch(b); renderSeries(); } return; }
   if (el.id === "voVoice"){ S.voVoice = el.value; return; }
   if (el.id === "safeT"){ S.safe = el.checked; if (S.renderer && S.renderer.ready && !S.renderer.running) S.renderer.draw(0); return; }
   if (el.id === "qual"){ S.dirty = true; return; }
@@ -1148,6 +1406,7 @@ document.addEventListener("change", async e => {
   await DB.open();
   S.projects = (await DB.all("projects")).sort((a, b) => (a.created || 0) - (b.created || 0));
   S.ideas = await DB.all("ideas");
+  S.batches = await DB.all("batches");
   if (!cur() && S.projects[0]) S.pid = S.projects[0].id;
   renderSel();
   go("projects");

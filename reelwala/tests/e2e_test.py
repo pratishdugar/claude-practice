@@ -20,7 +20,7 @@ OUT = pathlib.Path(__file__).resolve().parent / "artifacts"
 
 # Builds a test photo and a 3-second test video inside the page, then hands both to the
 # real file input so the app's own upload handler runs.
-MAKE_MEDIA = """async () => {
+MAKE_MEDIA = """async ([sel, copies]) => {
   const c = document.createElement('canvas'); c.width = 1080; c.height = 1350; const x = c.getContext('2d');
   const g = x.createLinearGradient(0, 0, 1080, 1350); g.addColorStop(0, '#2a6'); g.addColorStop(1, '#126');
   x.fillStyle = g; x.fillRect(0, 0, 1080, 1350); x.fillStyle = '#fff'; x.font = '120px sans-serif'; x.fillText('PHOTO', 300, 700);
@@ -35,9 +35,12 @@ MAKE_MEDIA = """async () => {
     if (++f > 90) { clearInterval(iv); res(); } }, 33); });
   rec.stop(); await new Promise(r => rec.onstop = r);
   const dt = new DataTransfer();
-  dt.items.add(new File([photo], 'photo.jpg', {type: 'image/jpeg'}));
-  dt.items.add(new File(chunks, 'clip.webm', {type: 'video/webm'}));
-  const input = document.querySelector('#fileIn'); input.files = dt.files;
+  for (let i = 0; i < copies; i++) {
+    const t = Date.now() - (copies - i) * 86400000;
+    dt.items.add(new File([photo], 'photo' + i + '.jpg', {type: 'image/jpeg', lastModified: t}));
+    dt.items.add(new File(chunks, 'clip' + i + '.webm', {type: 'video/webm', lastModified: t + 3600000}));
+  }
+  const input = document.querySelector(sel); input.files = dt.files;
   input.dispatchEvent(new Event('change', {bubbles: true}));
 }"""
 
@@ -78,7 +81,7 @@ async def run():
         await page.fill("#storyIn", "Badminton week. Rohan was two points down. He smashed three in a row. He won 21-19. I lost my shoe mid-rally.")
 
         step("upload a photo and a video")
-        await page.evaluate(MAKE_MEDIA)
+        await page.evaluate(MAKE_MEDIA, ["#fileIn", 1])
         await page.wait_for_function("document.querySelectorAll('#mediaGrid .mi').length === 2", timeout=15000)
 
         step("build the edit plan")
@@ -123,10 +126,56 @@ async def run():
         await page.click("[data-go='ideas']")
         assert await page.locator(".idea").count() == 5
 
+        step("series: upload a whole trip and plan 3 reels")
+        await page.click("[data-go='series']")
+        await page.fill("#bName", "Cebu trip")
+        await page.fill("#bStory", "Six days in Cebu. Whale sharks at Oslob. Canyoneering at Kawasan. Street food in the city.")
+        await page.evaluate(MAKE_MEDIA, ["#bFiles", 3])
+        await page.wait_for_function("S.bnew.length === 6", timeout=30000)
+        await page.select_option("#bCount", "3")
+        await page.select_option("#bFreq", "daily")
+        await page.click("#bPlanBtn")
+        await page.wait_for_selector(".reel", timeout=60000)
+        assert await page.locator(".reel").count() == 3, "expected 3 reels"
+        dates = await page.evaluate("curBatch().reels.map(r => r.date)")
+        assert len(set(dates)) == 3 and dates == sorted(dates), f"posting dates should be consecutive days: {dates}"
+
+        step("series: download the posting calendar")
+        async with page.expect_download() as dl:
+            await page.click("[data-act='ics']")
+        ics_path = OUT / "posting-plan.ics"
+        await (await dl.value).save_as(str(ics_path))
+        ics = ics_path.read_text()
+        assert ics.count("BEGIN:VEVENT") == 3 and "VALARM" in ics, "calendar should have 3 events with reminders"
+
+        step("series: make all reels in one go")
+        await page.click("[data-act='make-all']")
+        await page.wait_for_function("Object.keys(S.bOut).length === 3 && !S.queue", timeout=300000)
+        assert not await page.evaluate("curBatch().queueErr"), await page.evaluate("curBatch().queueErr")
+        statuses = await page.evaluate("curBatch().reels.map(r => r.status)")
+        assert statuses == ["made"] * 3, statuses
+        sizes = await page.evaluate("Object.values(S.bOut).map(o => o.blob.size)")
+        assert all(sz > 50_000 for sz in sizes), sizes
+        assert await page.locator(".reel video").count() == 3
+
+        step("series: open part 2 in the editor and mark part 1 posted")
+        await page.locator("[data-act='open-reel']").nth(1).click()
+        await page.wait_for_selector("#sceneList .scene")
+        assert "part 2 of 3" in (await page.inner_text("#createBox")).lower()
+        await page.click("[data-act='back-series']")
+        await page.click("#posted0")
+        await page.wait_for_timeout(300)
+        await page.reload()
+        await page.click("[data-go='series']")
+        await page.click("[data-act='open-batch']")
+        statuses = await page.evaluate("curBatch().reels.map(r => r.status)")
+        assert statuses == ["posted", "made", "made"], statuses
+        assert "aren't loaded on this device" in await page.inner_text("#seriesBox"), "should ask to re-select files after reload"
+
         await browser.close()
     real_errors = [e for e in errors if "net::" not in e]
     assert not real_errors, f"page errors: {real_errors}"
-    print(f"PASS: exported {kind}, {size/1048576:.1f} MB -> {out_file}")
+    print(f"PASS: exported {kind}, {size/1048576:.1f} MB -> {out_file}; series of 3 reels made and scheduled")
 
 
 if __name__ == "__main__":
