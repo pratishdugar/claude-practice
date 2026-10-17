@@ -156,20 +156,52 @@ a{color:var(--accent)}
 .chip.ok{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
 .mini{width:min(100%,180px);aspect-ratio:9/16;background:#000;border-radius:12px;overflow:hidden}
 .mini canvas,.mini video{width:100%;height:100%;display:block}
+.top .wrap.sub{padding-block:0 8px;gap:8px}
+.top .sub select{margin-left:0;max-width:none;flex:1;min-height:36px;padding:5px 10px;font-size:14px}
+.top #pageSel{font-weight:600}
+.gear{flex:none;display:grid;place-items:center;width:38px;height:38px}
+.gear svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:360px){.logo .wm{display:none}}
+details.panel summary{cursor:pointer}
+.slides{display:flex;flex-direction:column;gap:10px}
+.slide{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface)}
+.slide canvas.spv{width:108px;height:auto;flex:none;border-radius:8px;box-shadow:0 0 0 1px var(--line)}
+.slide .sf{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.slide textarea{min-height:70px}
+canvas.pthumb{width:64px;height:auto;flex:none;border-radius:6px;box-shadow:0 0 0 1px var(--line)}
+.pfiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.pfiles img{width:100%;border-radius:8px;display:block;box-shadow:0 0 0 1px var(--line)}
+.claim{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:4px;background:var(--bg)}
+.tele{position:fixed;inset:0;z-index:60;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tele-in{padding-block:18px;display:flex;flex-direction:column;gap:12px}
+.tele.cam{background:#000;color:#fff;overflow:hidden}
+.tele.cam video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tele.cam video.mirror{transform:scaleX(-1)}
+.tele-script{position:absolute;left:0;right:0;top:env(safe-area-inset-top,0px);height:40%;overflow:hidden;background:linear-gradient(rgba(0,0,0,.74),rgba(0,0,0,.4));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.tele-script p{margin:0 auto;max-width:640px;line-height:1.42;font-weight:600;text-align:center}
+.tele-pad{height:16vh}
+.tele-count{position:absolute;inset:0;display:grid;place-items:center;font:800 120px var(--display);color:#fff;text-shadow:0 4px 30px #000}
+.tele-bar{position:absolute;left:0;right:0;bottom:0;padding:12px max(16px,env(safe-area-inset-left,0px)) calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(transparent,rgba(0,0,0,.8));display:flex;flex-direction:column;gap:8px}
+.tele-bar .f{color:#fff;font-size:12px}
+.tele-bar .btn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff}
+.recbtn{width:72px;height:72px;border-radius:50%;border:5px solid #fff;background:#E8492A;cursor:pointer;flex:none;transition:border-radius .2s,transform .2s}
+.recbtn.on{border-radius:20px;transform:scale(.82)}
 ol.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5px;border-radius:5px;overflow-wrap:anywhere}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <div class="logo"><span class="rec" aria-hidden="true"></span>Reelwala</div>
-  <select id="projSel" aria-label="Current project"></select>
-</div></header>
+  <div class="logo"><span class="rec" aria-hidden="true"></span><span class="wm">Reelwala</span></div>
+  <select id="pageSel" aria-label="Instagram page"></select>
+  <button class="iconb gear" data-go="settings" aria-label="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+</div><div class="wrap sub" id="projBar" hidden><label for="projSel" class="eyebrow">Project</label><select id="projSel"></select></div></header>
 
 <main>
 <section id="v-projects"><div class="wrap" id="projectsBox"></div></section>
 <section id="v-setup" hidden><div class="wrap" id="setupBox"></div></section>
 <section id="v-ideas" hidden><div class="wrap" id="ideasBox"></div></section>
+<section id="v-posts" hidden><div class="wrap" id="postsBox"></div></section>
 <section id="v-series" hidden><div class="wrap" id="seriesBox"></div></section>
 <section id="v-create" hidden><div class="wrap" id="createBox"></div></section>
 <section id="v-settings" hidden><div class="wrap" id="settingsBox"></div></section>
@@ -178,9 +210,9 @@ code{font-family:var(--mono);font-size:13px;background:var(--sunk);padding:1px 5
 <nav class="tabs" aria-label="Sections"><div class="wrap">
   <button class="tab" data-go="projects"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4l2 5M14 4l2 5"/></svg>Projects</button>
   <button class="tab" data-go="ideas"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg>Ideas</button>
+  <button class="tab" data-go="posts"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Posts</button>
   <button class="tab" data-go="series"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h3M7 17h3M14 14h3"/></svg>Series</button>
   <button class="tab" data-go="create"><svg viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 9.5v5l4-2.5z"/></svg>Create</button>
-  <button class="tab" data-go="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Settings</button>
 </div></nav>
 <div class="toast" id="toast" hidden></div>
 
@@ -197,9 +229,16 @@ const STRUCTURES = {
   dayinlife:["Day in the life","Hook with the most interesting moment of the day. Then go chronological: morning, main activity, a funny or real moment, evening wind-down. Close with one reflection line."],
   tutorial:["How-to / Tutorial","Hook with the result and a promise (\"do this in 30 seconds\"). Steps 1–N, one per scene, each with a clear caption. One common mistake to avoid. Final result. Ask viewers to save the reel."],
   travel:["Travel diary","Hook with the best view. Arrival moment. 3–4 highlights, each with one interesting fact or tip. A food moment. Closing reflection plus one practical tip (cost, timing or route)."],
+  herb:["Herb spotlight","Hook with a surprising fact about the herb or spice. Its common and Sanskrit name and its taste. 2–3 ways Ayurveda traditionally uses it. One simple way to use it at home. Who should be careful with it. Ask viewers to save the reel."],
+  dosha:["Dosha explainer","Hook with a relatable question (\"Always cold and anxious?\"). Name the dosha and its qualities in one line. 3 signs it may be out of balance. 2–3 simple things that help balance it (food, routine). What makes it worse. Invite viewers to comment their dosha."],
+  myth:["Myth vs fact","Show the myth on screen as the hook. Say clearly whether it's true. What classical Ayurveda actually says. One practical takeaway. Ask viewers which myth to bust next."],
+  ritual:["Daily ritual","Hook with the result or feeling. Name the ritual (Sanskrit name and meaning). Show the steps, one per scene. When and how often to do it. One common mistake. Call to action."],
+  recipe:["Recipe","Hook with the finished dish. Ingredients in one quick shot. Steps, one per scene. When to have it (season, time of day, dosha). Ask viewers to save the recipe."],
+  talk:["Talk to camera","Hook line in the first 2 seconds. One relatable problem. The Ayurvedic view in plain words. 2–3 practical tips. Call to action to follow or comment."],
+  season:["Seasonal guide","Hook about the season change people feel. Which dosha rises this season and why. Foods to favour and to reduce. One daily habit for the season. Call to action."],
   review:["Review / Verdict","Hook with the money shot and a bold claim. Where it is and how much it costs. Reactions to each item tried. Honest pros and cons. Score out of 10. Call to action."]
 };
-const TONES = ["Energetic & funny banter","Hype & intense","Cinematic & dreamy","Fun & honest","Relaxed & personal","Inspirational","Informative & crisp","Dramatic & suspenseful","Sarcastic & witty"];
+const TONES = ["Energetic & funny banter","Hype & intense","Cinematic & dreamy","Fun & honest","Relaxed & personal","Inspirational","Informative & crisp","Dramatic & suspenseful","Sarcastic & witty","Calm & trustworthy","Warm & nurturing"];
 const LANGS = ["English (India)","English (US)","Hindi","Hinglish (Hindi + English mix)","Marathi","Gujarati","Bengali","Punjabi","Tamil","Telugu","Kannada","Malayalam","Urdu","Spanish","French","Arabic","Indonesian","Japanese"];
 const VOICES = [["Puck","Upbeat"],["Fenrir","Excitable"],["Zephyr","Bright"],["Kore","Firm"],["Charon","Informative"],["Leda","Youthful"],["Orus","Firm"],["Aoede","Breezy"],["Callirrhoe","Easy-going"],["Autonoe","Bright"],["Enceladus","Breathy"],["Iapetus","Clear"],["Umbriel","Easy-going"],["Algieba","Smooth"],["Despina","Smooth"],["Erinome","Clear"],["Algenib","Gravelly"],["Rasalgethi","Informative"],["Laomedeia","Upbeat"],["Achernar","Soft"],["Alnilam","Firm"],["Schedar","Even"],["Gacrux","Mature"],["Pulcherrima","Forward"],["Achird","Friendly"],["Zubenelgenubi","Casual"],["Vindemiatrix","Gentle"],["Sadachbia","Lively"],["Sadaltager","Knowledgeable"],["Sulafat","Warm"]];
 const FONTS = [["Poppins","Poppins (Hindi + English)"],["Baloo 2","Baloo 2 (Hindi + English)"],["Mukta","Mukta (Hindi + English)"],["Anton","Anton (English only)"],["Bebas Neue","Bebas Neue (English only)"],["Montserrat","Montserrat (English only)"]];
@@ -215,6 +254,16 @@ const TEMPLATES = [
   {label:"Travel diary", blurb:"Places, food and tips", p:{name:"Travel Diary", about:"Short travel films from my trips with practical tips.", audience:"Young travellers planning budget trips", structureKey:"travel", tone:"Cinematic & dreamy", duration:30, pacing:"medium", voice:"Aoede", voStyle:"warm storyteller", capStyle:"minimal", capAnim:"pop", transition:"fade", brand:"#1E7A8C"}},
   {label:"Food review", blurb:"Try it, rate it out of 10", p:{name:"Food Reviews", about:"Honest reviews of street food and restaurants.", audience:"Local foodies", structureKey:"review", tone:"Fun & honest", duration:30, pacing:"fast", voice:"Kore", voStyle:"friendly food critic", font:"Baloo 2", capStyle:"box", brand:"#C9821B"}},
   {label:"Day in my life", blurb:"A day, start to finish", p:{name:"Day in My Life", about:"Everyday moments from my life.", structureKey:"dayinlife", tone:"Relaxed & personal", duration:30, pacing:"medium", voice:"Sulafat", voStyle:"calm and personal", transition:"fade", brand:"#5B5FC7"}},
+  {label:"Blank project", blurb:"Set everything yourself", p:{}}
+];
+const AYUR_TEMPLATES = [
+  {label:"Herb of the week", blurb:"Faceless AI reel, one herb per episode", p:{name:"Herb of the Week", about:"One Ayurvedic herb or spice each week: what it is, how it's traditionally used and simple ways to use it at home.", audience:"Health-curious Indians 22–45", structureKey:"herb", tone:"Calm & trustworthy", duration:30, pacing:"medium", voice:"Sulafat", voStyle:"warm, knowledgeable guide", font:"Baloo 2", capStyle:"box", transition:"fade", brand:"#B86B12", cta:"Follow for a new herb every week"}},
+  {label:"Talk to camera", blurb:"Film yourself with a teleprompter", p:{name:"Ayurveda Tips (on camera)", about:"Short, practical Ayurveda tips told to camera.", structureKey:"talk", tone:"Warm & nurturing", duration:45, pacing:"medium", voMode:"none", origVol:1, musicVol:0.15, font:"Poppins", capStyle:"bold", transition:"cut", brand:"#4E7A3A"}},
+  {label:"Myth vs fact", blurb:"Bust one myth per reel", p:{name:"Myth vs Fact", about:"Common Ayurveda and wellness myths, checked against what the classical texts actually say.", structureKey:"myth", tone:"Informative & crisp", duration:30, pacing:"fast", voice:"Charon", voStyle:"clear, confident explainer", capCase:"upper", brand:"#8C3B2E"}},
+  {label:"Kitchen recipe", blurb:"Simple Ayurvedic recipes", p:{name:"Ayurvedic Kitchen", about:"Simple sattvic and seasonal recipes with the Ayurvedic reasoning behind them.", structureKey:"recipe", tone:"Warm & nurturing", duration:30, pacing:"medium", voice:"Aoede", voStyle:"friendly home cook", font:"Baloo 2", capStyle:"minimal", capAnim:"pop", transition:"fade", brand:"#C9821B"}},
+  {label:"Dosha 101", blurb:"Vata, Pitta, Kapha explained", p:{name:"Dosha 101", about:"The three doshas explained through everyday signs and simple balancing habits.", structureKey:"dosha", tone:"Calm & trustworthy", duration:30, pacing:"medium", voice:"Achird", voStyle:"friendly teacher", capStyle:"box", brand:"#5B6F8A"}},
+  {label:"Daily rituals", blurb:"Dinacharya, one ritual at a time", p:{name:"Daily Rituals", about:"Morning and evening Ayurvedic rituals (Dinacharya), shown step by step.", structureKey:"ritual", tone:"Calm & trustworthy", duration:30, pacing:"slow", voice:"Vindemiatrix", voStyle:"gentle and calm", font:"Mukta", capStyle:"minimal", capAnim:"pop", transition:"fade", brand:"#6B7F3A"}},
+  {label:"Seasonal guide", blurb:"Ritucharya for each season", p:{name:"Seasonal Living", about:"How to eat and live with each season, the Ayurvedic way.", structureKey:"season", tone:"Calm & trustworthy", duration:45, pacing:"medium", voice:"Sulafat", font:"Baloo 2", capStyle:"box", brand:"#A05A2C"}},
   {label:"Blank project", blurb:"Set everything yourself", p:{}}
 ];
 const FIELDS = [
@@ -279,9 +328,9 @@ function getAC(){ if (!AC) AC = new (window.AudioContext || window.webkitAudioCo
 
 /* ============ storage (IndexedDB) ============ */
 const DB = {
-  db:null, mem:{projects:new Map(), ideas:new Map(), batches:new Map()},
-  open(){ return new Promise(res => { try { const r = indexedDB.open("reelwala", 2);
-    r.onupgradeneeded = () => { const d = r.result; for (const n of ["projects","ideas","batches"]) if (!d.objectStoreNames.contains(n)) d.createObjectStore(n,{keyPath:"id"}); };
+  db:null, mem:{projects:new Map(), ideas:new Map(), batches:new Map(), pages:new Map(), posts:new Map(), plans:new Map()},
+  open(){ return new Promise(res => { try { const r = indexedDB.open("reelwala", 3);
+    r.onupgradeneeded = () => { const d = r.result; for (const n of ["projects","ideas","batches","pages","posts","plans"]) if (!d.objectStoreNames.contains(n)) d.createObjectStore(n,{keyPath:"id"}); };
     r.onsuccess = () => { this.db = r.result; res(); }; r.onerror = () => res(); } catch { res(); } }); },
   all(store){ if (!this.db) return Promise.resolve([...this.mem[store].values()]);
     return new Promise(res => { const q = this.db.transaction(store).objectStore(store).getAll(); q.onsuccess = () => res(q.result || []); q.onerror = () => res([]); }); },
@@ -297,9 +346,13 @@ const S = {
   media:[], story:"", ideaNote:"", plan:null, planBusy:false,
   vo:null, voMode:null, voVoice:null, music:null, musicVol:null,
   renderer:null, dirty:true, exportUrl:null, exportExt:"mp4", safe:true, delArm:null,
-  batches:[], bid:null, bmedia:new Map(), bnew:[], bOut:{}, batchRef:null, queue:null
+  batches:[], bid:null, bmedia:new Map(), bnew:[], bOut:{}, batchRef:null, queue:null,
+  pages:[], pageId:LS.get("rw_page",""), newPage:false, openPageSettings:false,
+  posts:[], postId:null, postDraft:{format:"carousel", topic:"", count:7, style:"clean"}, postPhotos:[], postFiles:[], postFrom:null, claims:null,
+  plans:[], planForm:{start:"", days:14, per:3, time:"19:00", formats:["ai_reel","self_video","carousel","story"], focus:""}, ideasTab:"ideas",
+  teleScript:"", teleSpeed:45, teleSize:30, origVolOverride:null
 };
-const cur = () => S.projects.find(p => p.id === S.pid) || null;
+const cur = () => S.projects.find(p => p.id === S.pid && (!S.pageId || p.pageId === S.pageId)) || null;
 function proj(){ const p = cur(); return p ? {...DEFAULTS, ...p} : {...DEFAULTS}; }
 
 /* ============ Gemini ============ */
@@ -433,9 +486,10 @@ const Mock = {
 };
 
 /* ============ prompts ============ */
-function brief(P){
+function brief(P, withPage = true){
   const pacing = {fast:"fast cuts, 1–2 seconds per scene", medium:"medium cuts, 2–4 seconds per scene", slow:"slow cinematic shots, 4+ seconds per scene"}[P.pacing];
   return [
+    withPage && pageBrief(pageOf(P)),
     "PROJECT: " + P.name,
     "Format: Instagram " + (P.kind === "story" ? "Story" : "Reel") + ", vertical 9:16, about " + P.duration + " seconds.",
     P.about && ("What the series is about: " + P.about),
@@ -469,6 +523,7 @@ async function loadVideo(f){
   const url = URL.createObjectURL(f); const v = document.createElement("video");
   v.muted = true; v.playsInline = true; v.preload = "auto"; v.src = url;
   await once(v, "loadedmetadata");
+  if (v.duration === Infinity){ v.currentTime = 1e101; await once(v, "durationchange", 3000); await seek(v, 0); }
   if (!isFinite(v.duration) || !v.videoWidth) throw new Error("bad video");
   await seek(v, Math.min(0.5, v.duration/2));
   return {id:uid(), name:f.name, type:"video", url, dur:v.duration, w:v.videoWidth, h:v.videoHeight, thumb:snap(v, v.videoWidth, v.videoHeight, 200, 0.7)};
@@ -509,7 +564,7 @@ async function buildPlan(P, media, story, note, onStatus){
     fr.forEach(f => images.push({label: m.type === "video" ? ("Media #" + i + " (video) frame at " + f.t + "s:") : ("Media #" + i + " (photo):"), b64:f.b64}));
   }
   if (onStatus) onStatus("Writing the story and edit plan…");
-  const list = media.map((m, i) => "#" + i + " " + (m.type === "video" ? "video, " + r1(m.dur) + "s" : "photo") + ", " + (m.h >= m.w ? "portrait" : "landscape")).join("\n");
+  const list = media.map((m, i) => "#" + i + " " + (m.bg ? "designed background, no footage" : m.type === "video" ? "video, " + r1(m.dur) + "s" : "photo") + ", " + (m.h >= m.w ? "portrait" : "landscape")).join("\n");
   const prompt = "You are a short-form video editor and scriptwriter. Build an edit plan for one Instagram " + (P.kind === "story" ? "Story" : "Reel") + " using ONLY the media provided.\n\n" +
     brief(P) + "\n\nSTORY FROM THE CREATOR:\n" + story.trim() + (note ? "\n\nIDEA NOTES:\n" + note : "") +
     "\n\nMEDIA (reference these indexes):\n" + list + "\nFrames from each media item follow, labelled with the media index and timestamp.\n\n" +
@@ -518,6 +573,7 @@ async function buildPlan(P, media, story, note, onStatus){
     "- You may reuse a video at different moments. Order scenes to follow the story structure. Open on the strongest visual.\n" +
     "- caption: on-screen text, max 7 words, " + capRule(P) + ".\n" +
     (P.voMode === "none" ? "- voice: leave empty for every scene (no voice-over).\n" : "- voice: the voice-over spoken during that scene, in " + P.language + ", roughly 2.5 words per second of the scene. Together the lines must tell the story.\n") +
+    (media.every(m => m.bg) ? "- There is no footage: every scene is a plain designed background, so the on-screen captions carry the content. Make each caption a complete, readable line (max 10 words).\n" : "") +
     "- motion: for photos one of zoom-in, zoom-out, pan-left, pan-right. For videos none or zoom-in.\n" +
     "- hook: punchy title shown in the first 2 seconds, max 6 words, " + capRule(P) + ".\n" +
     "- post_caption: the Instagram post caption, 1–3 short lines ending in a question that invites comments.\n" +
@@ -535,7 +591,7 @@ async function makePlan(){
   S.planBusy = true; renderPlan();
   try {
     S.plan = await buildPlan(P, S.media, S.story, S.ideaNote, t => { const st = $("#planStatus"); if (st) st.textContent = t; });
-    S.vo = null; S.dirty = true; toast("Plan ready: " + S.plan.scenes.length + " scenes");
+    S.vo = null; S.dirty = true; S.claims = null; toast("Plan ready: " + S.plan.scenes.length + " scenes");
   } catch (e) { S.planErr = e.message; }
   S.planBusy = false; renderCreate();
 }
@@ -588,16 +644,19 @@ class Renderer {
   constructor(cv){ this.cv = cv; this.cx = cv.getContext("2d"); this.running = false; this.scenes = []; }
   async prepare(W, H, src = null){
     this.halt(); this.W = W; this.H = H; this.cv.width = W; this.cv.height = H; this.P = proj();
-    this.src = src || {plan:S.plan, media:S.media, vo:S.vo, music:S.music, musicVol:S.musicVol};
+    this.src = src || {plan:S.plan, media:S.media, vo:S.vo, music:S.music, musicVol:S.musicVol, origVol:S.origVolOverride};
     const P = this.P, plan = this.src.plan, media = this.src.media; let t = 0;
     this.hook = plan.hook;
     this.scenes = plan.scenes.filter(s => media[s.mediaIdx]).map(s => { const o = {...s, m:media[s.mediaIdx], t0:t}; t += Math.max(0.3, +s.dur || 1); return o; });
     this.endT = t; this.total = t + (P.endCard ? 2.5 : 0);
+    this.ov = this.src.origVol ?? P.origVol; let prev = null;
     for (const s of this.scenes){
-      if (s.m.type !== "video") continue;
+      if (s.m.type !== "video"){ prev = s; continue; }
+      if (prev && prev.el && prev.m === s.m && Math.abs(prev.start + prev.dur - s.start) < 0.25){ s.el = prev.el; s.cont = true; prev = s; continue; }
       const el = document.createElement("video"); el.src = s.m.url; el.playsInline = true; el.setAttribute("playsinline", ""); el.preload = "auto";
-      el.muted = !(P.origVol > 0); s.el = el; await once(el, "loadeddata"); await seek(el, s.start);
+      el.muted = !(this.ov > 0); s.el = el; await once(el, "loadeddata"); await seek(el, s.start); prev = s;
     }
+    this.textOnly = this.scenes.length > 0 && this.scenes.every(s => s.m.bg);
     try { await Promise.all([document.fonts.load(fontStr(P.font, 40)), document.fonts.load(fontStr(P.font, 40, false))]); } catch {}
     this.ready = true; if (!src) S.dirty = false; this.draw(0);
   }
@@ -605,16 +664,16 @@ class Renderer {
   async play({record = false, onTick, onDone}){
     const ac = getAC(); ac.resume(); this.unlock();
     const P = this.P; this.recording = record;
-    await Promise.all(this.scenes.filter(s => s.el).map(s => { s.el.pause(); return seek(s.el, s.start); }));
+    await Promise.all(this.scenes.filter(s => s.el && !s.cont).map(s => { s.el.pause(); return seek(s.el, s.start); }));
     const master = ac.createGain(); master.gain.value = 1; master.connect(ac.destination);
     let dest = null; if (record){ dest = ac.createMediaStreamDestination(); master.connect(dest); }
     this.nodes = [master];
     const VO = this.src.vo, MUS = this.src.music; const hasVO = !!VO;
     for (const s of this.scenes){
-      if (!s.el || s.el.muted) continue;
+      if (!s.el || s.el.muted || s.cont) continue;
       if (!s.src) { try { s.src = ac.createMediaElementSource(s.el); } catch { continue; } }
       try { s.src.disconnect(); } catch {}
-      const g = ac.createGain(); g.gain.value = P.origVol * (hasVO ? 0.6 : 1); s.src.connect(g); g.connect(master); this.nodes.push(g);
+      const g = ac.createGain(); g.gain.value = this.ov * (hasVO ? 0.6 : 1); s.src.connect(g); g.connect(master); this.nodes.push(g);
     }
     const t0 = ac.currentTime + 0.3; this.sources = [];
     if (hasVO){ const src = ac.createBufferSource(); src.buffer = VO.buffer; src.connect(master); src.start(t0 + 0.2); this.sources.push(src); }
@@ -676,13 +735,13 @@ class Renderer {
     let scale = 1, ox = 0;
     switch (s.motion){ case "zoom-in": scale = 1 + 0.12*p; break; case "zoom-out": scale = 1.12 - 0.12*p; break;
       case "pan-left": scale = 1.15; ox = 0.05 - 0.1*p; break; case "pan-right": scale = 1.15; ox = -0.05 + 0.1*p; break; }
-    if (P.transition === "punch" && i > 0 && lt < 0.35) scale *= 1 + 0.08 * (1 - lt/0.35);
+    if (P.transition === "punch" && i > 0 && !s.cont && lt < 0.35) scale *= 1 + 0.08 * (1 - lt/0.35);
     cx.fillStyle = "#000"; cx.fillRect(0, 0, W, H);
     const k = Math.max(W/sw, H/sh) * scale, dw = sw*k, dh = sh*k;
     cx.drawImage(src, (W-dw)/2 + ox*W, (H-dh)/2, dw, dh);
-    if (P.transition === "flash" && i > 0 && lt < 0.2){ cx.fillStyle = "rgba(255,255,255," + (0.55*(1 - lt/0.2)) + ")"; cx.fillRect(0, 0, W, H); }
-    if (P.transition === "fade" && lt < 0.3){ cx.fillStyle = "rgba(0,0,0," + (1 - lt/0.3) + ")"; cx.fillRect(0, 0, W, H); }
-    if (P.captions && s.caption && P.capStyle !== "box"){
+    if (P.transition === "flash" && i > 0 && !s.cont && lt < 0.2){ cx.fillStyle = "rgba(255,255,255," + (0.55*(1 - lt/0.2)) + ")"; cx.fillRect(0, 0, W, H); }
+    if (P.transition === "fade" && !s.cont && lt < 0.3){ cx.fillStyle = "rgba(0,0,0," + (1 - lt/0.3) + ")"; cx.fillRect(0, 0, W, H); }
+    if (P.captions && s.caption && P.capStyle !== "box" && !this.textOnly){
       const yc = {top:0.24, middle:0.5, bottom:0.7}[P.capPos] * H; const g = cx.createLinearGradient(0, yc - H*0.18, 0, yc + H*0.18);
       g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(0.5, "rgba(0,0,0,0.28)"); g.addColorStop(1, "rgba(0,0,0,0)"); cx.fillStyle = g; cx.fillRect(0, yc - H*0.18, W, H*0.36);
     }
@@ -693,9 +752,9 @@ class Renderer {
   drawCaption(text, p, dur){
     const {cx, W, H, P} = this;
     let txt = P.capCase === "upper" ? text.toUpperCase() : text;
-    let fs = W * (P.capStyle === "minimal" ? 0.06 : 0.07), ws = words(txt), lines;
+    let fs = W * (P.capStyle === "minimal" ? 0.06 : 0.07) * (this.textOnly ? 1.25 : 1), ws = words(txt), lines;
     for (let tries = 0; tries < 4; tries++){ cx.font = fontStr(P.font, fs); lines = wrapWords(cx, ws, W * 0.82); if (lines.length <= 3) break; fs *= 0.86; }
-    const lh = fs * 1.22, yc = {top:0.24, middle:0.5, bottom:0.7}[P.capPos] * H, y0 = yc - (lines.length * lh)/2 + lh/2;
+    const lh = fs * 1.22, yc = (this.textOnly ? 0.5 : {top:0.24, middle:0.5, bottom:0.7}[P.capPos]) * H, y0 = yc - (lines.length * lh)/2 + lh/2;
     let shown = ws.length, hi = -1, sc = 1;
     if (P.capAnim === "words"){ shown = clamp(Math.floor(p / 0.85 * ws.length) + 1, 1, ws.length); hi = shown - 1; }
     if (P.capAnim === "pop"){ const a = clamp((p*dur) / 0.18, 0, 1); sc = 0.82 + 0.18 * (1 - Math.pow(1 - a, 3)); }
@@ -757,11 +816,12 @@ class Renderer {
 /* ============ views ============ */
 function go(view){
   S.view = view;
-  for (const v of ["projects","setup","ideas","series","create","settings"]) $("#v-" + v).hidden = v !== view;
+  for (const v of ["projects","setup","ideas","posts","series","create","settings"]) $("#v-" + v).hidden = v !== view;
+  $("#projBar").hidden = view === "projects" || view === "settings";
   document.querySelectorAll(".tab").forEach(b => { if (b.dataset.go === (view === "setup" ? "projects" : view)) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   if (view !== "create" && S.renderer && S.renderer.running && !S.renderer.recording) S.renderer.stop();
   if (view !== "series" && S.queue && S.queue.renderer && !S.queue.renderer.recording && S.queue.renderer.running) S.queue.renderer.stop();
-  ({projects:renderProjects, setup:renderSetup, ideas:renderIdeas, series:renderSeries, create:renderCreate, settings:renderSettings})[view]();
+  ({projects:renderProjects, setup:renderSetup, ideas:renderIdeas, posts:renderPosts, series:renderSeries, create:renderCreate, settings:renderSettings})[view]();
   window.scrollTo(0, 0);
 }
 function demoNote(){
@@ -769,16 +829,18 @@ function demoNote(){
   return '<div class="msg" id="demoNote"><b>Demo mode.</b> AI steps are simulated on this device, and the voice-over is a placeholder tone. <button class="btn small ghost" data-go="settings">Add Gemini key</button></div>';
 }
 function renderSel(){
-  const sel = $("#projSel");
-  sel.innerHTML = S.projects.length ? S.projects.map(p => '<option value="' + p.id + '"' + (p.id === S.pid ? " selected" : "") + ">" + esc(p.name) + "</option>").join("") : '<option value="">No projects yet</option>';
-  sel.disabled = !S.projects.length;
+  const ps = $("#pageSel");
+  ps.innerHTML = S.pages.map(g => '<option value="' + g.id + '"' + (g.id === S.pageId ? " selected" : "") + ">" + esc(g.name) + "</option>").join("") + '<option value="__new">+ New page…</option>';
+  const sel = $("#projSel"), list = pageProjects();
+  sel.innerHTML = list.length ? list.map(p => '<option value="' + p.id + '"' + (p.id === S.pid ? " selected" : "") + ">" + esc(p.name) + "</option>").join("") : '<option value="">No projects on this page yet</option>';
+  sel.disabled = !list.length;
 }
 function needProject(box, what){
-  box.innerHTML = '<div><h2>' + what + '</h2><p class="lead">Create a project first. It holds your reel format, story structure and voice settings so every reel stays consistent.</p></div><div><button class="btn primary" data-go="projects">Create a project</button></div>';
+  box.innerHTML = '<div><span class="eyebrow">' + esc(curPage() ? curPage().name : "") + '</span><h2>' + what + '</h2><p class="lead">Create a project on this page first. It holds your reel format, story structure and voice settings so every reel stays consistent.</p></div><div><button class="btn primary" data-go="projects">Create a project</button></div>';
 }
 function renderProjects(){
   const box = $("#projectsBox");
-  const cards = S.projects.map(p0 => { const p = {...DEFAULTS, ...p0}; const n = S.ideas.filter(i => i.pid === p.id).length;
+  const g = curPage(); const cards = pageProjects().map(p0 => { const p = {...DEFAULTS, ...p0}; const n = S.ideas.filter(i => i.pid === p.id).length;
     return '<article class="pcard"><div class="stripe" style="background:' + esc(p.brand) + '"></div><div class="in">' +
       '<div class="row"><h3 class="grow">' + esc(p.name) + '</h3>' + (p.id === S.pid ? '<span class="chip hot">Current</span>' : "") + '</div>' +
       '<div class="row"><span class="chip">' + (p.kind === "story" ? "Story" : "Reel") + ' · ' + p.duration + 's · 9:16</span><span class="chip">' + esc(STRUCTURES[p.structureKey] ? STRUCTURES[p.structureKey][0] : "Custom") + '</span><span class="chip">' +
@@ -786,17 +848,23 @@ function renderProjects(){
       (p.about ? '<p>' + esc(p.about) + '</p>' : "") +
       '<div class="row"><button class="btn small primary" data-act="open-create" data-id="' + p.id + '">Make a reel</button><button class="btn small" data-act="open-ideas" data-id="' + p.id + '">Ideas' + (n ? " (" + n + ")" : "") + '</button><button class="btn small" data-act="open-setup" data-id="' + p.id + '">Edit setup</button>' +
       '<button class="btn small ghost" data-act="dup" data-id="' + p.id + '">Duplicate</button><button class="btn small ghost danger" data-act="del" data-id="' + p.id + '">' + (S.delArm === p.id ? "Tap again to delete" : "Delete") + '</button></div></div></article>'; }).join("");
-  box.innerHTML = '<div><span class="eyebrow">Your series</span><h2>Reel projects</h2><p class="lead">Each project keeps one format, story structure, caption look and voice, so every reel in the series feels the same.</p></div>' +
+  box.innerHTML = (S.newPage ? newPagePanel() : "") +
+    '<div><span class="eyebrow">Instagram page' + (g.handle ? " · " + esc(g.handle) : "") + ' · ' + esc((NICHES[g.niche] || NICHES.general).label) + '</span><h2>' + esc(g.name) + '</h2><p class="lead">' + (g.niche === "ayurveda" ? "Projects are your recurring formats, like Herb of the Week or Myth vs Fact. Each keeps its own structure, voice and look." : "Each project keeps one format, story structure, caption look and voice, so every reel in the series feels the same.") + '</p></div>' +
+    playbookHTML(g) + pageSettingsHTML(g) +
     (cards ? '<div class="cards">' + cards + '</div>' : "") +
-    '<div class="panel"><h3>' + (S.projects.length ? "New project" : "Start your first project") + '</h3><p class="note" style="margin:0">Pick a starting point. You can change every setting afterwards.</p><div class="tpl">' +
-    TEMPLATES.map((t, i) => '<button data-act="new" data-tpl="' + i + '"><b>' + esc(t.label) + '</b><span>' + esc(t.blurb) + '</span></button>').join("") + '</div></div>';
+    '<div class="panel"><h3>' + (pageProjects().length ? "New project" : "Start your first project") + '</h3><p class="note" style="margin:0">Pick a starting point. You can change every setting afterwards.</p><div class="tpl">' +
+    templatesFor(g).map((t, i) => '<button data-act="new" data-tpl="' + i + '"><b>' + esc(t.label) + '</b><span>' + esc(t.blurb) + '</span></button>').join("") + '</div></div>';
 }
 async function newProject(i){
-  const t = TEMPLATES[i]; const p = {...DEFAULTS, ...t.p, id:uid(), created:Date.now()};
+  const g = curPage(); const t = templatesFor(g)[i]; const p = {...DEFAULTS, ...t.p, id:uid(), created:Date.now(), pageId:S.pageId};
+  if (g){ if (!t.p.brand) p.brand = g.brand || p.brand; if (g.handle) p.handle = g.handle; }
   p.structure = STRUCTURES[p.structureKey][1];
   S.projects.push(p); await DB.put("projects", p); setPid(p.id); go("setup"); toast("Project created");
 }
-function setPid(id){ if (S.pid !== id) S.bid = null; S.pid = id; LS.set("rw_pid", id); S.voMode = null; S.voVoice = null; S.musicVol = null; S.dirty = true; renderSel(); }
+function setPid(id){
+  const pr = S.projects.find(x => x.id === id);
+  if (pr && pr.pageId && pr.pageId !== S.pageId){ S.pageId = pr.pageId; LS.set("rw_page", pr.pageId); S.postId = null; S.claims = null; }
+  if (S.pid !== id){ S.bid = null; S.origVolOverride = null; } S.pid = id; LS.set("rw_pid", id); S.voMode = null; S.voVoice = null; S.musicVol = null; S.dirty = true; renderSel(); }
 let saveT;
 function saveProject(){ const p = cur(); if (!p) return; clearTimeout(saveT); saveT = setTimeout(async () => { await DB.put("projects", p); renderSel(); toast("Saved"); }, 450); S.dirty = true; }
 function renderSetup(){
@@ -840,7 +908,13 @@ async function sampleVoice(){
 
 /* ideas */
 function renderIdeas(){
-  const box = $("#ideasBox"); const p0 = cur(); if (!p0) return needProject(box, "Reel ideas");
+  const box = $("#ideasBox");
+  const seg = '<div class="seg" role="group" aria-label="Ideas view">' + [["ideas","Reel ideas"],["plan","Content plan"]].map(([a, b]) => '<button data-act="ideas-tab" data-v="' + a + '" aria-pressed="' + (S.ideasTab === a) + '">' + b + '</button>').join("") + '</div>';
+  if (S.ideasTab === "plan"){ box.innerHTML = seg; renderPlanTab(box); return; }
+  renderReelIdeas(box); box.insertAdjacentHTML("afterbegin", seg);
+}
+function renderReelIdeas(box){
+  const p0 = cur(); if (!p0) return needProject(box, "Reel ideas");
   const P = proj(); const list = S.ideas.filter(i => i.pid === P.id).sort((a, b) => (b.starred - a.starred) || (b.created - a.created));
   box.innerHTML = '<div><span class="eyebrow">' + esc(P.name) + '</span><h2>Reel ideas</h2><p class="lead">Ideas follow this project\'s structure, tone and language. Each comes with a hook, story beats, a shot list and a draft voice-over.</p></div>' + demoNote() +
     '<div class="panel"><label class="f" for="ideaHint">Topic or angle <span class="hint">Optional, e.g. “badminton week”, “Diwali special”, “rain day”</span><input type="text" id="ideaHint" value="' + esc(S.ideaHint || "") + '"></label>' +
@@ -889,6 +963,7 @@ function renderCreate(){
     '<div><span class="eyebrow">' + esc(P.name) + ' · ' + (P.kind === "story" ? "Story" : "Reel") + ' · ' + P.duration + 's</span><h2>Make a reel</h2><p class="lead">Add clips, describe the story, and let the AI cut it, caption it and voice it in this project\'s style.</p></div>' + demoNote() + seriesNote() +
     '<div class="panel"><div class="step"><span class="n">01</span><h3>Clips and photos</h3></div>' +
     '<label class="drop" for="fileIn">+ Add videos or photos<input type="file" id="fileIn" accept="video/*,image/*" multiple hidden></label>' +
+    '<div class="row"><button class="btn small" data-act="tele-open">Film yourself</button><button class="btn small" data-act="add-bgs">No footage? Use designed backgrounds</button></div>' +
     '<div class="msg" id="mediaMsg" hidden></div><div class="media" id="mediaGrid"></div></div>' +
     '<div class="panel"><div class="step"><span class="n">02</span><h3>Story</h3></div>' +
     '<label class="f" for="storyIn">What happens in this reel? <span class="hint">A few lines is enough. Mention names, the result and anything funny.</span><textarea id="storyIn" placeholder="e.g. Badminton week. Rohan was 2 points down, smashed three in a row and won 21–19. I lost my shoe mid-rally.">' + esc(S.story) + '</textarea></label>' +
@@ -900,7 +975,8 @@ function renderCreate(){
     '<div class="panel" id="musicPanel"' + (S.plan ? "" : " hidden") + '><div class="step"><span class="n">05</span><h3>Background music</h3></div>' +
     '<p class="note" style="margin:0">Use a track you have rights to. Instagram may mute copyrighted songs; you can also add music inside Instagram after uploading.</p>' +
     '<div class="row"><label class="btn small" for="musicIn">' + (S.music ? "Replace track" : "Add a track") + '<input type="file" id="musicIn" accept="audio/*" hidden></label>' + (S.music ? '<span class="grow note">' + esc(S.music.name) + '</span><button class="btn small ghost danger" data-act="del-music">Remove</button>' : "") + '</div>' +
-    '<label class="f" for="musicVol">Volume <input type="range" id="musicVol" min="0" max="1" step="0.05" value="' + (S.musicVol ?? P.musicVol) + '"></label></div>' +
+    '<label class="f" for="musicVol">Music volume <input type="range" id="musicVol" min="0" max="1" step="0.05" value="' + (S.musicVol ?? P.musicVol) + '"></label>' +
+    '<label class="f" for="origVol">Original clip sound <span class="hint">Turn up for videos where you speak</span><input type="range" id="origVol" min="0" max="1" step="0.05" value="' + (S.origVolOverride ?? P.origVol) + '"></label></div>' +
     '<div class="panel" id="outPanel"' + (S.plan ? "" : " hidden") + '><div class="step"><span class="n">06</span><h3>Preview and export</h3></div>' +
     '<div class="stage"><div class="screen"><canvas id="cv" width="540" height="960"></canvas></div><div class="grow" style="display:flex;flex-direction:column;gap:10px;min-width:200px">' +
     '<div class="tcbig"><span id="tcNow">00:00.0</span> <span class="muted">/ <span id="tcAll">' + tc(planTotal()) + '</span></span></div><div class="bar"><i id="pbar"></i></div>' +
@@ -949,8 +1025,9 @@ function renderPlan(){
       t += +s.dur || 0;
     });
     h += '</div><div class="row"><button class="btn small" data-act="add-scene">+ Add scene</button></div>';
+    if (curPage() && curPage().health) h += '<div class="row"><button class="btn small" data-act="claims-reel">Check health claims</button><span class="note" id="claimMsg"></span></div><div id="claimBox" data-target="reel" style="display:flex;flex-direction:column;gap:8px"></div>';
   }
-  box.innerHTML = h;
+  box.innerHTML = h; renderClaims();
 }
 function renderVO(){
   const b = $("#voBody"); if (!b) return; const P = proj(); const vm = S.voMode || P.voMode; const voice = S.voVoice || P.voice;
@@ -1081,14 +1158,17 @@ async function testKey(){
   } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; }
 }
 function exportJSON(){
-  const blob = new Blob([JSON.stringify({app:"reelwala", v:2, projects:S.projects, ideas:S.ideas, batches:S.batches}, null, 1)], {type:"application/json"});
+  const blob = new Blob([JSON.stringify({app:"reelwala", v:3, pages:S.pages, projects:S.projects, ideas:S.ideas, batches:S.batches, posts:S.posts, plans:S.plans}, null, 1)], {type:"application/json"});
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "reelwala-backup.json"; document.body.appendChild(a); a.click(); a.remove();
 }
 async function importJSON(f){
   try { const j = JSON.parse(await f.text()); if (j.app !== "reelwala") throw 0;
-    for (const p of j.projects || []){ if (!S.projects.find(x => x.id === p.id)) S.projects.push(p); await DB.put("projects", p); }
+    for (const g of j.pages || []){ if (!S.pages.find(x => x.id === g.id)) S.pages.push(g); await DB.put("pages", g); }
+    for (const p of j.projects || []){ if (!p.pageId || !S.pages.some(g => g.id === p.pageId)) p.pageId = S.pageId; if (!S.projects.find(x => x.id === p.id)) S.projects.push(p); await DB.put("projects", p); }
     for (const d of j.ideas || []){ if (!S.ideas.find(x => x.id === d.id)) S.ideas.push(d); await DB.put("ideas", d); }
     for (const d of j.batches || []){ if (!S.batches.find(x => x.id === d.id)) S.batches.push(d); await DB.put("batches", d); }
+    for (const d of j.posts || []){ if (!S.posts.find(x => x.id === d.id)) S.posts.push(d); await DB.put("posts", d); }
+    for (const d of j.plans || []){ if (!S.plans.find(x => x.id === d.id)) S.plans.push(d); await DB.put("plans", d); }
     if (!cur() && S.projects[0]) setPid(S.projects[0].id); renderSel(); toast("Backup imported");
   } catch { toast("That file isn't a Reelwala backup."); }
 }
@@ -1307,12 +1387,539 @@ function downloadICS(){
   toast("Calendar file downloaded. Open it to add the reminders.");
 }
 
+/* ============ pages: separate Instagram accounts, each with its own niche ============ */
+const AYUR_DISCLAIMER = "Educational content, not medical advice. Consult a qualified Ayurvedic doctor before trying any remedy.";
+const HEALTH_RULES = "HEALTH CONTENT RULES (always follow): This is educational wellness content, not medical advice. Never say a herb, food or practice cures, treats or prevents a disease, and don't pair remedies with named diseases. Use wording like \"traditionally used for\" or \"in Ayurveda, X is believed to support\". Don't give medicinal doses. Where relevant, mention who should be careful (pregnancy, medication, chronic conditions) and suggest consulting a qualified practitioner. No guarantees, miracle language or before/after promises.";
+const NICHES = {
+  general:{label:"General: travel, sports, lifestyle", pillars:"", health:false, brand:"#E8492A"},
+  ayurveda:{label:"Ayurveda and wellness", health:true, brand:"#B86B12",
+    pillars:"Herbs and spices\nDoshas (Vata, Pitta, Kapha)\nDaily routine (Dinacharya)\nSeasonal living (Ritucharya)\nKitchen remedies and recipes\nMyths vs facts"}
+};
+const curPage = () => S.pages.find(g => g.id === S.pageId) || S.pages[0] || null;
+const pageOf = p => (p && S.pages.find(g => g.id === p.pageId)) || curPage();
+const pageProjects = () => S.projects.filter(p => p.pageId === S.pageId);
+const templatesFor = g => g && g.niche === "ayurveda" ? AYUR_TEMPLATES : TEMPLATES;
+const projById = id => { const p = S.projects.find(x => x.id === id); return p ? {...DEFAULTS, ...p} : proj(); };
+function pageBrief(G){
+  if (!G) return "";
+  return [
+    "INSTAGRAM PAGE: " + G.name + (G.handle ? " (" + G.handle + ")" : ""),
+    G.about && ("Page focus: " + G.about),
+    G.audience && ("Page audience: " + G.audience),
+    G.pillars && ("Content pillars:\n" + G.pillars),
+    G.health && (HEALTH_RULES + (G.disclaimer ? "\nDisclaimer to use where needed: " + G.disclaimer : ""))
+  ].filter(Boolean).join("\n");
+}
+function newPageObj(name, niche, handle){
+  const n = NICHES[niche] || NICHES.general;
+  return {id:uid(), created:Date.now(), name, niche, handle:handle || "", brand:n.brand, about:"", audience:"", pillars:n.pillars, health:n.health,
+    disclaimer:n.health ? AYUR_DISCLAIMER : "", credentials:""};
+}
+function setPage(id){
+  if (S.pageId === id) return; S.pageId = id; LS.set("rw_page", id);
+  S.bid = null; S.postId = null; S.postFiles = []; S.claims = null;
+  const first = pageProjects()[0]; S.pid = first ? first.id : ""; LS.set("rw_pid", S.pid);
+  S.voMode = null; S.voVoice = null; S.musicVol = null; S.origVolOverride = null; S.dirty = true; renderSel();
+}
+let pageSaveT;
+function savePage(){ const g = curPage(); if (!g) return; clearTimeout(pageSaveT); pageSaveT = setTimeout(async () => { await DB.put("pages", g); renderSel(); toast("Page saved"); }, 450); }
+function pageSettingsHTML(g){
+  const f = (k, label, type, hint) => {
+    const id = "pg_" + k, v = g[k] ?? "";
+    if (type === "textarea") return '<label class="f" for="' + id + '">' + label + (hint ? '<span class="hint">' + hint + '</span>' : "") + '<textarea id="' + id + '" data-pk="' + k + '">' + esc(v) + '</textarea></label>';
+    if (type === "toggle") return '<label class="toggle" for="' + id + '">' + label + '<input type="checkbox" id="' + id + '" data-pk="' + k + '"' + (v ? " checked" : "") + '></label>';
+    if (type === "color") return '<label class="toggle" for="' + id + '">' + label + '<input type="color" id="' + id + '" data-pk="' + k + '" value="' + esc(v) + '"></label>';
+    if (type === "niche") return '<label class="f" for="' + id + '">' + label + '<select id="' + id + '" data-pk="' + k + '">' + Object.entries(NICHES).map(([a, n]) => '<option value="' + a + '"' + (a === v ? " selected" : "") + '>' + esc(n.label) + '</option>').join("") + '</select></label>';
+    return '<label class="f" for="' + id + '">' + label + (hint ? '<span class="hint">' + hint + '</span>' : "") + '<input type="text" id="' + id + '" data-pk="' + k + '" value="' + esc(v) + '"></label>';
+  };
+  return '<details class="panel"' + (S.openPageSettings ? " open" : "") + ' id="pageSettings"><summary><b>Page settings</b> <span class="note">· name, handle, pillars' + (g.health ? ", health rules" : "") + '</span></summary><div class="form" id="pageForm" style="margin-top:12px">' +
+    f("name", "Page name") + f("handle", "Instagram handle", "text", "Used on end cards and post slides") + f("niche", "Niche", "niche") +
+    f("about", "What the page is about", "textarea") + f("audience", "Audience") +
+    f("pillars", "Content pillars", "textarea", "One per line. Ideas and plans rotate through these.") + f("brand", "Page brand colour", "color") +
+    f("health", "Health content safety rules", "toggle") +
+    (g.health ? f("disclaimer", "Disclaimer", "textarea", "Added to the last slide of posts and suggested in captions") +
+      f("credentials", "Your credentials", "text", "e.g. BAMS, certified Ayurveda practitioner. Shown upfront on paid partnerships.") : "") +
+    '<div class="row"><button class="btn small ghost danger" data-act="del-page">' + (S.delArm === "page" ? "Tap again to delete this page and everything in it" : "Delete page") + '</button></div></div></details>';
+}
+function newPagePanel(){
+  return '<div class="panel form" id="newPagePanel"><div class="row"><h3 class="grow">New Instagram page</h3><button class="iconb" aria-label="Close" data-act="cancel-page">✕</button></div>' +
+    '<p class="note" style="margin:0">Each page keeps its own projects, ideas, posts, series and content plan, so different accounts never mix.</p>' +
+    '<label class="f" for="npName">Page name<input type="text" id="npName" placeholder="e.g. Ayurveda daily"></label>' +
+    '<label class="f" for="npHandle">Instagram handle<input type="text" id="npHandle" placeholder="@yourpage"></label>' +
+    '<label class="f" for="npNiche">Niche<select id="npNiche">' + Object.entries(NICHES).map(([a, n]) => '<option value="' + a + '">' + esc(n.label) + '</option>').join("") + '</select></label>' +
+    '<div class="row"><button class="btn primary" data-act="create-page">Create page</button></div></div>';
+}
+
+/* ============ health-claim check ============ */
+const CLAIM_RULES = [
+  [/\b(cures?|cured|curing)\b/gi, "supports", "Saying something cures a condition is a medical claim. Describe traditional use instead."],
+  [/\b(treats?|treated|treating)\b/gi, "is traditionally used for", "Treatment claims need medical evidence. Describe traditional use instead."],
+  [/\b(heals?|healed|healing)\b/gi, "soothes", "“Heals” reads as a medical promise."],
+  [/\b(guaranteed?|100\s?%)/gi, "often", "Avoid guarantees. Results vary from person to person."],
+  [/\bno side[- ]effects?\b/gi, "is generally well tolerated", "Every herb can cause side effects or interact with medicines."],
+  [/\b(miracle|magic(al)?)\b/gi, "time-tested", "Miracle language makes content look unreliable and can break ad rules."],
+  [/\b(instantly|overnight|permanently)\b/gi, "over time", "Promising instant or permanent results is misleading."],
+  [/\b(diabetes|cancer|thyroid|pcos|pcod|hypertension|blood pressure|asthma|arthritis|infertility|depression|heart disease|kidney stones?|covid)\b/gi, null, "A named disease next to a remedy reads as a medical claim. Talk about general wellbeing, or tell viewers to consult a doctor."]
+];
+function localClaims(text){
+  const out = [];
+  for (const [re, fix, why] of CLAIM_RULES){ re.lastIndex = 0; let m; while ((m = re.exec(text))) out.push({quote:m[0], why, suggestion:fix}); }
+  return out;
+}
+async function runClaimCheck(target){
+  const texts = target === "post" ? postTexts() : reelTexts(); const all = texts.join("\n");
+  const msg = $("#claimMsg"); if (msg) msg.innerHTML = '<span class="spin"></span> Checking…';
+  let issues = localClaims(all);
+  if (!AI.demo()){
+    try {
+      const j = await AI.json("You review Instagram wellness content (Ayurveda) for risky health claims before it is posted in India. Flag sentences that claim to cure, treat or prevent disease, name diseases next to remedies, give medicinal doses, promise guaranteed or instant results, or say there are no side effects. For each, give the exact quote from the text (copy it exactly), why it's risky, and a safer rewrite that keeps the meaning educational. If nothing is risky, return an empty list.\n\nTEXT:\n" + all + '\n\nReply with only JSON: {"issues":[{"quote":"","why":"","suggestion":""}]}');
+      for (const it of (j.issues || [])) if (it.quote && all.includes(it.quote)) issues.push({quote:String(it.quote), why:String(it.why || ""), suggestion:it.suggestion ? String(it.suggestion) : null});
+    } catch (e) { toast("AI check failed: " + e.message + " Showing the quick check only."); }
+  }
+  const seen = new Set(); issues = issues.filter(x => { const k = x.quote.toLowerCase() + "|" + x.suggestion; if (seen.has(k)) return false; seen.add(k); return true; });
+  S.claims = {target, issues}; renderClaims();
+}
+function renderClaims(){
+  const box = $("#claimBox"); if (!box) return; const c = S.claims && S.claims.target === box.dataset.target ? S.claims : null; const msg = $("#claimMsg"); if (msg) msg.textContent = "";
+  if (!c){ box.innerHTML = ""; return; }
+  if (!c.issues.length){ box.innerHTML = '<div class="msg good">No risky health claims found. Still keep the disclaimer on the last slide or in the caption.</div>'; return; }
+  box.innerHTML = '<div class="msg bad">' + c.issues.length + ' thing' + (c.issues.length > 1 ? "s" : "") + ' to fix before posting</div>' + c.issues.map((x, i) =>
+    '<div class="claim"><div><b>“' + esc(x.quote) + '”</b></div><div class="note">' + esc(x.why) + '</div>' +
+    (x.suggestion ? '<div class="row"><span class="note grow">Suggest: “' + esc(x.suggestion) + '”</span><button class="btn small" data-act="claim-fix" data-i="' + i + '">Apply</button></div>' : '<div class="note">Rewrite this part yourself.</div>') + '</div>').join("");
+}
+function replaceAll(text, quote, sug){
+  if (!text) return text;
+  const re = new RegExp(quote.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+  return text.replace(re, sug);
+}
+async function applyClaimFix(i){
+  const c = S.claims, x = c && c.issues[i]; if (!x || !x.suggestion) return;
+  if (c.target === "post"){ const p = curPost(); p.slides.forEach(s => { s.title = replaceAll(s.title, x.quote, x.suggestion); s.body = replaceAll(s.body, x.quote, x.suggestion); }); p.caption = replaceAll(p.caption, x.quote, x.suggestion); await DB.put("posts", p); S.claims.issues = localClaims(postTexts().join("\n")); renderPosts(); }
+  else { const pl = S.plan; pl.scenes.forEach(s => { s.caption = replaceAll(s.caption, x.quote, x.suggestion); s.voice = replaceAll(s.voice, x.quote, x.suggestion); }); pl.hook = replaceAll(pl.hook, x.quote, x.suggestion); pl.post = replaceAll(pl.post, x.quote, x.suggestion); S.dirty = true; S.claims.issues = localClaims(reelTexts().join("\n")); renderCreate(); }
+  renderClaims(); toast("Applied");
+}
+const reelTexts = () => S.plan ? [S.plan.hook, ...S.plan.scenes.map(s => s.caption), ...S.plan.scenes.map(s => s.voice), S.plan.post].filter(Boolean) : [];
+const postTexts = () => { const p = curPost(); return p ? [...p.slides.flatMap(s => [s.title, s.body]), p.caption].filter(Boolean) : []; };
+
+/* ============ posts: carousels, single posts, story sets ============ */
+const POST_FORMATS = {carousel:["Carousel", 1080, 1350], single:["Single post", 1080, 1350], story:["Story set", 1080, 1920]};
+const STICKERS = ["none","poll","quiz","question","slider","link"];
+const POST_TOPICS = {
+  ayurveda:[["carousel","5 herbs every Indian kitchen already has"],["story","What's your dosha? A quick quiz"],["carousel","Myth vs fact: ghee"],["single","One Dinacharya habit to start tomorrow"],["carousel","A simple routine for Vata season"],["story","Poll: do you scrape your tongue?"]],
+  general:[["carousel","Packing list for a 5-day beach trip"],["story","Poll: mountains or beaches?"],["carousel","Rules of our weekly challenge"],["single","Best moment from this week"]]
+};
+const curPost = () => S.posts.find(p => p.id === S.postId) || null;
+function hexRgb(h){ h = String(h || "#888888").replace("#", ""); if (h.length === 3) h = h.split("").map(c => c + c).join(""); const n = parseInt(h, 16) || 0; return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+function mixHex(a, b, t){ const x = hexRgb(a), y = hexRgb(b); return "rgb(" + x.map((v, i) => Math.round(v * (1 - t) + y[i] * t)).join(",") + ")"; }
+function lum(h){ const [r, g, b] = hexRgb(h).map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126*r + 0.7152*g + 0.0722*b; }
+function wrapPara(cx, text, maxW){
+  const out = [];
+  for (const raw of String(text || "").split("\n")){
+    const line = raw.trim(); if (!line){ out.push({t:"", gap:true}); continue; }
+    const bullet = /^[-•*]\s+/.test(line); const ws = words(line.replace(/^[-•*]\s+/, ""));
+    const indent = bullet ? cx.measureText("•  ").width : 0;
+    wrapWords(cx, ws, maxW - indent).forEach((l, k) => out.push({t:l.join(" "), bullet:bullet && k === 0, indent}));
+  }
+  return out;
+}
+function drawSlide(cv, post, i, scale){
+  const [, W, H] = POST_FORMATS[post.format]; cv.width = Math.round(W * scale); cv.height = Math.round(H * scale);
+  const cx = cv.getContext("2d"); cx.setTransform(scale, 0, 0, scale, 0, 0);
+  const P = projById(post.pid), G = pageOf(P); const n = post.slides.length, s = post.slides[i] || {title:"", body:""};
+  const story = post.format === "story", cover = i === 0, last = n > 1 && i === n - 1;
+  const photo = post.style === "photo" && S.postPhotos.length ? S.postPhotos[i % S.postPhotos.length] : null;
+  const brand = P.brand || "#B86B12"; let fg, accent;
+  if (post.style === "bold"){ cx.fillStyle = brand; cx.fillRect(0, 0, W, H); fg = lum(brand) > 0.45 ? "#1D1A16" : "#FFFFFF"; accent = fg; }
+  else if (photo){
+    const k = Math.max(W / photo.w, H / photo.h), dw = photo.w * k, dh = photo.h * k; cx.drawImage(photo.img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+    const g = cx.createLinearGradient(0, H * 0.25, 0, H); g.addColorStop(0, "rgba(0,0,0,0.05)"); g.addColorStop(1, "rgba(0,0,0,0.78)"); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+    fg = "#FFFFFF"; accent = mixHex(brand, "#FFFFFF", 0.45);
+  } else { cx.fillStyle = mixHex(brand, "#FFFFFF", 0.9); cx.fillRect(0, 0, W, H); fg = "#1D1A16"; accent = brand; }
+  const M = W * 0.085, top = story ? H * 0.14 + 24 : M, bottom = story ? H * 0.8 : H - M;
+  const mono = sz => "500 " + Math.round(sz) + 'px "JetBrains Mono", ui-monospace, monospace';
+  const body = sz => "500 " + Math.round(sz) + 'px "Figtree", "Mukta", system-ui, sans-serif';
+  cx.textBaseline = "top"; cx.fillStyle = fg; cx.globalAlpha = 0.75; cx.font = mono(26); cx.textAlign = "left";
+  cx.fillText(G && G.handle ? G.handle : (P.handle || G && G.name || ""), M, top);
+  if (n > 1 && !story){ cx.textAlign = "right"; cx.fillText((i + 1) + "/" + n, W - M, top); }
+  cx.globalAlpha = 1; cx.textAlign = "left";
+  // footer
+  let footH = 0; const foot = [];
+  if (last && G && G.health && G.disclaimer){ cx.font = body(24); const ls = wrapPara(cx, G.disclaimer, W - 2*M); foot.push({lines:ls, size:24}); footH += ls.length * 32 + 10; }
+  if (cover && n > 1 && !story) footH = Math.max(footH, 70);
+  const stickerH = story && s.sticker && s.sticker.type && s.sticker.type !== "none" ? H * 0.2 : 0;
+  const areaTop = top + 80, areaBot = bottom - footH - stickerH - 20, maxW = W - 2*M;
+  // content block, shrink to fit
+  let k = 1, blocks;
+  for (let tries = 0; tries < 10; tries++){
+    blocks = []; let h = 0;
+    if (cover && post.sponsored){ const t = "Paid partnership" + (G && G.credentials ? " · " + G.credentials : ""); cx.font = mono(24*k); blocks.push({kind:"tag", lines:wrapPara(cx, t, maxW), size:24*k, lh:32*k}); }
+    if (cover && post.kicker){ cx.font = mono(28*k); blocks.push({kind:"kicker", lines:[{t:post.kicker.toUpperCase()}], size:28*k, lh:40*k}); }
+    if (!cover && !last && n > 1 && !story){ blocks.push({kind:"num", lines:[{t:String(i).padStart(2, "0")}], size:56*k, lh:72*k}); }
+    const tsz = (cover ? (n === 1 ? 84 : 92) : 70) * k; cx.font = fontStr(P.font, tsz);
+    if (s.title) blocks.push({kind:"title", lines:wrapPara(cx, s.title, maxW), size:tsz, lh:tsz * 1.12});
+    const bsz = (cover ? 40 : 46) * k; cx.font = body(bsz);
+    if (s.body) blocks.push({kind:"body", lines:wrapPara(cx, s.body, maxW), size:bsz, lh:bsz * 1.42});
+    h = blocks.reduce((a, b) => a + b.lines.length * b.lh + 22*k, 0);
+    blocks.h = h; if (h <= areaBot - areaTop || k < 0.55) break; k *= 0.9;
+  }
+  let y = photo ? Math.max(areaTop, areaBot - blocks.h) : Math.max(areaTop, areaTop + (areaBot - areaTop - blocks.h) * (cover ? 0.42 : 0.3));
+  for (const b of blocks){
+    for (const ln of b.lines){
+      if (b.kind === "tag"){ cx.font = mono(b.size); cx.fillStyle = fg; cx.globalAlpha = 0.85; }
+      else if (b.kind === "kicker"){ cx.font = mono(b.size); cx.fillStyle = accent; try { cx.letterSpacing = "3px"; } catch {} }
+      else if (b.kind === "num"){ cx.font = fontStr(P.font, b.size); cx.fillStyle = accent; }
+      else if (b.kind === "title"){ cx.font = fontStr(P.font, b.size); cx.fillStyle = fg; }
+      else { cx.font = body(b.size); cx.fillStyle = fg; cx.globalAlpha = photo ? 0.95 : 0.88; }
+      if (ln.bullet){ cx.fillStyle = accent; cx.fillText("•", M, y); cx.fillStyle = fg; }
+      cx.fillText(ln.t, M + (ln.indent || 0), y); cx.globalAlpha = 1; try { cx.letterSpacing = "0px"; } catch {}
+      y += ln.gap ? b.lh * 0.5 : b.lh;
+    }
+    y += 22 * k;
+  }
+  if (cover && n > 1 && !story){
+    cx.font = body(30); const t = "Swipe  →", tw = cx.measureText(t).width; cx.fillStyle = accent; rrect(cx, W - M - tw - 48, H - M - 58, tw + 48, 58, 29); cx.fill();
+    cx.fillStyle = post.style === "bold" ? brand : (lum(brand) > 0.45 && !photo ? "#1D1A16" : "#FFFFFF"); cx.textBaseline = "middle"; cx.fillText(t, W - M - tw - 24, H - M - 29); cx.textBaseline = "top";
+  }
+  if (foot.length){ let fy = bottom - footH + 10; cx.fillStyle = fg; cx.globalAlpha = 0.7; for (const f of foot){ cx.font = body(f.size); for (const ln of f.lines){ cx.fillText(ln.t, M, fy); fy += 32; } } cx.globalAlpha = 1; }
+}
+function postBlank(format, topic){
+  const P = proj(); const n = format === "single" ? 1 : format === "story" ? 4 : 6;
+  return {id:uid(), pageId:S.pageId, pid:P.id, created:Date.now(), format, topic:topic || "", style:"clean", kicker:"", sponsored:false, status:"draft",
+    slides:Array.from({length:n}, (_, i) => ({title:i === 0 ? (topic || "Your title") : "", body:"", sticker:{type:"none", text:""}})), caption:""};
+}
+async function writePost(){
+  const d = S.postDraft, P = proj(), G = curPage(); if (!d.topic.trim()) return toast("Write a topic first.");
+  const btn = $("#pWrite"), msg = $("#pMsg"); if (btn) btn.disabled = true; if (msg) msg.innerHTML = '<span class="spin"></span> Writing…';
+  const n = d.format === "single" ? 1 : +d.count;
+  const spec = d.format === "carousel" ? "an Instagram carousel of " + n + " slides. Slide 1 is the cover: a scroll-stopping title (max 8 words) and a one-line subtitle as body. Slides 2 to " + (n - 1) + " each teach one idea: title max 6 words, body max 35 words in short lines (\"- \" bullets allowed). The last slide is a recap or a call to action (save, share, follow)."
+    : d.format === "single" ? "a single-image Instagram post: one strong title (max 10 words) and a body of max 25 words."
+    : "an Instagram Story set of " + n + " frames designed for interaction. Frame 1 hooks. Use poll, quiz, question or slider stickers on the middle frames. The last frame tells people what to do next (follow, reply, see the latest post). Title max 7 words, body max 20 words per frame. For each frame give a sticker: type (none, poll, quiz, question, slider, link) and the sticker text with options separated by \" / \".";
+  const prompt = "You write Instagram content for this page.\n\n" + pageBrief(G) + "\n\nPROJECT STYLE:\n" + brief(P, false) +
+    "\n\nWrite " + spec + "\nTopic: " + d.topic.trim() + "\nLanguage: " + P.language + ".\nAlso give: kicker (2–3 word label for the content pillar or series), caption (first line is a hook, then 2–4 short lines of value, end with a question" + (G && G.health ? ", then the disclaimer" : "") + "), hashtags (10–15, mix of broad and niche).\n\n" +
+    'Reply with only JSON: {"kicker":"","slides":[{"title":"","body":"","sticker":{"type":"none","text":""}}],"caption":"","hashtags":["#tag"]}';
+  try {
+    const j = await AI.json(prompt, [], () => Mock.post(P, G, d.format, d.topic, n));
+    const post = postBlank(d.format, d.topic);
+    post.style = d.style; post.kicker = String(j.kicker || "");
+    post.slides = (j.slides || []).slice(0, Math.max(n, 1)).map(s => ({title:String(s.title || ""), body:String(s.body || ""), sticker:{type:STICKERS.includes(s.sticker && s.sticker.type) ? s.sticker.type : "none", text:String((s.sticker && s.sticker.text) || "")}}));
+    if (!post.slides.length) throw new Error("No slides came back. Try again.");
+    post.caption = String(j.caption || "") + ((j.hashtags || []).length ? "\n\n" + j.hashtags.map(String).join(" ") : "");
+    S.posts.push(post); await DB.put("posts", post); S.postId = post.id; S.postFiles = []; S.claims = null;
+    if (S.postFrom){ await markPlanDone(S.postFrom); S.postFrom = null; }
+    renderPosts(); toast("Draft ready. Edit anything, then export.");
+  } catch (e) { if (msg){ msg.textContent = e.message; msg.style.color = "var(--bad)"; } if (btn) btn.disabled = false; }
+}
+Mock.post = function(P, G, format, topic, n){
+  const t = String(topic).split("\n")[0].trim();
+  const ayur = G && G.niche === "ayurveda";
+  const pts = ayur ? ["What Ayurveda says", "How it's traditionally used", "Simple ways to start", "Who should be careful", "When to see a practitioner", "Make it a habit"]
+    : ["Why it matters", "What we did", "What surprised us", "Tips if you try it", "What we'd change", "Your turn"];
+  const slides = format === "single" ? [{title:t, body:"Save this and try it this week."}]
+    : Array.from({length:n}, (_, i) => i === 0 ? {title:t, body:"A quick guide in " + (n - 1) + " slides", sticker:{type:"none", text:""}}
+      : i === n - 1 ? {title:format === "story" ? "Tell me below" : "Save this for later", body:(G && G.handle ? "Follow " + G.handle : "Follow") + " for more like this.", sticker:{type:format === "story" ? "question" : "none", text:"What should I cover next?"}}
+      : {title:pts[(i - 1) % pts.length], body:"- Demo point one about " + t.toLowerCase() + "\n- Demo point two\n- Add a Gemini key for real content", sticker:{type:format === "story" ? (i % 2 ? "poll" : "quiz") : "none", text:i % 2 ? "Have you tried this? / Yes / Not yet" : "Which is right? / A / B / C"}});
+  return {kicker:ayur ? "Ayurveda basics" : "Quick guide", slides, caption:t + "\nDemo caption. Add a Gemini key for a real one.\nWhat would you add?" + (G && G.health && G.disclaimer ? "\n\n" + G.disclaimer : ""),
+    hashtags:ayur ? ["#ayurveda","#ayurvedalifestyle","#dinacharya","#wellness","#holistichealth","#doshas","#herbs","#selfcare","#indianwellness","#ayurvedatips"] : ["#reels","#travel","#tips","#explore"]};
+};
+function renderPosts(){
+  const box = $("#postsBox"); if (!cur()) return needProject(box, "Posts");
+  const p = curPost(); if (p) return renderPostEditor(box, p);
+  const G = curPage(), d = S.postDraft; const mine = S.posts.filter(x => x.pageId === S.pageId).sort((a, b) => b.created - a.created);
+  box.innerHTML = '<div><span class="eyebrow">' + esc(G ? G.name : "") + '</span><h2>Posts and Stories</h2><p class="lead">Carousels get saved and shared the most, which is how educational pages grow. Story sets with polls and quizzes keep followers talking to you.</p></div>' + demoNote() +
+    '<div class="panel form"><div class="seg" role="group" aria-label="Format">' + Object.entries(POST_FORMATS).map(([k, v]) => '<button data-act="pformat" data-v="' + k + '" aria-pressed="' + (d.format === k) + '">' + v[0] + '</button>').join("") + '</div>' +
+    '<label class="f" for="ptopic">Topic<textarea id="ptopic" placeholder="e.g. 5 herbs every Indian kitchen already has">' + esc(d.topic) + '</textarea></label>' +
+    '<div class="row">' + (POST_TOPICS[G && G.niche] || POST_TOPICS.general).map(([f, t]) => '<button class="chip" style="cursor:pointer" data-act="ptopic" data-f="' + f + '" data-t="' + esc(t) + '">' + esc(t) + '</button>').join("") + '</div>' +
+    '<div class="two">' + (d.format === "single" ? "" : '<label class="f" for="pcount">' + (d.format === "story" ? "Frames" : "Slides") + '<select id="pcount">' + (d.format === "story" ? [3,4,5,6] : [5,6,7,8,10]).map(n => '<option' + (+d.count === n ? " selected" : "") + '>' + n + '</option>').join("") + '</select></label>') +
+    '<label class="f" for="pstyle">Look<select id="pstyle">' + [["clean","Clean (light background)"],["bold","Bold (brand colour)"],["photo","Photo background"]].map(([a, b]) => '<option value="' + a + '"' + (d.style === a ? " selected" : "") + '>' + b + '</option>').join("") + '</select></label></div>' +
+    '<p class="note" style="margin:0">Uses the look of project “' + esc(proj().name) + '” (font, colours, language). Switch project at the top to change it.</p>' +
+    '<div class="row"><button class="btn primary" id="pWrite" data-act="pwrite">Write with AI</button><button class="btn ghost" data-act="pblank">Start blank</button><span class="note" id="pMsg"></span></div></div>' +
+    (mine.length ? '<div class="cards">' + mine.map(x => '<article class="pcard"><div class="in"><div class="row" style="align-items:flex-start;flex-wrap:nowrap"><canvas class="pthumb" data-post="' + x.id + '"></canvas><div class="grow" style="display:flex;flex-direction:column;gap:6px"><div class="row"><span class="chip">' + POST_FORMATS[x.format][0] + ' · ' + x.slides.length + '</span><span class="chip ' + (x.status === "posted" ? "ok" : "") + '">' + (x.status === "posted" ? "Posted" : "Draft") + '</span></div><b>' + esc(x.topic.split("\n")[0]) + '</b>' +
+      '<div class="row"><button class="btn small primary" data-act="open-post" data-id="' + x.id + '">Open</button><button class="btn small ghost danger" data-act="del-post" data-id="' + x.id + '">' + (S.delArm === x.id ? "Tap again" : "Delete") + '</button></div></div></div></div></article>').join("") + '</div>' : "");
+  document.querySelectorAll("canvas.pthumb").forEach(c => { const x = S.posts.find(q => q.id === c.dataset.post); if (x) drawSlide(c, x, 0, 0.11); });
+}
+function renderPostEditor(box, p){
+  const G = pageOf(projById(p.pid)), story = p.format === "story";
+  box.innerHTML = '<div><button class="btn small ghost" data-act="close-post">← All posts</button></div>' +
+    '<div><span class="eyebrow">' + POST_FORMATS[p.format][0] + ' · ' + p.slides.length + (story ? " frames" : p.slides.length === 1 ? " image" : " slides") + ' · ' + esc(projById(p.pid).name) + '</span><h2>' + esc(p.topic.split("\n")[0] || "Untitled post") + '</h2></div>' +
+    '<div class="panel"><div class="seg" role="group" aria-label="Look">' + [["clean","Clean"],["bold","Bold"],["photo","Photo"]].map(([a, b]) => '<button data-act="pset-style" data-v="' + a + '" aria-pressed="' + (p.style === a) + '">' + b + '</button>').join("") + '</div>' +
+    (p.style === "photo" ? '<div class="row"><label class="btn small" for="pPhotos">' + (S.postPhotos.length ? "Replace photos (" + S.postPhotos.length + ")" : "Add background photos") + '<input type="file" id="pPhotos" accept="image/*" multiple hidden></label><span class="note">Used in order, one per slide. They stay on this device and aren\'t saved with the draft.</span></div>' : "") +
+    '<label class="f" for="pKicker">Label on the first slide<input type="text" id="pKicker" value="' + esc(p.kicker) + '" placeholder="e.g. Herb of the week"></label>' +
+    '<label class="toggle" for="pSpons"><span>Paid partnership' + (G && G.health ? '<span class="note" style="display:block;font-weight:400">Shows your credentials upfront, as ad rules require</span>' : "") + '</span><input type="checkbox" id="pSpons"' + (p.sponsored ? " checked" : "") + '></label></div>' +
+    '<div class="slides" id="slideList">' + p.slides.map((s, i) => '<div class="slide" data-i="' + i + '"><canvas class="spv" data-i="' + i + '"></canvas><div class="sf">' +
+      '<div class="row"><span class="eyebrow grow">' + (story ? "Frame " : "Slide ") + (i + 1) + '</span><button class="iconb" aria-label="Move up" data-act="sup" data-i="' + i + '">↑</button><button class="iconb" aria-label="Move down" data-act="sdown" data-i="' + i + '">↓</button><button class="iconb" aria-label="Delete" data-act="sdel" data-i="' + i + '">✕</button></div>' +
+      '<input type="text" data-sf="title" data-i="' + i + '" value="' + esc(s.title) + '" placeholder="Title">' +
+      '<textarea data-sf="body" data-i="' + i + '" placeholder="Body. Start lines with - for bullets.">' + esc(s.body) + '</textarea>' +
+      (story ? '<div class="two"><label class="f" for="stk' + i + '">Sticker<select id="stk' + i + '" data-sf="stype" data-i="' + i + '">' + STICKERS.map(t => '<option' + ((s.sticker && s.sticker.type) === t ? " selected" : "") + '>' + t + '</option>').join("") + '</select></label><label class="f" for="stt' + i + '">Sticker text<input type="text" id="stt' + i + '" data-sf="stext" data-i="' + i + '" value="' + esc(s.sticker && s.sticker.text) + '" placeholder="Question / Option A / Option B"></label></div>' : "") +
+      '</div></div>').join("") + '</div>' +
+    (p.format === "single" ? "" : '<div class="row"><button class="btn small" data-act="sadd">+ Add ' + (story ? "frame" : "slide") + '</button></div>') +
+    '<div class="panel"><label class="f" for="pCap">Caption and hashtags<textarea id="pCap" rows="7">' + esc(p.caption) + '</textarea></label><div class="row"><button class="btn small" data-act="pcopy">Copy caption</button></div></div>' +
+    (G && G.health ? '<div class="panel"><div class="row"><h3 class="grow">Health claim check</h3><button class="btn small" data-act="claims-post">Check claims</button><span class="note" id="claimMsg"></span></div><div id="claimBox" data-target="post" style="display:flex;flex-direction:column;gap:8px"></div></div>' : "") +
+    '<div class="panel"><div class="row"><button class="btn primary" data-act="pexport">Export images</button><label class="toggle" for="pPosted" style="margin-left:auto">Posted<input type="checkbox" id="pPosted"' + (p.status === "posted" ? " checked" : "") + '></label></div><div id="pFiles"></div></div>';
+  drawPreviews(); renderClaims(); renderPostFiles();
+}
+function drawPreviews(only){ const p = curPost(); if (!p) return; document.querySelectorAll("canvas.spv").forEach(c => { const i = +c.dataset.i; if (only == null || only === i) drawSlide(c, p, i, 0.3); }); }
+let postSaveT;
+function savePost(){ const p = curPost(); if (!p) return; clearTimeout(postSaveT); postSaveT = setTimeout(() => DB.put("posts", p), 400); S.postFiles = []; const f = $("#pFiles"); if (f) f.innerHTML = ""; }
+async function exportPost(){
+  const p = curPost(); if (!p) return; const box = $("#pFiles"); box.innerHTML = '<div class="msg"><span class="spin"></span> Rendering…</div>';
+  try { await Promise.all([document.fonts.load(fontStr(projById(p.pid).font, 60)), document.fonts.load('500 40px "Figtree"'), document.fonts.load('500 26px "JetBrains Mono"')]); } catch {}
+  S.postFiles.forEach(f => URL.revokeObjectURL(f.url)); S.postFiles = [];
+  for (let i = 0; i < p.slides.length; i++){
+    const c = document.createElement("canvas"); drawSlide(c, p, i, 1);
+    const blob = await new Promise(r => c.toBlob(r, "image/png"));
+    const file = new File([blob], slug(p.topic.split("\n")[0]).slice(0, 40) + "-" + (i + 1) + ".png", {type:"image/png"});
+    S.postFiles.push({file, url:URL.createObjectURL(blob)});
+  }
+  renderPostFiles();
+}
+function renderPostFiles(){
+  const box = $("#pFiles"), p = curPost(); if (!box || !p) return; if (!S.postFiles.length){ box.innerHTML = ""; return; }
+  const stk = p.format === "story" ? p.slides.map((s, i) => s.sticker && s.sticker.type !== "none" ? '<li>Frame ' + (i + 1) + ': add a <b>' + esc(s.sticker.type) + '</b> sticker' + (s.sticker.text ? ': ' + esc(s.sticker.text) : "") + '</li>' : "").join("") : "";
+  box.innerHTML = '<div class="pfiles">' + S.postFiles.map((f, i) => '<a href="' + f.url + '" download="' + esc(f.file.name) + '"><img src="' + f.url + '" alt="Slide ' + (i + 1) + '"></a>').join("") + '</div>' +
+    '<div class="row"><button class="btn primary" data-act="pshare">Share all to Instagram</button><button class="btn" data-act="pdl">Download all</button></div>' +
+    '<p class="note" style="margin:0">On a phone, “Share all” opens the share sheet; pick Instagram, then Feed' + (p.format === "story" ? " or Story" : "") + '. Tap any image to save it alone.</p>' +
+    (stk ? '<div class="msg"><b>Add these stickers in Instagram:</b><ul style="margin:6px 0 0;padding-left:18px">' + stk + '</ul></div>' : "");
+}
+async function sharePost(){
+  const p = curPost(); const files = S.postFiles.map(f => f.file);
+  try { if (navigator.canShare && navigator.canShare({files})) await navigator.share({files, text:p.caption}); else toast("Sharing isn't supported in this browser. Use Download all."); }
+  catch (e) { if (e.name !== "AbortError") toast("Couldn't open the share sheet. Use Download all."); }
+}
+async function downloadAllPost(){
+  for (const f of S.postFiles){ const a = document.createElement("a"); a.href = f.url; a.download = f.file.name; document.body.appendChild(a); a.click(); a.remove(); await new Promise(r => setTimeout(r, 350)); }
+}
+
+/* ============ film yourself: camera + teleprompter + auto captions ============ */
+const Tele = {stream:null, rec:null, chunks:[], raf:0, facing:"user", t0:0, timer:0};
+function openTele(script, autoWrite){
+  if (script != null) S.teleScript = script; else if (!S.teleScript) S.teleScript = S.story || "";
+  let el = $("#tele"); if (!el){ el = document.createElement("div"); el.id = "tele"; el.className = "tele"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Film yourself"); document.body.appendChild(el); }
+  el.hidden = false; teleScriptStage(); if (autoWrite) teleAI();
+}
+function teleScriptStage(){
+  stopTeleStream(); const el = $("#tele"); const P = proj(); const n = words(S.teleScript).length;
+  el.className = "tele"; el.innerHTML = '<div class="wrap tele-in"><div class="row"><h3 class="grow">Film yourself</h3><button class="iconb" aria-label="Close" data-act="tele-close">✕</button></div>' +
+    '<label class="f" for="teleText">Script <span class="hint">Read it from the screen while you record. Short lines are easier to follow.</span><textarea id="teleText" rows="10">' + esc(S.teleScript) + '</textarea></label>' +
+    '<div class="row"><button class="btn small" data-act="tele-ai">Write script with AI</button><span class="note" id="teleMsg">' + n + ' words · about ' + Math.round(n / 2.3) + ' s at a natural pace (target ' + P.duration + ' s)</span></div>' +
+    '<button class="btn primary" data-act="tele-cam">Open camera</button>' +
+    '<p class="note" style="margin:0">Prefer your phone\'s camera app? <label for="teleFile" style="color:var(--accent);cursor:pointer;text-decoration:underline">Record with it instead</label><input type="file" id="teleFile" accept="video/*" capture="user" hidden>, then the script becomes captions.</p></div>';
+}
+async function teleAI(){
+  const P = proj(), G = pageOf(P); const msg = $("#teleMsg"); const topic = ($("#teleText") && $("#teleText").value.trim()) || S.story;
+  if (!topic) return toast("Write the topic or a rough script first.");
+  if (msg) msg.innerHTML = '<span class="spin"></span> Writing…';
+  try {
+    const j = await AI.json("Write a talking-head script for the creator to say to camera.\n\n" + brief(P) +
+      "\n\nTopic or rough notes:\n" + topic + "\n\nRules: about " + P.duration + " seconds (about " + Math.round(P.duration * 2.3) + " words) in " + P.language + ". First line is a hook that makes people stay. One short sentence per line. Sound natural, like talking to a friend. End with a call to action." +
+      '\n\nReply with only JSON: {"script":"line one\\nline two"}', [], () => ({script:Mock.talk(P, G, topic)}));
+    S.teleScript = String(j.script || ""); teleScriptStage();
+  } catch (e) { if (msg){ msg.textContent = e.message; msg.style.color = "var(--bad)"; } }
+}
+Mock.talk = function(P, G, topic){
+  const first = this.sentences(topic)[0] || topic;
+  return ["Stop scrolling if you've ever wondered about this.", first, "Here's what most people get wrong.", "Ayurveda looks at the person, not just the problem.", "Start small and notice how you feel.", "Follow for more simple tips like this."].join("\n");
+};
+async function teleCam(){
+  const ta = $("#teleText"); if (ta) S.teleScript = ta.value; const el = $("#tele");
+  try {
+    Tele.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:Tele.facing, width:{ideal:1080}, height:{ideal:1920}}, audio:{echoCancellation:true, noiseSuppression:true}});
+  } catch {
+    const m = $("#teleMsg"); if (m){ m.textContent = "Camera or microphone was blocked. Allow access in your browser settings, or record with your phone's camera app."; m.style.color = "var(--bad)"; } return;
+  }
+  el.className = "tele cam";
+  el.innerHTML = '<video id="teleVid" autoplay muted playsinline' + (Tele.facing === "user" ? ' class="mirror"' : "") + '></video>' +
+    '<div class="tele-script" id="teleScroll"><div class="tele-pad"></div><p id="teleP" style="font-size:' + (S.teleSize || 30) + 'px">' + esc(S.teleScript).replace(/\n/g, "<br>") + '</p><div class="tele-pad"></div></div>' +
+    '<div class="tele-count" id="teleCount" hidden></div>' +
+    '<div class="tele-bar"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><button class="btn small" data-act="tele-back">Script</button><button class="recbtn" id="teleRec" data-act="tele-rec" aria-label="Start recording"></button><button class="btn small" data-act="tele-flip">Flip</button></div>' +
+    '<div class="row" style="flex-wrap:nowrap"><label class="f grow" for="teleSpeed">Scroll speed<input type="range" id="teleSpeed" min="10" max="140" value="' + (S.teleSpeed || 45) + '"></label><label class="f grow" for="teleSize">Text size<input type="range" id="teleSize" min="20" max="52" value="' + (S.teleSize || 30) + '"></label></div>' +
+    '<div class="tcbig" id="teleT" style="text-align:center">00:00.0</div></div>';
+  const v = $("#teleVid"); v.srcObject = Tele.stream; v.play().catch(() => {});
+}
+function stopTeleStream(){ cancelAnimationFrame(Tele.raf); clearInterval(Tele.timer); if (Tele.rec && Tele.rec.state !== "inactive"){ Tele.rec.onstop = null; Tele.rec.stop(); } Tele.rec = null; if (Tele.stream){ Tele.stream.getTracks().forEach(t => t.stop()); Tele.stream = null; } }
+function closeTele(){ stopTeleStream(); const el = $("#tele"); if (el){ el.hidden = true; el.innerHTML = ""; } }
+async function teleRec(){
+  const btn = $("#teleRec"); if (!Tele.stream) return;
+  if (Tele.rec){ Tele.rec.stop(); return; }
+  const cnt = $("#teleCount"); cnt.hidden = false;
+  for (const n of [3, 2, 1]){ cnt.textContent = n; await new Promise(r => setTimeout(r, 650)); }
+  cnt.hidden = true;
+  const types = ["video/mp4;codecs=avc1.640028,mp4a.40.2","video/mp4;codecs=avc1.42E01E,mp4a.40.2","video/mp4;codecs=avc1,mp4a","video/mp4","video/webm;codecs=vp9,opus","video/webm"];
+  const mime = types.find(t => MediaRecorder.isTypeSupported(t)) || "";
+  Tele.chunks = []; Tele.rec = new MediaRecorder(Tele.stream, mime ? {mimeType:mime, videoBitsPerSecond:8e6} : undefined);
+  Tele.rec.ondataavailable = e => { if (e.data && e.data.size) Tele.chunks.push(e.data); };
+  Tele.rec.onstop = () => teleDone(new Blob(Tele.chunks, {type:(mime || "video/webm").split(";")[0]}));
+  Tele.rec.start(500); Tele.t0 = performance.now(); btn.classList.add("on"); btn.setAttribute("aria-label", "Stop recording");
+  Tele.timer = setInterval(() => { const t = $("#teleT"); if (t) t.textContent = tc((performance.now() - Tele.t0) / 1000); }, 100);
+  const sc = $("#teleScroll"); let last = performance.now();
+  const step = now => { const dt = (now - last) / 1000; last = now; if (now - Tele.t0 > 1000) sc.scrollTop += dt * (S.teleSpeed || 45); Tele.raf = requestAnimationFrame(step); };
+  Tele.raf = requestAnimationFrame(step);
+}
+async function teleDone(blob){
+  stopTeleStream();
+  const ext = /mp4/.test(blob.type) ? "mp4" : "webm";
+  await addSelfVideo(new File([blob], "self-video-" + Date.now() + "." + ext, {type:blob.type, lastModified:Date.now()}));
+}
+async function addSelfVideo(file){
+  const el = $("#tele"); if (el && !el.hidden) el.innerHTML = '<div class="wrap tele-in"><div class="msg"><span class="spin"></span> Adding your video…</div></div>';
+  try {
+    const m = await loadVideo(file); S.media.push(m); const idx = S.media.length - 1;
+    S.plan = scriptPlan(idx, S.teleScript, m.dur); S.voMode = "none"; S.vo = null; S.origVolOverride = 1; S.dirty = true; S.exportUrl = null;
+    if (!S.story.trim()) S.story = S.teleScript;
+    closeTele(); renderCreate(); toast("Video added with captions from your script. Check the timing.");
+  } catch { closeTele(); toast("Couldn't read the recording. Try again."); }
+}
+function scriptPlan(idx, text, dur){
+  const chunks = [];
+  for (const sen of Mock.sentences(text)){ const w = words(sen); for (let k = 0; k < w.length; k += 6) chunks.push(w.slice(k, k + 6).join(" ")); }
+  const first = Mock.sentences(text)[0] || "";
+  if (!chunks.length) return {title:"", hook:"", scenes:[{mediaIdx:idx, start:0, dur:r1(dur), caption:"", voice:"", motion:"none"}], post:"", tags:[]};
+  const W = chunks.reduce((a, c) => a + words(c).length, 0); const usable = Math.max(1, dur);
+  let t = 0; const scenes = chunks.map((c, k) => { let d = usable * words(c).length / W; if (k === chunks.length - 1) d = Math.max(0.5, dur - t); const sc = {mediaIdx:idx, start:r1(t), dur:r1(Math.max(0.5, d)), caption:c, voice:"", motion:"none"}; t += d; return sc; });
+  return {title:first, hook:words(first).slice(0, 6).join(" "), scenes, post:String(text).split("\n").filter(Boolean).slice(0, 2).join("\n"), tags:[]};
+}
+
+/* ============ designed backgrounds for text-only AI reels ============ */
+function makeBackgrounds(n = 6){
+  const P = proj(), base = P.brand; const out = [];
+  const grain = document.createElement("canvas"); grain.width = grain.height = 128; const gx = grain.getContext("2d"); const id = gx.createImageData(128, 128);
+  for (let k = 0; k < id.data.length; k += 4){ const v = Math.random() * 255; id.data[k] = id.data[k+1] = id.data[k+2] = v; id.data[k+3] = 14; } gx.putImageData(id, 0, 0);
+  for (let i = 0; i < n; i++){
+    const c = document.createElement("canvas"); c.width = 1080; c.height = 1920; const x = c.getContext("2d");
+    const ang = (i * 47 % 180) * Math.PI / 180, dx = Math.cos(ang) * 1100, dy = Math.sin(ang) * 1900;
+    const g = x.createLinearGradient(540 - dx/2, 960 - dy/2, 540 + dx/2, 960 + dy/2);
+    g.addColorStop(0, mixHex(base, "#000000", 0.62 - (i % 3) * 0.08)); g.addColorStop(1, mixHex(base, i % 2 ? "#FFFFFF" : "#000000", i % 2 ? 0.08 : 0.25));
+    x.fillStyle = g; x.fillRect(0, 0, 1080, 1920);
+    for (let k = 0; k < 3; k++){ const cxp = ((i * 331 + k * 577) % 1080), cyp = ((i * 613 + k * 911) % 1920), r = 260 + ((i + k) * 97 % 320);
+      const rg = x.createRadialGradient(cxp, cyp, 0, cxp, cyp, r); rg.addColorStop(0, "rgba(255,255,255,0.13)"); rg.addColorStop(1, "rgba(255,255,255,0)"); x.fillStyle = rg; x.fillRect(0, 0, 1080, 1920); }
+    x.fillStyle = x.createPattern(grain, "repeat"); x.fillRect(0, 0, 1080, 1920);
+    out.push({id:uid(), name:"Background " + (i + 1), type:"image", bg:true, img:c, url:"", dur:0, w:1080, h:1920, thumb:snap(c, 1080, 1920, 200, 0.7)});
+  }
+  return out;
+}
+
+/* ============ content plan: a posting calendar for the whole page ============ */
+const PLAN_FORMATS = {ai_reel:"AI reel", self_video:"Self video", carousel:"Carousel", single:"Single post", story:"Story set"};
+const PLAN_DAYS = {3:[1,3,5], 4:[1,2,4,6], 5:[1,2,3,4,5], 7:[0,1,2,3,4,5,6]};
+function slotDates(start, days, perWeek){
+  const out = [], d = new Date(start + "T00:00"); if (isNaN(d)) return out; const dows = PLAN_DAYS[perWeek] || PLAN_DAYS[3];
+  for (let k = 0; k < days; k++){ if (dows.includes(d.getDay())) out.push(isoDay(d)); d.setDate(d.getDate() + 1); }
+  return out;
+}
+const curPlan = () => S.plans.filter(p => p.pageId === S.pageId).sort((a, b) => b.created - a.created)[0] || null;
+function renderPlanTab(box){
+  const G = curPage(), pl = curPlan(), f = S.planForm;
+  const tomorrow = isoDay(new Date(Date.now() + 864e5));
+  const form = '<div class="form"><div class="two"><label class="f" for="cpStart">Start on<input type="date" id="cpStart" value="' + esc(f.start || tomorrow) + '"></label>' +
+    '<label class="f" for="cpDays">Length<select id="cpDays">' + [[14,"2 weeks"],[30,"30 days"]].map(([a, b]) => '<option value="' + a + '"' + (+f.days === a ? " selected" : "") + '>' + b + '</option>').join("") + '</select></label>' +
+    '<label class="f" for="cpPer">Posts per week<select id="cpPer">' + [3,4,5,7].map(n => '<option value="' + n + '"' + (+f.per === n ? " selected" : "") + '>' + n + (n === 7 ? " (daily)" : "") + '</option>').join("") + '</select></label>' +
+    '<label class="f" for="cpTime">Posting time<input type="time" id="cpTime" value="' + esc(f.time) + '"></label></div>' +
+    '<fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:6px"><legend class="eyebrow" style="margin-bottom:6px">Formats to use</legend><div class="row">' +
+    Object.entries(PLAN_FORMATS).map(([k, v]) => '<label class="chip" style="cursor:pointer;display:inline-flex;gap:6px;align-items:center;text-transform:none;font-size:12px" for="cpf_' + k + '"><input type="checkbox" id="cpf_' + k + '" data-cpf="' + k + '"' + (f.formats.includes(k) ? " checked" : "") + '>' + v + '</label>').join("") + '</div></fieldset>' +
+    '<label class="f" for="cpFocus">Focus for this period <span class="hint">Optional, e.g. “winter is Vata season”, “Diwali”, “launching my consultations”</span><input type="text" id="cpFocus" value="' + esc(f.focus) + '"></label>' +
+    '<div class="row"><button class="btn primary" id="cpBtn" data-act="gen-plan">' + (pl ? "Make a new plan" : "Make my content plan") + '</button><span class="note" id="cpMsg"></span></div></div>';
+  let html = '<div><span class="eyebrow">' + esc(G ? G.name : "") + '</span><h2>Content plan</h2><p class="lead">A posting calendar for the whole page that mixes reels, self videos, carousels and Stories, rotates your pillars and builds recurring series. Tap “Make it” to open each item in the right tool.</p></div>' + demoNote();
+  if (pl){
+    const done = pl.items.filter(x => x.status === "done").length; let wk = null;
+    html += '<div class="panel"><div class="row"><span class="chip">' + pl.items.length + ' posts</span><span class="chip ' + (done === pl.items.length ? "ok" : "") + '">' + done + ' done</span><span class="grow"></span><button class="btn small" data-act="plan-ics">Add to calendar</button></div>' +
+      (pl.strategy ? '<p style="margin:0">' + esc(pl.strategy) + '</p>' : "") +
+      ((pl.series || []).length ? '<div><span class="eyebrow">Recurring series</span><ul style="margin:6px 0 0;padding-left:18px">' + pl.series.map(s => '<li><b>' + esc(s.name) + '</b>' + (s.why ? " · " + esc(s.why) : "") + '</li>').join("") + '</ul></div>' : "") + '</div><div class="cards">';
+    pl.items.forEach((it, i) => {
+      const d = new Date(it.date + "T00:00"), monday = new Date(d); monday.setDate(d.getDate() - ((d.getDay() + 6) % 7)); const wkKey = isoDay(monday);
+      if (wkKey !== wk){ wk = wkKey; html += '<div class="eyebrow" style="margin-top:6px">Week of ' + fmtDate(wkKey) + '</div>'; }
+      const pr = S.projects.find(p => p.id === it.pid);
+      html += '<article class="reel' + (it.status === "done" ? " posted" : "") + '"><div class="row"><span class="chip hot">' + fmtDate(it.date) + ' · ' + esc(it.time || pl.time) + '</span><span class="chip">' + esc(PLAN_FORMATS[it.format] || it.format) + '</span>' + (it.series ? '<span class="chip">' + esc(it.series) + '</span>' : "") +
+        '<span class="grow"></span><label class="toggle" style="font-size:13px" for="cpd' + i + '">Done<input type="checkbox" id="cpd' + i + '" data-act="plan-done" data-i="' + i + '"' + (it.status === "done" ? " checked" : "") + '></label></div>' +
+        '<h3>' + esc(it.title) + '</h3>' + (it.hook ? '<div class="note">Hook: “' + esc(it.hook) + '”</div>' : "") +
+        '<div class="note">' + esc(it.pillar || "") + (pr ? (it.pillar ? " · " : "") + "Project: " + esc(pr.name) : "") + '</div>' +
+        (it.outline ? '<details><summary>Outline</summary><div class="vo">' + esc(it.outline) + '</div></details>' : "") +
+        '<div class="row"><button class="btn small primary" data-act="plan-make" data-i="' + i + '">Make it</button></div></article>';
+    });
+    html += '</div><details class="panel"><summary><b>Make a new plan</b></summary><div style="margin-top:12px">' + form + '</div></details>' +
+      '<div class="row"><button class="btn small ghost danger" data-act="del-plan">' + (S.delArm === "plan" ? "Tap again to delete this plan" : "Delete this plan") + '</button></div>';
+  } else html += '<div class="panel">' + form + '</div>';
+  box.insertAdjacentHTML("beforeend", html);
+}
+async function genPlan(){
+  const G = curPage(), f = S.planForm; const btn = $("#cpBtn"), msg = $("#cpMsg");
+  if (!f.formats.length) return toast("Pick at least one format.");
+  const dates = slotDates(f.start || isoDay(new Date(Date.now() + 864e5)), +f.days, +f.per); if (!dates.length) return toast("Pick a valid start date.");
+  btn.disabled = true; msg.innerHTML = '<span class="spin"></span> Planning ' + dates.length + ' posts…';
+  const projs = pageProjects().map(p => { const q = {...DEFAULTS, ...p}; return "- " + q.name + ": " + (STRUCTURES[q.structureKey] ? STRUCTURES[q.structureKey][0] : "custom") + (q.about ? ". " + q.about : "") + (q.voMode === "none" ? " (filmed on camera)" : ""); }).join("\n");
+  const fdesc = {ai_reel:"faceless reel built from photos or clips with AI voice-over and captions", self_video:"the creator talking to camera (needs a short script)", carousel:"5–8 slide educational post, best for saves and shares", single:"one-image post: a quote, tip or announcement", story:"3–5 interactive Story frames with poll, quiz or question stickers"};
+  const prompt = "You are the content strategist for this Instagram page. Build a posting plan that grows followers through consistency, saves and conversation.\n\n" + pageBrief(G) +
+    "\n\nPROJECTS ON THIS PAGE (recurring formats with saved styles):\n" + (projs || "(none)") +
+    "\n\nFORMATS ALLOWED:\n" + f.formats.map(k => "- " + k + ": " + fdesc[k]).join("\n") +
+    (f.focus ? "\n\nFOCUS FOR THIS PERIOD: " + f.focus : "") +
+    "\n\nSLOTS:\n" + dates.map((d, i) => (i + 1) + ". " + fmtDate(d)).join("\n") +
+    "\n\nRULES:\n- Exactly one item per slot, in slot order.\n- Mix the allowed formats; reels and carousels should be most of the plan. Don't put the same format three times in a row.\n- Rotate through the content pillars.\n- Create 1–2 recurring series (for example a weekly herb spotlight) that land on the same weekday, and number their episodes.\n- project: the name of the best-fitting project above, or empty.\n- title: specific and curiosity-driven. hook: what's seen or said in the first 2 seconds or on the first slide. outline: 3–5 short lines of what to show or say.\n- strategy: 2–3 sentences on rhythm, what to measure (saves, shares, follows) and how to reply to comments.\n\n" +
+    'Reply with only JSON: {"strategy":"","series":[{"name":"","why":""}],"items":[{"slot":1,"format":"carousel","project":"","pillar":"","series":"","title":"","hook":"","outline":""}]}';
+  try {
+    const j = await AI.json(prompt, [], () => Mock.contentPlan(G, dates, f));
+    const items = dates.map((d, i) => { const it = (j.items || []).find(x => +x.slot === i + 1) || (j.items || [])[i] || {};
+      const fmt = f.formats.includes(it.format) ? it.format : f.formats[i % f.formats.length];
+      const pr = pageProjects().find(p => p.name.toLowerCase() === String(it.project || "").toLowerCase());
+      return {date:d, time:f.time, format:fmt, pid:pr ? pr.id : "", pillar:String(it.pillar || ""), series:String(it.series || ""), title:String(it.title || "Post " + (i + 1)), hook:String(it.hook || ""), outline:String(it.outline || ""), status:"todo"}; });
+    const pl = {id:uid(), pageId:S.pageId, created:Date.now(), time:f.time, strategy:String(j.strategy || ""), series:(j.series || []).map(s => ({name:String(s.name || ""), why:String(s.why || "")})).filter(s => s.name), items};
+    S.plans.push(pl); await DB.put("plans", pl); toast(items.length + " posts planned"); renderIdeas();
+  } catch (e) { msg.textContent = e.message; msg.style.color = "var(--bad)"; btn.disabled = false; }
+}
+Mock.contentPlan = function(G, dates, f){
+  const ayur = G && G.niche === "ayurveda";
+  const pillars = String((G && G.pillars) || "General").split("\n").map(s => s.trim()).filter(Boolean);
+  const titles = ayur ? ["Turmeric: more than haldi doodh","3 signs your Vata is running high","Myth: Ayurveda has no side effects","Tongue scraping, explained in 30 seconds","Kitchari for a reset day","Ghee: friend or foe?","Triphala basics","Your winter routine for Vata season","Copper vessel water: what's true","Ashwagandha: who should be careful","Pitta in summer: keep cool","Kapha mornings: get moving","Oil pulling: what it is and isn't","Ajwain water for after heavy meals","CCF tea: cumin, coriander, fennel"]
+    : ["Best moment of the week","Packing hacks","Our rivalry, explained","Behind the scenes","Q&A from your comments","Hidden gem we found"];
+  const hasHerb = pageProjects().find(p => /herb/i.test(p.name));
+  return {strategy:"Demo plan: formats rotate in the order you picked and pillars rotate each post. Add a Gemini key for a strategy built around your page.",
+    series:ayur ? [{name:"Herb of the Week", why:"A fixed weekly slot people come back for."}] : [],
+    items:dates.map((d, i) => ({slot:i + 1, format:f.formats[i % f.formats.length], project:(hasHerb && i % 3 === 0) ? hasHerb.name : "", pillar:pillars[i % pillars.length],
+      series:ayur && new Date(d + "T00:00").getDay() === 1 ? "Herb of the Week #" + (Math.floor(i / (+f.per)) + 1) : "",
+      title:titles[i % titles.length], hook:"Text on screen: " + titles[i % titles.length], outline:"- Open with the hook\n- Explain the idea in 2–3 points\n- Close with a tip and a question"}))};
+};
+async function markPlanDone(ref){ const pl = S.plans.find(p => p.id === ref.planId); if (!pl || !pl.items[ref.i]) return; pl.items[ref.i].status = "done"; await DB.put("plans", pl); }
+function planMake(i){
+  const pl = curPlan(), it = pl && pl.items[i]; if (!it) return;
+  if (it.pid && S.projects.some(p => p.id === it.pid)) setPid(it.pid);
+  const text = it.title + (it.outline ? "\n" + it.outline : "");
+  if (["carousel","single","story"].includes(it.format)){
+    S.postDraft = {...S.postDraft, format:it.format, topic:text, count:it.format === "story" ? 4 : 7}; S.postId = null; S.postFrom = {planId:pl.id, i};
+    go("posts"); writePost();
+  } else {
+    S.media = []; S.plan = null; S.vo = null; S.music = null; S.batchRef = null; S.exportUrl = null; S.origVolOverride = null; S.voMode = null; S.dirty = true;
+    S.story = text; S.ideaNote = (it.hook ? "Hook: " + it.hook : "") + (it.series ? "\nSeries: " + it.series : "");
+    go("create");
+    if (it.format === "self_video") openTele(text, true);
+  }
+}
+function icsDownload(name, events){
+  const pad = n => String(n).padStart(2, "0"), now = new Date(), stamp = now.getUTCFullYear() + pad(now.getUTCMonth()+1) + pad(now.getUTCDate()) + "T" + pad(now.getUTCHours()) + pad(now.getUTCMinutes()) + "00Z";
+  const escI = t => String(t).replace(/\\/g, "\\\\").replace(/\n/g, "\\n").replace(/[,;]/g, m => "\\" + m);
+  const ev = events.map(e => { const tm = e.time || "19:00"; const end = new Date(e.date + "T" + tm); end.setMinutes(end.getMinutes() + 30);
+    const fmt = d => d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + "T" + pad(d.getHours()) + pad(d.getMinutes()) + "00";
+    return ["BEGIN:VEVENT", "UID:" + e.uid + "@reelwala", "DTSTAMP:" + stamp, "DTSTART:" + fmt(new Date(e.date + "T" + tm)), "DTEND:" + fmt(end),
+      "SUMMARY:" + escI(e.title), "DESCRIPTION:" + escI(e.desc || ""), "BEGIN:VALARM", "TRIGGER:-PT30M", "ACTION:DISPLAY", "DESCRIPTION:" + escI(e.title), "END:VALARM", "END:VEVENT"].join("\r\n"); });
+  const ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Reelwala//Posting plan//EN", "CALSCALE:GREGORIAN", ...ev, "END:VCALENDAR"].join("\r\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([ics], {type:"text/calendar"})); a.download = slug(name) + "-posting-plan.ics"; document.body.appendChild(a); a.click(); a.remove();
+  toast("Calendar file downloaded. Open it to add the reminders.");
+}
+
+function playbookHTML(g){
+  if (!g || g.niche !== "ayurveda") return "";
+  return '<details class="panel"' + (pageProjects().length ? "" : " open") + '><summary><b>Growth playbook for this page</b></summary><ol class="steps" style="margin-top:10px">' +
+    ['<b>Start with 3 projects</b>: Herb of the Week (AI reel), Talk to camera (your face builds trust) and Myth vs Fact.',
+     '<b>Post 4–5 times a week</b>: about 2 reels, 2 carousels and 1 self video. Make a content plan under Ideas to schedule it.',
+     '<b>Carousels earn saves</b>, and saves tell Instagram your content is useful. Turn every big topic into one.',
+     '<b>Stories every day</b>: a dosha quiz or a poll keeps followers replying to you. Make Story sets under Posts.',
+     '<b>Own a weekly slot</b>, like Herb of the Week every Monday, so people know when to come back.',
+     '<b>Stay claim-safe</b>: no “cures” or disease promises. Run Check claims before posting and keep the disclaimer. For paid partnerships, show your credentials upfront.',
+     '<b>Reply to every comment</b> in the first hour, and turn good questions into your next reel.'].map(x => '<li>' + x + '</li>').join("") + '</ol></details>';
+}
+
 /* ============ events ============ */
 document.addEventListener("click", async e => {
   const t = e.target.closest("[data-go],[data-act]"); if (!t) return;
   if (t.dataset.go){ go(t.dataset.go); return; }
   const a = t.dataset.act, id = t.dataset.id, i = +t.dataset.i;
-  if (a !== "del") S.delArm = null;
+  if (!["del","del-batch","del-post","del-page","del-plan"].includes(a)) S.delArm = null;
   switch (a){
     case "new": newProject(+t.dataset.tpl); break;
     case "open-setup": setPid(id); go("setup"); break;
@@ -1352,6 +1959,47 @@ document.addEventListener("click", async e => {
     case "clear-key": try { localStorage.removeItem("rw_key"); } catch {} renderSettings(); toast("Key removed. Demo mode is on."); break;
     case "save-models": LS.set("rw_text_model", $("#tmIn").value.trim() || "gemini-2.5-flash"); LS.set("rw_tts_model", $("#vmIn").value.trim() || "gemini-2.5-flash-preview-tts"); toast("Models saved"); break;
     case "export-json": exportJSON(); break;
+    case "create-page": { const name = $("#npName").value.trim(); if (!name) { toast("Give the page a name."); break; }
+      const g = newPageObj(name, $("#npNiche").value, $("#npHandle").value.trim()); S.pages.push(g); await DB.put("pages", g); S.newPage = false; setPage(g.id); S.openPageSettings = true; go("projects"); toast("Page created"); break; }
+    case "cancel-page": S.newPage = false; renderProjects(); break;
+    case "del-page": { if (S.pages.length < 2){ toast("You need at least one page."); break; } if (S.delArm !== "page"){ S.delArm = "page"; S.openPageSettings = true; renderProjects(); break; }
+      const g = curPage(); const pids = S.projects.filter(p => p.pageId === g.id).map(p => p.id);
+      for (const id2 of pids) await DB.del("projects", id2); for (const x of S.ideas.filter(x => pids.includes(x.pid))) await DB.del("ideas", x.id); for (const x of S.batches.filter(x => pids.includes(x.pid))) await DB.del("batches", x.id);
+      for (const x of S.posts.filter(x => x.pageId === g.id)) await DB.del("posts", x.id); for (const x of S.plans.filter(x => x.pageId === g.id)) await DB.del("plans", x.id); await DB.del("pages", g.id);
+      S.projects = S.projects.filter(p => !pids.includes(p.id)); S.ideas = S.ideas.filter(x => !pids.includes(x.pid)); S.batches = S.batches.filter(x => !pids.includes(x.pid)); S.posts = S.posts.filter(x => x.pageId !== g.id); S.plans = S.plans.filter(x => x.pageId !== g.id); S.pages = S.pages.filter(x => x.id !== g.id);
+      S.delArm = null; S.pageId = ""; setPage(S.pages[0].id); go("projects"); toast("Page deleted"); break; }
+    case "ideas-tab": S.ideasTab = t.dataset.v; renderIdeas(); break;
+    case "gen-plan": genPlan(); break;
+    case "plan-make": planMake(i); break;
+    case "plan-done": { const pl = curPlan(); pl.items[i].status = t.checked ? "done" : "todo"; await DB.put("plans", pl); renderIdeas(); break; }
+    case "plan-ics": { const pl = curPlan(); icsDownload(curPage().name, pl.items.map((it, k) => ({uid:pl.id + "-" + k, date:it.date, time:it.time || pl.time, title:"Post: " + it.title + " (" + (PLAN_FORMATS[it.format] || it.format) + ")", desc:(it.hook ? "Hook: " + it.hook + "\n" : "") + it.outline}))); break; }
+    case "del-plan": if (S.delArm !== "plan"){ S.delArm = "plan"; renderIdeas(); break; } { const pl = curPlan(); S.plans = S.plans.filter(x => x.id !== pl.id); await DB.del("plans", pl.id); S.delArm = null; renderIdeas(); toast("Plan deleted"); } break;
+    case "pformat": S.postDraft.format = t.dataset.v; if (S.postDraft.format === "story" && S.postDraft.count > 6) S.postDraft.count = 4; if (S.postDraft.format === "carousel" && S.postDraft.count < 5) S.postDraft.count = 7; renderPosts(); break;
+    case "ptopic": S.postDraft.topic = t.dataset.t; S.postDraft.format = t.dataset.f; if (t.dataset.f === "story") S.postDraft.count = 4; else if (t.dataset.f === "carousel") S.postDraft.count = 7; renderPosts(); break;
+    case "pwrite": S.postFrom = null; writePost(); break;
+    case "pblank": { const d = S.postDraft; const post = postBlank(d.format, d.topic); post.style = d.style; S.posts.push(post); await DB.put("posts", post); S.postId = post.id; S.postFiles = []; S.claims = null; renderPosts(); break; }
+    case "open-post": S.postId = id; S.postFiles = []; S.claims = null; renderPosts(); window.scrollTo(0, 0); break;
+    case "close-post": S.postId = null; S.claims = null; renderPosts(); break;
+    case "del-post": if (S.delArm !== id){ S.delArm = id; renderPosts(); break; } S.posts = S.posts.filter(x => x.id !== id); await DB.del("posts", id); S.delArm = null; renderPosts(); toast("Post deleted"); break;
+    case "pset-style": { const p = curPost(); p.style = t.dataset.v; savePost(); renderPosts(); break; }
+    case "sup": case "sdown": { const p = curPost(), j = a === "sup" ? i - 1 : i + 1; if (j < 0 || j >= p.slides.length) break; [p.slides[i], p.slides[j]] = [p.slides[j], p.slides[i]]; savePost(); renderPosts(); break; }
+    case "sdel": { const p = curPost(); if (p.slides.length < 2) break; p.slides.splice(i, 1); savePost(); renderPosts(); break; }
+    case "sadd": { const p = curPost(); p.slides.push({title:"", body:"", sticker:{type:"none", text:""}}); savePost(); renderPosts(); break; }
+    case "pcopy": { const v = curPost().caption; try { await navigator.clipboard.writeText(v); toast("Caption copied"); } catch { $("#pCap").select(); toast("Selected. Copy it from the menu."); } break; }
+    case "claims-post": runClaimCheck("post"); break;
+    case "claims-reel": runClaimCheck("reel"); break;
+    case "claim-fix": applyClaimFix(i); break;
+    case "pexport": exportPost(); break;
+    case "pshare": sharePost(); break;
+    case "pdl": downloadAllPost(); break;
+    case "tele-open": openTele(null); break;
+    case "tele-close": closeTele(); break;
+    case "tele-ai": teleAI(); break;
+    case "tele-cam": teleCam(); break;
+    case "tele-back": teleScriptStage(); break;
+    case "tele-rec": teleRec(); break;
+    case "tele-flip": if (Tele.rec) break; Tele.facing = Tele.facing === "user" ? "environment" : "user"; stopTeleStream(); teleCam(); break;
+    case "add-bgs": S.media.push(...makeBackgrounds(6)); S.dirty = true; renderCreate(); toast("6 backgrounds added. Write the story, then create the plan."); break;
     case "open-batch": S.bid = id; renderSeries(); window.scrollTo(0, 0); break;
     case "close-batch": S.bid = null; renderSeries(); break;
     case "del-batch": if (S.delArm !== id){ S.delArm = id; renderSeries(); break; }
@@ -1373,6 +2021,19 @@ document.addEventListener("click", async e => {
 document.addEventListener("input", e => {
   const el = e.target;
   if (el.closest("#setupForm")) return onSetupInput(e);
+  if (el.dataset.pk){ const g = curPage(); let v = el.type === "checkbox" ? el.checked : el.value; g[el.dataset.pk] = v;
+    if (el.dataset.pk === "niche" || el.dataset.pk === "health"){ if (el.dataset.pk === "niche" && v === "ayurveda" && !g.disclaimer){ g.health = true; g.disclaimer = AYUR_DISCLAIMER; if (!g.pillars) g.pillars = NICHES.ayurveda.pillars; } S.openPageSettings = true; DB.put("pages", g); renderSel(); renderProjects(); return; }
+    savePage(); return; }
+  if (el.id === "ptopic"){ S.postDraft.topic = el.value; return; }
+  if (el.dataset.sf){ const p = curPost(); const sl = p.slides[+el.dataset.i]; if (el.dataset.sf === "stype") sl.sticker = {...(sl.sticker || {}), type:el.value}; else if (el.dataset.sf === "stext") sl.sticker = {...(sl.sticker || {type:"none"}), text:el.value}; else sl[el.dataset.sf] = el.value; drawPreviews(+el.dataset.i); savePost(); return; }
+  if (el.id === "pKicker"){ curPost().kicker = el.value; drawPreviews(0); savePost(); return; }
+  if (el.id === "pCap"){ curPost().caption = el.value; savePost(); return; }
+  if (el.id === "teleText"){ S.teleScript = el.value; return; }
+  if (el.id === "teleSpeed"){ S.teleSpeed = +el.value; return; }
+  if (el.id === "teleSize"){ S.teleSize = +el.value; const tp = $("#teleP"); if (tp) tp.style.fontSize = S.teleSize + "px"; return; }
+  if (el.id === "origVol"){ S.origVolOverride = +el.value; S.dirty = true; return; }
+  if (el.dataset.cpf){ const fm = S.planForm.formats, k = el.dataset.cpf; S.planForm.formats = el.checked ? [...new Set([...fm, k])] : fm.filter(x => x !== k); return; }
+  if (el.id && el.id.startsWith("cp") && el.closest("#ideasBox")){ const map = {cpStart:"start", cpDays:"days", cpPer:"per", cpTime:"time", cpFocus:"focus"}; if (map[el.id]) S.planForm[map[el.id]] = el.value; return; }
   if (el.id === "storyIn"){ S.story = el.value; return; }
   if (el.id === "hookIn"){ S.plan.hook = el.value; S.dirty = true; return; }
   if (el.id === "musicVol"){ S.musicVol = +el.value; S.dirty = true; return; }
@@ -1387,6 +2048,13 @@ document.addEventListener("input", e => {
 document.addEventListener("change", async e => {
   const el = e.target;
   if (el.id === "projSel"){ setPid(el.value); go(S.view === "settings" ? "projects" : S.view); return; }
+  if (el.id === "pageSel"){ if (el.value === "__new"){ S.newPage = true; renderSel(); go("projects"); setTimeout(() => { const n = $("#npName"); if (n) n.focus(); }, 50); } else { setPage(el.value); go(["settings","setup"].includes(S.view) ? "projects" : S.view); } return; }
+  if (el.id === "pcount"){ S.postDraft.count = +el.value; return; }
+  if (el.id === "pstyle"){ S.postDraft.style = el.value; return; }
+  if (el.id === "pSpons"){ curPost().sponsored = el.checked; drawPreviews(0); savePost(); return; }
+  if (el.id === "pPosted"){ curPost().status = el.checked ? "posted" : "draft"; savePost(); return; }
+  if (el.id === "pPhotos"){ const imgs = []; for (const f of el.files){ try { imgs.push(await loadImage(f)); } catch {} } S.postPhotos = imgs; drawPreviews(); S.postFiles = []; renderPosts(); return; }
+  if (el.id === "teleFile" && el.files[0]){ const ta = $("#teleText"); if (ta) S.teleScript = ta.value; await addSelfVideo(el.files[0]); return; }
   if (el.id === "fileIn"){ await addFiles([...el.files]); el.value = ""; return; }
   if (el.id === "musicIn" && el.files[0]){ try { S.music = {name:el.files[0].name, buffer:await getAC().decodeAudioData(await el.files[0].arrayBuffer())}; S.dirty = true; renderCreate(); } catch { toast("Couldn't read that audio file."); } return; }
   if (el.id === "voIn" && el.files[0]){ try { setVO(await getAC().decodeAudioData(await el.files[0].arrayBuffer()), "upload"); toast("Voice-over added"); } catch { toast("Couldn't read that audio file."); } return; }
@@ -1407,7 +2075,16 @@ document.addEventListener("change", async e => {
   S.projects = (await DB.all("projects")).sort((a, b) => (a.created || 0) - (b.created || 0));
   S.ideas = await DB.all("ideas");
   S.batches = await DB.all("batches");
-  if (!cur() && S.projects[0]) S.pid = S.projects[0].id;
+  S.pages = (await DB.all("pages")).sort((a, b) => (a.created || 0) - (b.created || 0));
+  S.posts = await DB.all("posts"); S.plans = await DB.all("plans");
+  if (!S.pages.length){
+    const a = newPageObj("Travel & Sports", "general", (S.projects.find(p => p.handle) || {}).handle || "");
+    const b = newPageObj("Ayurveda", "ayurveda", ""); b.created = a.created + 1;
+    S.pages = [a, b]; await DB.put("pages", a); await DB.put("pages", b);
+  }
+  for (const p of S.projects) if (!p.pageId || !S.pages.some(g => g.id === p.pageId)){ p.pageId = S.pages[0].id; await DB.put("projects", p); }
+  if (!S.pages.some(g => g.id === S.pageId)) S.pageId = S.pages[0].id;
+  if (!cur()) S.pid = (pageProjects()[0] || {}).id || "";
   renderSel();
   go("projects");
 })();

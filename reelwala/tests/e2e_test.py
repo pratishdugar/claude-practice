@@ -53,7 +53,8 @@ async def run():
     OUT.mkdir(exist_ok=True)
     errors = []
     async with async_playwright() as p:
-        browser = await p.chromium.launch(args=["--autoplay-policy=no-user-gesture-required"])
+        browser = await p.chromium.launch(args=["--autoplay-policy=no-user-gesture-required",
+                                                   "--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"])
         page = await browser.new_page(viewport={"width": 400, "height": 860})
         page.on("pageerror", lambda e: errors.append(str(e)))
         await page.goto(APP)
@@ -172,10 +173,121 @@ async def run():
         assert statuses == ["posted", "made", "made"], statuses
         assert "aren't loaded on this device" in await page.inner_text("#seriesBox"), "should ask to re-select files after reload"
 
+        step("ayurveda: switch to the Ayurveda page and start Herb of the Week")
+        await page.click("[data-go='projects']")
+        ayur_id = await page.evaluate("S.pages.find(g => g.niche === 'ayurveda').id")
+        await page.select_option("#pageSel", ayur_id)
+        await page.wait_for_selector("text=Growth playbook for this page")
+        assert await page.locator(".pcard").count() == 0, "Ayurveda page should start empty, separate from travel"
+        await page.click("[data-tpl='0']")
+        await page.wait_for_selector("#setupForm")
+        assert await page.input_value("#f_name") == "Herb of the Week"
+        await page.click("[data-go='projects']")
+        await page.click("#pageSettings summary")
+        await page.fill("#pg_handle", "@ayurveda.daily")
+        await page.wait_for_timeout(600)
+        assert await page.evaluate("curPage().handle") == "@ayurveda.daily"
+
+        step("ayurveda: write a carousel with AI, fix a risky claim, export images")
+        await page.click("[data-go='posts']")
+        await page.fill("#ptopic", "Turmeric basics")
+        await page.click("#pWrite")
+        await page.wait_for_selector(".slide", timeout=10000)
+        assert await page.locator(".slide").count() == 7
+        body = page.locator("[data-sf='body'][data-i='1']")
+        await body.fill("Turmeric cures diabetes overnight with no side effects.")
+        await page.click("[data-act='claims-post']")
+        await page.wait_for_selector(".claim")
+        n_issues = await page.locator(".claim").count()
+        assert n_issues >= 3, f"expected at least 3 flagged claims, got {n_issues}"
+        await page.locator("[data-act='claim-fix']").first.click()
+        await page.wait_for_timeout(300)
+        fixed = await page.evaluate("curPost().slides[1].body")
+        assert "cures" not in fixed.lower(), fixed
+        await page.click("[data-act='pexport']")
+        await page.wait_for_function("document.querySelectorAll('.pfiles img').length === 7", timeout=20000)
+        dims = await page.evaluate("""() => new Promise(r => { const i = new Image(); i.onload = () => r([i.naturalWidth, i.naturalHeight]); i.src = S.postFiles[0].url; })""")
+        assert dims == [1080, 1350], dims
+        await page.locator(".pfiles img").last.screenshot(path=str(OUT / "carousel-last.png"))
+        await page.locator(".pfiles img").first.screenshot(path=str(OUT / "carousel-cover.png"))
+
+        step("ayurveda: story set with stickers")
+        await page.click("[data-act='close-post']")
+        await page.click("[data-act='pformat'][data-v='story']")
+        await page.fill("#ptopic", "What's your dosha?")
+        await page.click("#pWrite")
+        await page.wait_for_selector(".slide")
+        await page.click("[data-act='pexport']")
+        await page.wait_for_selector(".pfiles img")
+        assert "sticker" in (await page.inner_text("#pFiles")).lower()
+        dims = await page.evaluate("""() => new Promise(r => { const i = new Image(); i.onload = () => r([i.naturalWidth, i.naturalHeight]); i.src = S.postFiles[0].url; })""")
+        assert dims == [1080, 1920], dims
+
+        step("ayurveda: 2-week content plan, then make a carousel from it")
+        await page.click("[data-go='ideas']")
+        await page.click("[data-act='ideas-tab'][data-v='plan']")
+        await page.select_option("#cpDays", "14")
+        await page.select_option("#cpPer", "3")
+        await page.click("#cpBtn")
+        await page.wait_for_selector("[data-act='plan-make']", timeout=10000)
+        expected = await page.evaluate("slotDates(S.planForm.start || isoDay(new Date(Date.now() + 864e5)), 14, 3).length")
+        n_items = await page.locator("[data-act='plan-make']").count()
+        assert n_items == expected and n_items >= 5, f"{n_items} items vs {expected} slots"
+        fmts = await page.evaluate("curPlan().items.map(x => x.format)")
+        assert set(fmts) <= {"ai_reel", "self_video", "carousel", "story"} and len(set(fmts)) >= 3, fmts
+        async with page.expect_download() as dl:
+            await page.click("[data-act='plan-ics']")
+        assert (await (await dl.value).path()).read_text().count("BEGIN:VEVENT") == n_items
+        carousel_idx = fmts.index("carousel")
+        await page.locator("[data-act='plan-make']").nth(carousel_idx).click()
+        await page.wait_for_selector(".slide", timeout=10000)
+        assert await page.evaluate(f"curPlan().items[{carousel_idx}].status") == "done"
+
+        step("ayurveda: film yourself with the teleprompter (fake camera)")
+        await page.click("[data-go='create']")
+        await page.click("[data-act='tele-open']")
+        await page.fill("#teleText", "Stop scrolling. Tongue scraping takes ten seconds. Do it before brushing. Follow for more.")
+        await page.click("[data-act='tele-cam']")
+        await page.wait_for_selector("#teleRec")
+        await page.wait_for_function("document.querySelector('#teleVid').videoWidth > 0", timeout=10000)
+        await page.click("#teleRec")
+        await page.wait_for_timeout(2000 + 3500)  # countdown + recording
+        await page.click("#teleRec")
+        await page.wait_for_function("S.media.length === 1 && S.plan && S.plan.scenes.length > 1", timeout=20000)
+        caps = await page.evaluate("S.plan.scenes.map(s => s.caption).join(' ')")
+        assert "Tongue scraping" in caps, caps
+        assert await page.evaluate("S.origVolOverride") == 1
+        await page.click("#expBtn")
+        await page.wait_for_selector("#expMsg .msg.good", timeout=60000)
+        assert await page.evaluate("S.exportBlob.size") > 20_000
+
+        step("ayurveda: text-only AI reel from designed backgrounds")
+        await page.evaluate("S.media = []; S.plan = null; renderCreate()")
+        await page.click("[data-act='add-bgs']")
+        await page.wait_for_function("S.media.length === 6 && S.media.every(m => m.bg)")
+        await page.fill("#storyIn", "Ghee myths. Ghee is not bad for you in moderation. It carries herbs deep into the body. Use a teaspoon on warm food.")
+        await page.click("[data-act='plan']")
+        await page.wait_for_selector("#sceneList .scene", timeout=30000)
+        await page.click("#playBtn")
+        await page.wait_for_function("S.renderer && S.renderer.running && S.renderer.textOnly", timeout=15000)
+        await page.wait_for_timeout(1200)
+        await page.locator(".screen").first.screenshot(path=str(OUT / "text-only-reel.png"))
+        await page.click("[data-act='stop']")
+
+        step("pages stay separate after reload")
+        await page.reload()
+        await page.wait_for_selector("#pageSel")
+        assert await page.evaluate("curPage().niche") == "ayurveda"
+        assert [await page.locator(".pcard").count()] == [1]
+        travel_id = await page.evaluate("S.pages.find(g => g.niche === 'general').id")
+        await page.select_option("#pageSel", travel_id)
+        await page.wait_for_timeout(200)
+        assert await page.locator(".pcard").count() == 1 and await page.evaluate("cur().name") == "Weekly Showdown"
+
         await browser.close()
     real_errors = [e for e in errors if "net::" not in e]
     assert not real_errors, f"page errors: {real_errors}"
-    print(f"PASS: exported {kind}, {size/1048576:.1f} MB -> {out_file}; series of 3 reels made and scheduled")
+    print(f"PASS: exported {kind}, {size/1048576:.1f} MB -> {out_file}; series of 3 reels made and scheduled; Ayurveda page: carousel, story set, content plan, self video and text-only reel")
 
 
 if __name__ == "__main__":
